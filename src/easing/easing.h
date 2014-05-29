@@ -1,0 +1,12 @@
+// Robert Penner Easing Equations
+#include "Back.h"
+#include "Bounce.h"
+#include "Circ.h"
+#include "Cubic.h"
+#include "Elastic.h"
+#include "Expo.h"
+#include "Linear.h"
+#include "Quad.h"
+#include "Quart.h"
+#include "Quint.h"
+#include "Sine.h"
