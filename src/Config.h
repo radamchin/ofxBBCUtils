@@ -25,7 +25,7 @@ namespace bbc {
                 bool load_success;
                            
             protected:
-                Config(); // protected constuctor
+                Config(); // hidden constuctor
         
         };
         
