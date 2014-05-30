@@ -5,45 +5,16 @@
  
  TODO:
  
- * Test FrameTweener
- * Test BezierAnimator
- * Test RandomBezierAnimator
- 
  */
 
 
 using namespace bbc::utils;
 
 //--------------------------------------------------------------
-void ofApp::setup()  {
-        
+void ofApp::setup()  {        
     ofSetWindowTitle("bbcUtils: dev test app");
     
-    cout << "type \t\tsize \tmin \t\t\tmax" << endl;
-    cout << "---------------------------------------------------------------" << endl;
-    cout << "bool\t\t" << sizeof(bool) << endl;
-    cout << "char\t\t" << sizeof(char) << "\t" << CHAR_MIN << "\t\t\t" << CHAR_MAX << endl;
-    cout << "unsigned char\t" << sizeof(unsigned char) << "\t\t\t\t" << UCHAR_MAX << endl;
-    cout << "short\t\t" << sizeof(short) << "\t" << INT_MIN << "\t\t" << INT_MAX << endl;
-    cout << "int\t\t" << sizeof(int) << "\t" << INT_MIN << "\t\t" << INT_MAX << endl;
-    cout << "unsigned int\t" << sizeof(unsigned int) << "\t\t\t\t" << UINT_MAX << endl;
-    cout << "float\t\t" << sizeof(float) << "\t" << FLT_MIN << "\t\t" << FLT_MAX << endl;
-    cout << "long\t\t" << sizeof(long) << "\t" << LONG_MIN << "\t" << LONG_MAX << endl;
-    cout << "double\t\t" << sizeof(double) << "\t" << DBL_MIN << "\t\t" << DBL_MAX << endl;
-    cout << "---------------------------------------------------------------" << endl;
-    //------------------------------
-    
-    
-    int c = ofHexToInt("ff0000");
-    int c1 = ofHexToInt("ffff00");
-    int c2 = ofHexToInt("ffffff");
-    int c3 = ofHexToInt("000000");
-    cout << c << " " << c1 << endl;
-    
-    //------------------------------
-    
    // testConfig();
-    
     
     // init timers.
     
@@ -61,18 +32,11 @@ void ofApp::setup()  {
     bezier_animator_a.start(start_pos, start_pos+300, end_pos-300, end_pos, 500);
     bezier_animator_a.use_ease = true;
     
-    
     rand_bezier_animator.setup(10,10,ofGetWidth()-20, ofGetHeight()-20);
     rand_bezier_animator.repeating = true;
     rand_bezier_animator.use_ease = false;
     rand_bezier_animator.start();
-   
-    int n = INT_MAX;
-    int o = INT_MIN;
-    
-    cout << "int_max=" << n << ", int_min=" << o << endl;
-    cout << ++n << ", " << --o << endl;
-    
+      
 }
 
 void ofApp::testConfig() {
@@ -159,15 +123,8 @@ void ofApp::update(){
     frame_tweener.update();
     bezier_animator_a.update();
     rand_bezier_animator.update();
-    
-   /* float seed = sin((float)ofGetFrameNum());
-    float seed2 = ofGetElapsedTimeMicros()/10000;
-    
-    cout << " " << ofNoise(seed, seed2) << " "; // << seed <<  " = "*/
-    
+        
 }
-
-
 
 //--------------------------------------------------------------
 void ofApp::draw(){
