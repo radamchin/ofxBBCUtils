@@ -144,6 +144,105 @@ void iApp::exit(ofEventArgs & args) {
 }
 
 
+//------------------------------------------------------------------------------------------------------
+
+void iApp::drawCalibration(int alpha) {
+    
+    /* 
+     Draw a screen calibration graphic, useful for projection calibration,
+     */
+    
+    ofPushStyle();
+    
+    float sw = 2.0f;
+    ofSetLineWidth(sw);
+
+    float w = ofGetWidth();
+    float h = ofGetHeight();
+    
+    float cx = w / 2.0;
+    float cy = h / 2.0;
+    
+    float hsw = sw / 2.0;
+    
+    ofSetCircleResolution(36);
+
+    ofSetColor(255, alpha);
+    ofNoFill();
+    
+    // border
+    ofRectMode(OF_RECTMODE_CORNER);
+    ofRect(hsw, hsw, w-sw, h-sw);
+    
+    // diagonal lines
+    ofLine(hsw, hsw, w+hsw, h-hsw);
+    ofLine(-hsw, h-hsw, w-hsw, hsw);
+    
+    // centre lines
+    ofLine(cx, 0, cx, h);
+    ofLine(0, cy, w, cy);
+    
+    // horizontal 1/4 lines
+    ofLine(0, h/4, w, h/4);
+    ofLine(0, h-h/4, w, h-h/4);
+    
+    // Draw centre rect & circle
+    ofRectMode(OF_RECTMODE_CENTER);
+    
+    float dim = min(w, h) * .66f;
+    
+    ofEllipse(cx, cy, dim, dim);
+    
+    ofSetLineWidth(1.0f);
+    
+    // Draw circles at the sides
+    int n = 8;
+    float mini_rad = h / n;
+    float y;
+    
+    for(int i = 0; i<n-1; i++) {
+        y = (mini_rad)+(i*mini_rad);
+        int c = i % 4;
+        switch(c) {
+            case 0: ofSetColor(255, alpha); break;
+            case 1: ofSetColor(255,0,0, alpha); break;
+            case 2: ofSetColor(0,255,0, alpha); break;
+            case 3: ofSetColor(0,0,255, alpha); break;
+        }
+        
+        ofEllipse(0, y, mini_rad, mini_rad); // LHS
+        ofEllipse(w, y, mini_rad, mini_rad); // RHS
+    }
+    
+    // Draw more comprehensive grid
+    
+    // do this at the ratio of the screen?
+    
+    float wc = 16.0f;
+    float hc = 9.0f;
+    
+    float grid_x = w / wc;
+    float grid_y = h / hc;
+    
+    ofSetColor(255, alpha);
+    
+    // vertical lines
+    for(int col = 1; col < wc; col++) {
+        int gx = round(col * grid_x);
+        ofLine(gx, 0, gx, h);
+    }
+    
+    // horizontal lines
+    for(int row = 1; row < hc; row++) {
+        int gy = round(row * grid_y);
+        ofLine(0, gy, w, gy);
+    }
+    
+    ofPopStyle();
+    
+}
+
+
 //-----------------------------------------------------------------------------
 void iApp::logHeader(const string& _name, const string& _version) {
     ofLogNotice("");
