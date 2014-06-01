@@ -30,7 +30,7 @@
 namespace bbc {
     namespace utils {
 
-        static const string getUpTimeStr(bool show_secs = true) {
+        inline string getUpTimeStr(bool show_secs = true) {
             // How long uas this app been running? Return formated string of such.
             
             unsigned long total_up_secs = ofGetElapsedTimeMillis() / 1000;
@@ -45,7 +45,7 @@ namespace bbc {
             return out.str();
         }
 
-        static void setClipboard(string clippy) {
+        inline void setClipboard(string clippy) {
             // Found in ofxTextInputField
             // if win32 code not working, could just bail out.
             
@@ -58,7 +58,7 @@ namespace bbc {
             #endif
         }
         
-        static const string getClipboard(){
+        inline string getClipboard(){
             
             #if defined(TARGET_OSX)
             const char *clip = glfwGetClipboardString((GLFWwindow*) ofGetWindowPtr()->getCocoaWindow());
@@ -71,7 +71,7 @@ namespace bbc {
             return (clip==NULL) ? "" : string(clip);
         }
         
-        static const string getUnixTimeStamp(bool show_ms = false) {
+        inline string getUnixTimeStamp(bool show_ms = false) {
             // get now in format  YYYYMMDDHHMMSSmmm
             ostringstream format;
             format << "%Y%m%d%H%M%S" << (show_ms ? "%i" : "");
