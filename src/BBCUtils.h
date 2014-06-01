@@ -10,6 +10,8 @@
  
  */
 
+#pragma once
+
 //#include "ErpEase.h"
 //#include "Config.h"
 
@@ -30,7 +32,7 @@
 namespace bbc {
     namespace utils {
 
-        inline string getUpTimeStr(bool show_secs = true) {
+        static const string getUpTimeStr(bool show_secs = true) {
             // How long uas this app been running? Return formated string of such.
             
             unsigned long total_up_secs = ofGetElapsedTimeMillis() / 1000;
@@ -45,7 +47,7 @@ namespace bbc {
             return out.str();
         }
 
-        inline void setClipboard(string clippy) {
+        static void setClipboard(string clippy) {
             // Found in ofxTextInputField
             // if win32 code not working, could just bail out.
             
@@ -58,7 +60,7 @@ namespace bbc {
             #endif
         }
         
-        inline string getClipboard(){
+        static const string getClipboard(){
             
             #if defined(TARGET_OSX)
             const char *clip = glfwGetClipboardString((GLFWwindow*) ofGetWindowPtr()->getCocoaWindow());
@@ -71,7 +73,7 @@ namespace bbc {
             return (clip==NULL) ? "" : string(clip);
         }
         
-        inline string getUnixTimeStamp(bool show_ms = false) {
+        static const string getUnixTimeStamp(bool show_ms = false) {
             // get now in format  YYYYMMDDHHMMSSmmm
             ostringstream format;
             format << "%Y%m%d%H%M%S" << (show_ms ? "%i" : "");
