@@ -130,8 +130,11 @@ void ofApp::update(){
 void ofApp::draw(){
     
     ofBackgroundGradient(ofColor::lightGray, ofColor::darkGray);
-    
     //ofBackgroundHex(0xAAAAAA);
+    
+    drawCalibration(192);
+    
+    ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate(), 2) + ", " + getUpTimeStr() + ", " + getUnixTimeStamp(true), 5, 15);
     
     ofSetColor(255);
     
@@ -140,17 +143,36 @@ void ofApp::draw(){
     testTimers();
     
     testAnimators();
+    
+    testClipboard();
+    
+}
+
+void ofApp::testClipboard() {
+    
+    // get whats in the clipboard and draw it to screen?
+    
+    string clip_str = "CLIPBOARD = '" + getClipboard() + "'";
+    
+    ofSetColor(0);
+    ofDrawBitmapString(clip_str, 4, ofGetHeight()-35);
+    
+    ofSetColor(255);
+    ofDrawBitmapString(clip_str, 3, ofGetHeight()-36);
+    
 }
 
 void ofApp::testAnimators() {
     
-    
     ofSetColor(255,0, 255);
-    ofDrawBitmapString(frame_tweener.toString(), 350, 15);
+    ofDrawBitmapString(frame_tweener.toString(), 350, 25);
     
-    ofDrawBitmapString(bezier_animator_a.toString(), 350, 30);
+    ofSetColor(255,0, 192);
+    ofDrawBitmapString(bezier_animator_a.toString(), 350, 40);
     
-    ofDrawBitmapString(rand_bezier_animator.toString(), 350, 45);
+    
+    ofSetColor(255,0, 128);
+    ofDrawBitmapString(rand_bezier_animator.toString(), 350, 55);
     
     bezier_animator_a.drawDebug(128);
     
@@ -191,9 +213,10 @@ void ofApp::testTimers(){
     }
     
     ofSetColor(0);
-    ofDrawBitmapString(fa_timer->toString(), 10, 20);
+    ofDrawBitmapString(fa_timer->toString(), 10, 35);
+    
     ofSetColor(0,255,255);
-    ofDrawBitmapString(fb_timer->toString(), 10, 36);    
+    ofDrawBitmapString(fb_timer->toString(), 10, 50);
 
 }
 

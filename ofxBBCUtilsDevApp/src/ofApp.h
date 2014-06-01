@@ -14,6 +14,8 @@
 #include "BezierAnimator.h"
 #include "RandomBezierAnimator.h"
 
+#include "BBCUtils.h"
+
 #include "iApp.h"
 
 using namespace bbc::utils;
@@ -38,6 +40,7 @@ class ofApp : public iApp{
         void testTimers();
         void testEasing();
         void testAnimators();
+        void testClipboard();
     
     private:
     
