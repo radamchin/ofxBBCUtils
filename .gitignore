@@ -1,3 +1,13 @@
 # ignory
 ofxBBCUtilsDevApp/bin/bbcUtilsDebug.app/*
 *.xcuserdatad
+
+**.zip
+
+*.exp
+*.ilk
+*.lib
+*.dll
+**/obj/Debug
+*.sdf
+*.opensdf
