@@ -1,0 +1,4 @@
+[submodule "ofxBBCUtils"]
+	path = ofxBBCUtils
+	url = https://radamchin@github.com/radamchin/ofxBBCUtils.git
+	branch = master
