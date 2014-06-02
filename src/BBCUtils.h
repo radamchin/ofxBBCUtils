@@ -19,8 +19,6 @@
 //#include "BezierAnimator.h"
 //#include "FrameTweener.h"
 
-
-
 // For Clipboard access
 #if (_MSC_VER)
 #include <GLFW/glfw3.h>
