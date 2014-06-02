@@ -19,6 +19,8 @@
 //#include "BezierAnimator.h"
 //#include "FrameTweener.h"
 
+#include "ofMain.h"
+
 // For Clipboard access
 #if (_MSC_VER)
 #include <GLFW/glfw3.h>
@@ -26,10 +28,17 @@
 #include "GLFW/glfw3.h"
 #endif
 
+#if (_MSC_VER)
+	// crazy no round function in math.h on win32 (or in OF)
+	static inline float round(float f){
+		return floor(f + .5);
+	}
+#endif
+
 
 namespace bbc {
     namespace utils {
-
+		
         static const string getUpTimeStr(bool show_secs = true) {
             // How long uas this app been running? Return formated string of such.
             
@@ -49,12 +58,12 @@ namespace bbc {
             // Found in ofxTextInputField
             // if win32 code not working, could just bail out.
             
-            #if defined(TARGET_OSX)
+            #if (TARGET_OSX)
             glfwSetClipboardString( (GLFWwindow*) ofGetWindowPtr()->getCocoaWindow(), clippy.c_str());
             #endif
             
-            #if defined(TARGET_WIN32)
-            glfwSetClipboardString( (GLFWwindow*) ofGetWindowPtr()->getWin32Window(), clippy.c_str())
+			#if defined(TARGET_WIN32)
+            glfwSetClipboardString( (GLFWwindow*) ofGetWindowPtr()->getWin32Window(), clippy.c_str());
             #endif
         }
         
@@ -65,10 +74,13 @@ namespace bbc {
             #endif
             
             #if defined(TARGET_WIN32)
-            const char *clip = glfwGetClipboardString((GLFWwindow*) ofGetWindowPtr()->getWin32Window());
+			const char *clip;
+			return "<<THIS NOT CURRENTLY WORKING ON WIN32 SORRY>>";
+            //const char *clip = glfwGetClipboardString((GLFWwindow*) ofGetWindowPtr()->getWin32Window());
             #endif
             
             return (clip==NULL) ? "" : string(clip);
+
         }
         
         static const string getUnixTimeStamp(bool show_ms = false) {

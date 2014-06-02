@@ -49,9 +49,9 @@ class ofApp : public iApp{
         FrameTimer *fa_timer;
         FrameTimer *fb_timer;
         
-        float fa = 0;
-        float fb = 0;
-        float fc = 0;
+        float fa;
+        float fb;
+        float fc;
     
         FrameTweener frame_tweener;
         BezierAnimator bezier_animator_a;

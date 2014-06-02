@@ -17,12 +17,13 @@ namespace bbc {
 	        
             public:
             
-                float control_rand = 200.0f;
+                float control_rand;
 
-                bool repeating = false;
+                bool repeating;
                 
-                RandomBezierAnimator() {
-                    
+                RandomBezierAnimator(bool _repeating = false, float _control_rand = 200.0f) {
+                    control_rand = _control_rand;
+					repeating = _repeating;
                 }
             
                 void setup(float rx, float ry, float rw, float rh) {

@@ -24,7 +24,13 @@ namespace bbc {
             public:
             
                 FrameTweener() {
-                    
+                    frame_counter = 0;
+					frame_total = 1; 
+            
+					_running = false;
+					_complete = true;
+            
+					 step = 0.0;
                 }
                 
                 void start(int _frame_total = 100) {
@@ -105,13 +111,13 @@ namespace bbc {
             
             protected:
                 
-                int frame_counter = 0;
-                int frame_total = 1; // how many frames to reach target
+                int frame_counter;
+                int frame_total; // how many frames to reach target
             
-                bool _running = false;
-                bool _complete = true;
+                bool _running;
+                bool _complete;
             
-                float step = 0.0;
+                float step;
                 
                 void completed(bool interrupted) {
                     _complete = true;

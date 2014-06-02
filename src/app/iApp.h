@@ -14,9 +14,9 @@
 #include "ofMain.h"
 #include "ofEvents.h"
 
-//#include "BBCUtils.h"
+#include "BBCUtils.h" // at moment to get at the custom round method for WIN32
 
-//using namespace bbc::utils;
+///using namespace bbc::utils;
 
 class iApp : public ofBaseApp{
     
@@ -48,14 +48,14 @@ class iApp : public ofBaseApp{
     
     protected:
     
-        bool auto_hide_cursor = true;
-        bool cursor_visible = true;
+        bool auto_hide_cursor;
+        bool cursor_visible;
     
         void logHeader(const string& _name, const string& _version);
         void logFooter(const string& _name, const string& _version);
     
     
-        int cursor_duration_ms = 3000;
+        int cursor_duration_ms;
 
     
     private:

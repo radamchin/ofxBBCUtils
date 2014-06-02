@@ -18,7 +18,7 @@ namespace bbc {
 	namespace utils {
                 
         FrameTimer::FrameTimer(int frames_duration, bool auto_reset) {
-            init(frames_duration, auto_reset);
+			init(frames_duration, auto_reset);
         }
 
         void FrameTimer::init(int frames_duration, bool auto_reset) {
@@ -56,7 +56,7 @@ namespace bbc {
             _counter = 0;
         }
 
-        float FrameTimer::FrameTimer::getPosition() { // 0..1
+        float FrameTimer::getPosition() { // 0..1
             return _counter/(float)_duration;
         }
 

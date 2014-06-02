@@ -7,6 +7,12 @@ string iApp::app_version = "1.0.0";
 
 iApp::iApp(string _app_name, string _app_version) {
     
+	auto_hide_cursor = true;
+    cursor_visible = true;
+		
+	cursor_duration_ms = 3000;
+
+
     if(_app_name != "") app_name = _app_name;
     if(_app_version != "") app_version = _app_version;
     
@@ -217,7 +223,7 @@ void iApp::drawCalibration(int alpha) {
     // Draw more comprehensive grid
     
     // do this at the ratio of the screen?
-    
+    // TODO: make the ratio dynamic too reading getWidth and getHeight
     float wc = 16.0f;
     float hc = 9.0f;
     

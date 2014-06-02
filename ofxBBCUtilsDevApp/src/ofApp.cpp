@@ -17,7 +17,8 @@ void ofApp::setup()  {
    // testConfig();
     
     // init timers.
-    
+    fa = fb = fc = 0;
+
 	a_timer = new CheckTimer("A_TEST", 1 * 1000);
 	b_timer = new CheckTimer("B_TEST", 3 * 1000);
     fa_timer = new FrameTimer(500, true);

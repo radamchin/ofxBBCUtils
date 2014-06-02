@@ -23,10 +23,10 @@ namespace bbc {
             
             public:
                 
-                bool use_ease = true;
+                bool use_ease;
                 
-                BezierAnimator() {
-                    
+                BezierAnimator(bool _use_ease = true) {
+                    use_ease = _use_ease;
                 }
             
                 void start(float start_x, float start_y, float a_x, float a_y, float b_x, float b_y, float end_x, float end_y, int frame_duration) {

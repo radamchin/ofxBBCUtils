@@ -42,7 +42,7 @@ namespace bbc {
                 int _duration;
                 int _counter;
 
-                bool _auto_reset = true;
+                bool _auto_reset;
                 
                 ~FrameTimer();
             
