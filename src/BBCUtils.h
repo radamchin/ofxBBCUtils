@@ -58,7 +58,7 @@ namespace bbc {
             // Found in ofxTextInputField
             // if win32 code not working, could just bail out.
             
-            #if (TARGET_OSX)
+            #if defined(TARGET_OSX)
             glfwSetClipboardString( (GLFWwindow*) ofGetWindowPtr()->getCocoaWindow(), clippy.c_str());
             #endif
             
