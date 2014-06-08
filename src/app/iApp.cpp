@@ -11,10 +11,15 @@ iApp::iApp(string _app_name, string _app_version) {
     cursor_visible = true;
 		
 	cursor_duration_ms = 3000;
-
+    
 
     if(_app_name != "") app_name = _app_name;
     if(_app_version != "") app_version = _app_version;
+    
+    
+    // TODO: check logs/ dir and zip up anything of 1MB?
+    ofLogToFile("logs/" + _app_name + ".log", true); // appends
+    //ofSetLogLevel(OF_LOG_VERBOSE);
     
     logHeader(app_name, app_version);
     
@@ -146,6 +151,8 @@ void iApp::gotMessage(ofMessage msg){
 void iApp::exit(ofEventArgs & args) {
     ofBaseApp::exit(args);
     logFooter(app_name, app_version);
+    
+    ofLogToConsole(); // reset logging to file
     
 }
 
