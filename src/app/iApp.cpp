@@ -5,33 +5,26 @@
 string iApp::app_name = "iApp";
 string iApp::app_version = "1.0.0";
 
-iApp::iApp(string _app_name, string _app_version) {
+
+iApp::iApp(string _app_name, string _app_version, bool _log_to_file, bool _archive_logs) {
     
 	auto_hide_cursor = true;
     cursor_visible = true;
-		
+    
 	cursor_duration_ms = 3000;
     
-
     if(_app_name != "") app_name = _app_name;
     if(_app_version != "") app_version = _app_version;
     
+    log_to_file = _log_to_file;
+    archive_logs = _archive_logs;
     
-    // TODO: check logs/ dir and zip up anything of 1MB?
-    ofLogToFile("logs/" + _app_name + ".log", true); // appends
-    //ofSetLogLevel(OF_LOG_VERBOSE);
+    logSetup();
     
     logHeader(app_name, app_version);
     
     cursor_timer = ofGetElapsedTimeMillis() + cursor_duration_ms;
-    
-  //  ofRegisterMouseEvents(this);
-    // ofRegisterKeyEvents(this);
-    // ofRegisterGetMessages(this);
-    // ofRegister
-    
-   // ofAddListener(ofEvents().update, this, &iApp::update);
-    
+
 }
 
 void iApp::setup() {
@@ -55,19 +48,19 @@ void iApp::update(ofEventArgs& args) {
 
 void iApp::cursorCheck() {
     
-   // cout << "check cursor " << ofGetElapsedTimeMillis() << endl;
+    // cout << "check cursor " << ofGetElapsedTimeMillis() << endl;
     
     if(cursor_visible) {
         if(ofGetElapsedTimeMillis() >= cursor_timer) { // its been still long enough to auto hide it
             
-            // Cursor show and hide not working on mac in 0.8.0 : using workaroud from http://forum.openframeworks.cc/t/ofhidecursor-not-working-on-osx-10-8-v0-8-0/13379/3?u=adamh
+            // Cursor show and hide not working on mac in 0.8.0 : using workaroud from http://forum.openframeworks.cc/t/ofhidecursor-not-working-on-osx-10-8-v0-8-0/13379/3
             // Working in 0.8.1 so do a OF compile check here
             
-            #ifdef __APPLE__
-                CGDisplayHideCursor(NULL);
-            #else
-                ofHideCursor();
-            #endif
+    #ifdef __APPLE__
+            CGDisplayHideCursor(NULL);
+    #else
+            ofHideCursor();
+    #endif
             
             cout << " hideCursor " << ofGetElapsedTimeMillis() << endl;
             cursor_visible = false;
@@ -78,18 +71,18 @@ void iApp::cursorCheck() {
 
 void iApp::cursorUpdate() {
     
-  //  cout << "cursorUpdate " << ofGetElapsedTimeMillis() << endl;
+    //  cout << "cursorUpdate " << ofGetElapsedTimeMillis() << endl;
     
     if(!cursor_visible) {
         cout << " showCursor " << ofGetElapsedTimeMillis() << endl;
         cursor_visible = true;
         
-        #ifdef __APPLE__        
-            CGDisplayShowCursor(NULL);
-        #else
-            ofShowCursor();
-        #endif
-      
+    #ifdef __APPLE__
+        CGDisplayShowCursor(NULL);
+    #else
+        ofShowCursor();
+    #endif
+        
     }
     
     cursor_timer = ofGetElapsedTimeMillis() + cursor_duration_ms; // reset timer hid it after 3 seconds of no movement
@@ -135,7 +128,7 @@ void iApp::mouseReleased( ofMouseEventArgs & mouse ) {
 
 void iApp::windowResized(ofResizeEventArgs & resize) {
     ofBaseApp::windowResized(resize);
-
+    
 }
 
 void iApp::dragEvent(ofDragInfo dragInfo) {
@@ -161,7 +154,7 @@ void iApp::exit(ofEventArgs & args) {
 
 void iApp::drawCalibration(int alpha) {
     
-    /* 
+    /*
      Draw a screen calibration graphic, useful for projection calibration,
      */
     
@@ -169,7 +162,7 @@ void iApp::drawCalibration(int alpha) {
     
     float sw = 2.0f;
     ofSetLineWidth(sw);
-
+    
     float w = ofGetWidth();
     float h = ofGetHeight();
     
@@ -179,7 +172,7 @@ void iApp::drawCalibration(int alpha) {
     float hsw = sw / 2.0;
     
     ofSetCircleResolution(36);
-
+    
     ofSetColor(255, alpha);
     ofNoFill();
     
@@ -257,6 +250,27 @@ void iApp::drawCalibration(int alpha) {
 
 
 //-----------------------------------------------------------------------------
+
+void iApp::logSetup() {
+     
+    if(log_to_file) {
+        
+        if(archive_logs) {
+            // TODO: check logs/ dir and zip up anything over 1MB to logs/archive (cmd line zip util? or an addon)
+            
+            // Mac could use: terminal gzip: http://superuser.com/questions/161706/command-to-gzip-a-folder
+            
+            // Win could use: win7 cmd option: http://superuser.com/questions/110991/can-you-zip-a-file-from-the-command-prompt-using-only-windows-built-in-capabili
+        }
+        
+        ofLogToFile("logs/" + app_name + ".log", true); // appends
+    }
+    
+    //ofSetLogLevel(OF_LOG_VERBOSE);
+    
+}
+
+
 void iApp::logHeader(const string& _name, const string& _version) {
     ofLogNotice("");
     ofLogNotice("--------------------------------------");

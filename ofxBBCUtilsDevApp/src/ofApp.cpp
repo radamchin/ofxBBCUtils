@@ -1,16 +1,14 @@
 #include "ofApp.h"
 
-
-/*
- 
- TODO:
- 
- */
-
-
 using namespace bbc::utils;
 
 //--------------------------------------------------------------
+
+ofApp::ofApp():iApp("bbcUtilsDevTest", BBC_UTILS_DEV_VERSION, true) {
+    // How to pass configurable values into iApp, very not great.
+    
+}
+
 void ofApp::setup()  {        
     ofSetWindowTitle("bbcUtils: dev test app");
     

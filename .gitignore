@@ -4,6 +4,8 @@ ofxBBCUtilsDevApp/bin/bbcUtilsDebug.app/*
 
 **.zip
 
+**.log
+
 *.exp
 *.ilk
 *.lib

@@ -1,10 +1,10 @@
 /*
  
-    iApp: InstalationApp
+ iApp: InstalationApp
  
-    Collection of utils for running an application in interactive installation type environment
-    
-    Adam Hinshaw 17 May 2014
+ Collection of utils for running an application in interactive installation type environment
+ 
+ Adam Hinshaw 17 May 2014
  
  
  */
@@ -16,51 +16,54 @@
 
 #include "BBCUtils.h" // at moment to get at the custom round method for WIN32
 
-///using namespace bbc::utils;
-
 class iApp : public ofBaseApp{
     
-	public:
-        iApp(string _app_name = "", string _app_version = "");
+public:
+    iApp(string _app_name = "", string _app_version = "", bool _log_to_file = false, bool _archive_logs = true);
     
-        static string app_name;
-        static string app_version;
-    
-        void setup();
-        void update(ofEventArgs& args);
-        void draw(ofEventArgs & args);
+    static string app_name;
+    static string app_version;
         
-        void keyPressed(ofKeyEventArgs & key);
-        void keyReleased(ofKeyEventArgs & key);
+    void setup();
+    void update(ofEventArgs& args);
+    void draw(ofEventArgs & args);
     
-        void mouseMoved( ofMouseEventArgs & mouse );
-        void mouseDragged( ofMouseEventArgs & mouse );
-        void mousePressed( ofMouseEventArgs & mouse );
-        void mouseReleased( ofMouseEventArgs & mouse );
+    void keyPressed(ofKeyEventArgs & key);
+    void keyReleased(ofKeyEventArgs & key);
     
-        void windowResized(ofResizeEventArgs & resize);
-        void dragEvent(ofDragInfo dragInfo);
-        void gotMessage(ofMessage msg);
+    void mouseMoved( ofMouseEventArgs & mouse );
+    void mouseDragged( ofMouseEventArgs & mouse );
+    void mousePressed( ofMouseEventArgs & mouse );
+    void mouseReleased( ofMouseEventArgs & mouse );
     
-        void drawCalibration(int alpha = 255);
+    void windowResized(ofResizeEventArgs & resize);
+    void dragEvent(ofDragInfo dragInfo);
+    void gotMessage(ofMessage msg);
     
-        void exit(ofEventArgs & args);
+    void drawCalibration(int alpha = 255);
     
-    protected:
+    void exit(ofEventArgs & args);
     
-        bool auto_hide_cursor;
-        bool cursor_visible;
+protected:
     
-        void logHeader(const string& _name, const string& _version);
-        void logFooter(const string& _name, const string& _version);
+    bool log_to_file;
+    bool archive_logs;
+    
+    bool auto_hide_cursor;
+    bool cursor_visible;
+    
+    void logHeader(const string& _name, const string& _version);
+    void logFooter(const string& _name, const string& _version);
+    
+    int cursor_duration_ms;
     
     
-        int cursor_duration_ms;
-
+private:
+    void cursorUpdate();
+    void cursorCheck();
     
-    private:
-        void cursorUpdate();
-        void cursorCheck();
-        int cursor_timer;
+    void logSetup();
+    
+    int cursor_timer;
     
 };

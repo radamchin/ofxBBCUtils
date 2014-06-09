@@ -18,10 +18,16 @@
 
 #include "iApp.h"
 
+
+#define BBC_UTILS_DEV_VERSION "1.0.2"
+
 using namespace bbc::utils;
 
 class ofApp : public iApp{
 	public:
+    
+        ofApp();
+    
 		void setup();
 		void update();
 		void draw();
