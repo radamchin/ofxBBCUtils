@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>F66D8930-0A36-4118-AD82-04B3B18D1052</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ofxBBCUtilsTestApp</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>7BB5C7BA-7958-471E-B729-FDEFB8285029</key>
+		<string>https://github.com/Laudanum/awm_dailypapers.git</string>
+		<key>FE65FA4F-173F-4E17-BE91-B449D0233C73</key>
+		<string>https://github.com/radamchin/ofxBBCUtils.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>addons/ofxBBCUtils/ofxBBCUtilsDevApp/ofxBBCUtilsTestApp.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>7BB5C7BA-7958-471E-B729-FDEFB8285029</key>
+		<string>../../../../..</string>
+		<key>FE65FA4F-173F-4E17-BE91-B449D0233C73</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/radamchin/ofxBBCUtils.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>7BB5C7BA-7958-471E-B729-FDEFB8285029</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>7BB5C7BA-7958-471E-B729-FDEFB8285029</string>
+			<key>IDESourceControlWCCName</key>
+			<string>of_v0.8.1_osx_release</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>FE65FA4F-173F-4E17-BE91-B449D0233C73</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofxBBCUtils</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -4,7 +4,7 @@ using namespace bbc::utils;
 
 //--------------------------------------------------------------
 
-ofApp::ofApp():iApp("bbcUtilsDevTest", BBC_UTILS_DEV_VERSION, true) {
+ofApp::ofApp():iApp("bbcUtilsDevTest", BBC_UTILS_DEV_VERSION, false) {
     // How to pass configurable values into iApp, very not great.
     
 }

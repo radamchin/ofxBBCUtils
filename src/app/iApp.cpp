@@ -275,7 +275,8 @@ void iApp::logHeader(const string& _name, const string& _version) {
     ofLogNotice("");
     ofLogNotice("--------------------------------------");
     ofLogNotice("--- START ") << _name << " app v" << _version << " @ " << ofGetTimestampString("%H:%M:%S %d-%m-%Y");
-    // TODO: log OS version and name + opengl properties + OF props, free gpu memory?
+    ofLogNotice("--- ") << "oF:" << OF_VERSION_MAJOR << "." << OF_VERSION_MINOR << "." << OF_VERSION_PATCH << " platform:" << ofGetTargetPlatform();
+    // TODO: log OS version and name + opengl properties, free gpu memory?
     ofLogNotice("--------------------------------------");
 }
 
@@ -284,5 +285,6 @@ void iApp::logFooter(const string& _name, const string& _version) {
     ofLogNotice("--- STOP ") << _name << " app v" << _version << " @ " << ofGetTimestampString("%H:%M:%S %d-%m-%Y");
     ofLogNotice("--------------------------------------");
 }
+
 
 //-----------------------------------------------------------------------------
