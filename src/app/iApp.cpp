@@ -62,7 +62,7 @@ void iApp::cursorCheck() {
             ofHideCursor();
     #endif
             
-            cout << " hideCursor " << ofGetElapsedTimeMillis() << endl;
+           // cout << " hideCursor " << ofGetElapsedTimeMillis() << endl;
             cursor_visible = false;
         }
     }
@@ -74,7 +74,7 @@ void iApp::cursorUpdate() {
     //  cout << "cursorUpdate " << ofGetElapsedTimeMillis() << endl;
     
     if(!cursor_visible) {
-        cout << " showCursor " << ofGetElapsedTimeMillis() << endl;
+        //cout << " showCursor " << ofGetElapsedTimeMillis() << endl;
         cursor_visible = true;
         
     #ifdef __APPLE__
