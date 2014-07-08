@@ -13,6 +13,8 @@ iApp::iApp(string _app_name, string _app_version, bool _log_to_file, bool _archi
     
     keep_cursor_hidden = false; // a lock
     
+    header_logged = false;
+    
 	cursor_duration_ms = 3000;
     
     if(_app_name != "") app_name = _app_name;
@@ -23,7 +25,7 @@ iApp::iApp(string _app_name, string _app_version, bool _log_to_file, bool _archi
     
     logSetup();
     
-    logHeader(app_name, app_version);
+    logHeader();
     
     cursor_timer = ofGetElapsedTimeMillis() + cursor_duration_ms;
 
@@ -158,7 +160,7 @@ void iApp::gotMessage(ofMessage msg){
 
 void iApp::exit(ofEventArgs & args) {
     ofBaseApp::exit(args);
-    logFooter(app_name, app_version);
+    logFooter();
     
     ofLogToConsole(); // reset logging to file
     
@@ -266,7 +268,7 @@ void iApp::drawCalibration(int alpha) {
 
 //-----------------------------------------------------------------------------
 
-void iApp::logSetup() {
+void iApp::logSetup(bool appending) {
      
     if(log_to_file) {
         
@@ -278,26 +280,29 @@ void iApp::logSetup() {
             // Win could use: win7 cmd option: http://superuser.com/questions/110991/can-you-zip-a-file-from-the-command-prompt-using-only-windows-built-in-capabili
         }
         
-        ofLogToFile("logs/" + app_name + ".log", true); // appends
+        ofLogToFile("logs/" + app_name + ".log", appending);
     }
     
-    //ofSetLogLevel(OF_LOG_VERBOSE);
+    //ofSetLogLevel(OF_LOG_VERBOSE);s
     
 }
 
 
-void iApp::logHeader(const string& _name, const string& _version) {
+void iApp::logHeader() {
     ofLogNotice("");
     ofLogNotice("--------------------------------------");
-    ofLogNotice("--- START ") << _name << " app v" << _version << " @ " << ofGetTimestampString("%H:%M:%S %d-%m-%Y");
+    ofLogNotice("--- START ") << app_name << " app v" << app_version << " @ " << ofGetTimestampString("%H:%M:%S %d-%m-%Y");
     ofLogNotice("--- ") << "oF:" << OF_VERSION_MAJOR << "." << OF_VERSION_MINOR << "." << OF_VERSION_PATCH << " platform:" << ofGetTargetPlatform();
     // TODO: log OS version and name + opengl properties, free gpu memory?
     ofLogNotice("--------------------------------------");
+    
+    header_logged = true;
+    
 }
 
-void iApp::logFooter(const string& _name, const string& _version) {
+void iApp::logFooter() {
     ofLogNotice("--------------------------------------");
-    ofLogNotice("--- STOP ") << _name << " app v" << _version << " @ " << ofGetTimestampString("%H:%M:%S %d-%m-%Y");
+    ofLogNotice("--- STOP ") << app_name << " app v" << app_version << " @ " << ofGetTimestampString("%H:%M:%S %d-%m-%Y");
     ofLogNotice("--------------------------------------");
 }
 

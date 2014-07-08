@@ -57,17 +57,19 @@ protected:
     bool auto_hide_cursor;
     bool cursor_visible;
     
-    void logHeader(const string& _name, const string& _version);
-    void logFooter(const string& _name, const string& _version);
+    void logHeader();
+    void logFooter();
+    
+    void logSetup(bool appending = true);
     
     int cursor_duration_ms;
     
+    bool header_logged;
     
 private:
     void cursorUpdate();
     void cursorCheck();
     
-    void logSetup();
     
     int cursor_timer;
     
