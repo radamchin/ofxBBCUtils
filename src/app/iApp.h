@@ -44,10 +44,15 @@ public:
     
     void exit(ofEventArgs & args);
     
+    void showCursor();
+    void hideCursor(bool permanent = false);
+        
 protected:
     
     bool log_to_file;
     bool archive_logs;
+    
+    bool keep_cursor_hidden;
     
     bool auto_hide_cursor;
     bool cursor_visible;

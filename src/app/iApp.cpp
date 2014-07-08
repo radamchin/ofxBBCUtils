@@ -11,6 +11,8 @@ iApp::iApp(string _app_name, string _app_version, bool _log_to_file, bool _archi
 	auto_hide_cursor = true;
     cursor_visible = true;
     
+    keep_cursor_hidden = false; // a lock
+    
 	cursor_duration_ms = 3000;
     
     if(_app_name != "") app_name = _app_name;
@@ -44,6 +46,8 @@ void iApp::update(ofEventArgs& args) {
     
     if(auto_hide_cursor) cursorCheck();
     
+    if(keep_cursor_hidden) hideCursor();
+    
 }
 
 void iApp::cursorCheck() {
@@ -53,14 +57,7 @@ void iApp::cursorCheck() {
     if(cursor_visible) {
         if(ofGetElapsedTimeMillis() >= cursor_timer) { // its been still long enough to auto hide it
             
-            // Cursor show and hide not working on mac in 0.8.0 : using workaroud from http://forum.openframeworks.cc/t/ofhidecursor-not-working-on-osx-10-8-v0-8-0/13379/3
-            // Working in 0.8.1 so do a OF compile check here
-            
-    #ifdef __APPLE__
-            CGDisplayHideCursor(NULL);
-    #else
-            ofHideCursor();
-    #endif
+            hideCursor();
             
            // cout << " hideCursor " << ofGetElapsedTimeMillis() << endl;
             cursor_visible = false;
@@ -69,20 +66,38 @@ void iApp::cursorCheck() {
     
 }
 
-void iApp::cursorUpdate() {
+void iApp::hideCursor(bool permanent) {
+    // Cursor show and hide not working on mac in 0.8.0 : using workaroud from http://forum.openframeworks.cc/t/ofhidecursor-not-working-on-osx-10-8-v0-8-0/13379/3
+    // Is working in 0.8.1 so do a OF compile check here
+    #ifdef __APPLE__
+        CGDisplayHideCursor(NULL);
+    #else
+        ofHideCursor();
+    #endif
     
-    //  cout << "cursorUpdate " << ofGetElapsedTimeMillis() << endl;
+    if(permanent) keep_cursor_hidden = true;
     
-    if(!cursor_visible) {
-        //cout << " showCursor " << ofGetElapsedTimeMillis() << endl;
-        cursor_visible = true;
-        
+}
+
+void iApp::showCursor() {
+    
     #ifdef __APPLE__
         CGDisplayShowCursor(NULL);
     #else
         ofShowCursor();
     #endif
-        
+    
+    if(keep_cursor_hidden) keep_cursor_hidden = false;
+
+}
+
+void iApp::cursorUpdate() {
+    
+    //  cout << "cursorUpdate " << ofGetElapsedTimeMillis() << endl;
+    
+    if(!cursor_visible) {
+        cursor_visible = true;
+        showCursor();
     }
     
     cursor_timer = ofGetElapsedTimeMillis() + cursor_duration_ms; // reset timer hid it after 3 seconds of no movement
