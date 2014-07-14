@@ -283,7 +283,7 @@ void iApp::logSetup(bool appending) {
         ofLogToFile("logs/" + app_name + ".log", appending);
     }
     
-    //ofSetLogLevel(OF_LOG_VERBOSE);s
+    //ofSetLogLevel(OF_LOG_VERBOSE);
     
 }
 
@@ -296,8 +296,7 @@ void iApp::logHeader() {
     // TODO: log OS version and name + opengl properties, free gpu memory?
     ofLogNotice("--------------------------------------");
     
-    header_logged = true;
-    
+    header_logged = true;    
 }
 
 void iApp::logFooter() {
