@@ -5,46 +5,46 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>F56E980A-EE44-42A7-9149-AAAC4A86699A</string>
+	<string>4EFAC742-B372-428E-90BC-DD1024E2B444</string>
 	<key>IDESourceControlProjectName</key>
 	<string>ofxBBCUtilsTestApp</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>7A94E731-5320-4250-935D-793B9A0F12F8</key>
-		<string>https://github.com/Laudanum/awm_dailypapers.git</string>
-		<key>9321EB9F-DE5C-46F1-AEB8-BD9048C01543</key>
+		<key>C649CF9E-F6D0-4790-BF42-4C1789A00604</key>
+		<string>https://bitbucket.org/adamhinshaw/lrsmodel.git</string>
+		<key>DBE139B9-F5CB-427B-A12A-7426E1AF5545</key>
 		<string>https://github.com/radamchin/ofxBBCUtils.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>addons/ofxBBCUtils/ofxBBCUtilsDevApp/ofxBBCUtilsTestApp.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>7A94E731-5320-4250-935D-793B9A0F12F8</key>
+		<key>C649CF9E-F6D0-4790-BF42-4C1789A00604</key>
 		<string>../../../../..</string>
-		<key>9321EB9F-DE5C-46F1-AEB8-BD9048C01543</key>
+		<key>DBE139B9-F5CB-427B-A12A-7426E1AF5545</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/radamchin/ofxBBCUtils.git</string>
+	<string>https://bitbucket.org/adamhinshaw/lrsmodel.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>7A94E731-5320-4250-935D-793B9A0F12F8</string>
+	<string>C649CF9E-F6D0-4790-BF42-4C1789A00604</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>7A94E731-5320-4250-935D-793B9A0F12F8</string>
+			<string>C649CF9E-F6D0-4790-BF42-4C1789A00604</string>
 			<key>IDESourceControlWCCName</key>
-			<string>of_v0.8.1_osx_release</string>
+			<string>of_v0.8.4_osx_release</string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>9321EB9F-DE5C-46F1-AEB8-BD9048C01543</string>
+			<string>DBE139B9-F5CB-427B-A12A-7426E1AF5545</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ofxBBCUtils</string>
 		</dict>
