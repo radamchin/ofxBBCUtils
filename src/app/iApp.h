@@ -1,10 +1,10 @@
 /*
  
- iApp: InstalationApp
+    iApp: InstalationApp
  
- Collection of utils for running an application in interactive installation type environment
+    Collection of utils for running an application in interactive installation type environment
  
- Adam Hinshaw 17 May 2014
+    Adam Hinshaw 17 May 2014
  
  
  */
@@ -19,6 +19,7 @@
 class iApp : public ofBaseApp{
     
 public:
+    
     iApp(string _app_name = "", string _app_version = "", bool _log_to_file = false, bool _archive_logs = true);
     
     static string app_name;
@@ -67,9 +68,9 @@ protected:
     bool header_logged;
     
 private:
+    
     void cursorUpdate();
     void cursorCheck();
-    
     
     int cursor_timer;
     

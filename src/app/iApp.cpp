@@ -287,7 +287,6 @@ void iApp::logSetup(bool appending) {
     
 }
 
-
 void iApp::logHeader() {
     ofLogNotice("");
     ofLogNotice("--------------------------------------");
@@ -304,6 +303,5 @@ void iApp::logFooter() {
     ofLogNotice("--- STOP ") << app_name << " app v" << app_version << " @ " << ofGetTimestampString("%H:%M:%S %d-%m-%Y");
     ofLogNotice("--------------------------------------");
 }
-
 
 //-----------------------------------------------------------------------------
