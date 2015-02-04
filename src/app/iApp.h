@@ -6,6 +6,9 @@
  
     Adam Hinshaw 17 May 2014
  
+    TODO:
+        * Add the interaction interupt, timeout stuff from AWM-DP project, reseting on mouse input and having timeout / listeners to expiry events.
+        * Could add draw_calibration flag, and call drawCalibration manually in draw.
  
  */
 

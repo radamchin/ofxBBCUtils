@@ -1,12 +1,18 @@
-
-
 #include "iApp.h"
+#include "Config.h"
 
 string iApp::app_name = "iApp";
 string iApp::app_version = "1.0.0";
 
+using namespace bbc::utils;
 
 iApp::iApp(string _app_name, string _app_version, bool _log_to_file, bool _archive_logs) {
+    
+    if(!Config::instance()->load_success){
+        ofLogError("Config XML failed to load") << Config::data_file_path;
+    }else{
+        ofLogNotice("Config XML loaded!") << Config::data_file_path;
+    }
     
 	auto_hide_cursor = true;
     cursor_visible = true;
@@ -23,12 +29,43 @@ iApp::iApp(string _app_name, string _app_version, bool _log_to_file, bool _archi
     log_to_file = _log_to_file;
     archive_logs = _archive_logs;
     
-    logSetup();
+    if(CONFIG_GET("log", "to_file", false)) {
+        if(!log_to_file) { // not already setup
+            log_to_file = true;
+            logSetup(CONFIG_GET("log", "append", true));
+            logHeader(); // relog header so it gets to file
+        }
+    }else{
+        logSetup();
+        logHeader();
+    }
+
+    ofSetLogLevel((ofLogLevel)CONFIG_GET("log", "level", (int)OF_LOG_NOTICE));
     
-    logHeader();
+    if(Config::instance()->attributeExists("config:window", "fps")) {
+		int fps = CONFIG_GET("window", "fps", 60);
+        ofSetFrameRate(fps);
+        ofLogNotice("iApp set") << "fps=" << fps;
+    }
+    
+	bool vs = CONFIG_GET("window", "vertical_sync", true);
+    
+    ofSetVerticalSync(vs);
+    ofLogNotice("iApp set") << "vertical_sync=" << vs;
+    
+    // NOTE: to get full fps, dont specify fps and set vertical_sync="0"
+    
+    if(CONFIG_GET("window", "fullscreen", true)){
+		ofToggleFullscreen();
+    }
     
     cursor_timer = ofGetElapsedTimeMillis() + cursor_duration_ms;
-
+    
+    if(CONFIG_GET("mouse", "hide", false)) { // override auto hide cursor
+        auto_hide_cursor = false;
+        hideCursor(true);
+    }
+    
 }
 
 void iApp::setup() {
@@ -161,11 +198,8 @@ void iApp::gotMessage(ofMessage msg){
 void iApp::exit(ofEventArgs & args) {
     ofBaseApp::exit(args);
     logFooter();
-    
     ofLogToConsole(); // reset logging to file
-    
 }
-
 
 //------------------------------------------------------------------------------------------------------
 
