@@ -13,3 +13,4 @@ ofxBBCUtilsDevApp/bin/bbcUtilsDebug.app/*
 **/obj/Debug
 *.sdf
 *.opensdf
+*.xccheckout
