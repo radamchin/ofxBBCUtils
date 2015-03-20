@@ -20,9 +20,14 @@ namespace bbc {
             public:
                 
                 string id;
-                
+            
+                CheckTimer();
                 CheckTimer(string id, int duration);
-                
+            
+                ~CheckTimer();
+            
+                void setup(string id, int duration);
+            
                 bool isExpired();
                 float getPosition();
                 float getPositionSeconds();
@@ -47,9 +52,6 @@ namespace bbc {
                 
                 int getCurrentTimeStamp(); // could be static ??
                 int resetCount;
-                
-                ~CheckTimer();
-            
         };
         
     }

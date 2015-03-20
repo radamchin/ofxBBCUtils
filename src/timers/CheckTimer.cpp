@@ -16,14 +16,22 @@
 //--------------------------------------------------------------
 namespace bbc {
 	namespace utils {
-                
-        CheckTimer::CheckTimer(string id, int duration) { // constructor
+        
+        CheckTimer::CheckTimer() {
+            setup("tmpid", 1000);
+        }
+        
+        CheckTimer::CheckTimer(string id, int duration) {
+            setup(id, duration);
+        }
+        
+        void CheckTimer::setup(string id, int duration) {
             this->id = id;
             this->duration = duration;
             resetCount = 0;
             reset(false); // start counting
         }
-
+        
         CheckTimer::~CheckTimer() {
             printf("*** CheckTimer Destroyed ***\n");
         }
