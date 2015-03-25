@@ -1,6 +1,8 @@
 #include "iApp.h"
 #include "Config.h"
 
+#include "Poco/DateTimeParser.h"
+
 string iApp::app_name = "iApp";
 string iApp::app_version = "1.0.0";
 
@@ -66,6 +68,37 @@ iApp::iApp(string _app_name, string _app_version, bool _log_to_file, bool _archi
         hideCursor(true);
     }
     
+    
+    auto_shutdown = CONFIG_GET("shutdown", "enabled", false);
+    
+    if(auto_shutdown) { // override auto hide cursor
+        
+        string time_str = CONFIG_GET("shutdown", "time", "20:20");
+        
+        ofLogNotice("auto_shutdown setting up with time") << time_str;
+        
+        Poco::LocalDateTime now;
+        
+        int time_zone_dif = now.tzd();
+        
+        Poco::DateTime t = Poco::DateTimeParser::parse("%H:%M:%S", time_str, time_zone_dif);
+        
+        Poco::LocalDateTime next(now.year(), now.month(), now.day(), t.hour(), t.minute(), t.second());
+        
+        if(next < now) {
+            ofLogNotice("Shutdown time already elapsed for today making it for tomorrow");
+            
+            // add a day
+            Poco::Timespan dif(0, 24, 0, 0, 0);
+            shutdown_time = next + dif;
+            
+        }else{
+            shutdown_time = next;
+        }
+        
+        
+    }
+    
 }
 
 void iApp::setup() {
@@ -86,6 +119,16 @@ void iApp::update(ofEventArgs& args) {
     if(auto_hide_cursor) cursorCheck();
     
     if(keep_cursor_hidden) hideCursor();
+    
+    if(auto_shutdown) {
+        
+        Poco::LocalDateTime now;
+        
+        if(now > shutdown_time) {
+            ofLogWarning("iApp: AUTO SHUTDOWN was scheduled for now. Terminating app.");
+            ofExit();
+        }
+    }
     
 }
 

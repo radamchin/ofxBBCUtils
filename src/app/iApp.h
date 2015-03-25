@@ -19,6 +19,8 @@
 
 #include "BBCUtils.h" // at moment to get at the custom round method for WIN32
 
+#include "Poco/LocalDateTime.h"
+
 class iApp : public ofBaseApp{
     
 public:
@@ -60,6 +62,10 @@ protected:
     
     bool auto_hide_cursor;
     bool cursor_visible;
+    
+    bool auto_shutdown;
+    
+    Poco::LocalDateTime shutdown_time;
     
     void logHeader();
     void logFooter();
