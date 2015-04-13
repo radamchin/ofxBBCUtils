@@ -68,7 +68,6 @@ iApp::iApp(string _app_name, string _app_version, bool _log_to_file, bool _archi
         hideCursor(true);
     }
     
-    
     auto_shutdown = CONFIG_GET("shutdown", "enabled", false);
     
     if(auto_shutdown) { // override auto hide cursor
@@ -88,7 +87,7 @@ iApp::iApp(string _app_name, string _app_version, bool _log_to_file, bool _archi
         if(next < now) {
             ofLogNotice("Shutdown time already elapsed for today making it for tomorrow");
             
-            // add a day
+            // Add a day
             Poco::Timespan dif(0, 24, 0, 0, 0);
             shutdown_time = next + dif;
             
@@ -350,6 +349,7 @@ void iApp::logSetup(bool appending) {
     if(log_to_file) {
         
         if(archive_logs) {
+            
             // TODO: check logs/ dir and zip up anything over 1MB to logs/archive (cmd line zip util? or an addon)
             
             // Mac could use: terminal gzip: http://superuser.com/questions/161706/command-to-gzip-a-folder
