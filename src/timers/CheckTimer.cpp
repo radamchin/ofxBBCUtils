@@ -33,7 +33,7 @@ namespace bbc {
         }
         
         CheckTimer::~CheckTimer() {
-            printf("*** CheckTimer Destroyed ***\n");
+            //printf("*** CheckTimer Destroyed ***\n");
         }
 
         bool CheckTimer::isExpired() {
