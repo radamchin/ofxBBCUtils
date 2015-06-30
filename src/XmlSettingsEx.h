@@ -30,6 +30,10 @@ namespace bbc {
                 XmlSettingsEx* getXmlSettingsExNode(const string& tag, int which = 0);
                 ofxXmlSettings* getXMLSettingsNode(const string& tag, int which = 0);
             
+                int		getAttributeN(const string& tag, const string& attribute, int defaultValue, int which = 0);
+                double	getAttributeN(const string& tag, const string& attribute, double defaultValue, int which = 0);
+                string	getAttributeN(const string& tag, const string& attribute, const string& defaultValue, int which = 0);
+            
                 ofXml* getXMLNode(const string& tag, int which = 0);
             
                 TiXmlElement* getNode(const string& tag, int which = 0);

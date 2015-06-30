@@ -12,7 +12,7 @@ ofApp::ofApp():iApp("BBC_UTILS_DEV_TEST", BBC_UTILS_DEV_VERSION, false) {
 void ofApp::setup()  {        
     ofSetWindowTitle("bbcUtils: dev test app");
     
-   // testConfig();
+    testConfig();
     
     // init timers.
     fa = fb = fc = 0;
@@ -40,11 +40,19 @@ void ofApp::setup()  {
 
 void ofApp::testConfig() {
 
-    string s = Config::instance()->getAttribute("config:colors:palette", "values", "empty");
+    //string s = Config::instance()->getAttribute("config:colors:palette", "values", "empty");
+    string s = CONFIG_GET("colors:palette", "values", "empty0");
     cout << s << endl;
     
-    //string s2 = Config::instance()->getValue("config:colors", "empty");
-    //cout << s2 << endl;
+    string s2 = CONFIG_GET_FROM_INDEX("colors:palette", "values", "empty1", 1);
+    cout << s2 << endl;
+    
+    string  i2 = CONFIG_GET_FROM_INDEX("colors:palette", "id", "empty1", 1);
+    cout << i2 << endl;
+    
+    
+    string s3 = CONFIG_GET_FROM_INDEX("colors:palette", "values", "empty2", 2);
+    cout << s3 << endl;
     
     bool mpe_enabled = Config::instance()->getAttribute("config:mpereadwillfail", "enabled", 1);
     cout << mpe_enabled << endl;

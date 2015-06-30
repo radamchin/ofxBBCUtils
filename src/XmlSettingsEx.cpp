@@ -37,6 +37,41 @@ namespace bbc {
             return xmls_ex;
         }
         
+        
+        int	XmlSettingsEx::getAttributeN(const string& tag, const string& attribute, int defaultValue, int which) {
+            vector<string> tags = ofSplitString(tag, ":");
+            
+            for(int i = 0; i<tags.size()-1; i++) pushTag(tags[i], 0);
+
+            int val = getAttribute(tags[tags.size()-1], attribute, defaultValue, which);
+            
+            for(int i = 0; i<tags.size()-1; i++) popTag();
+            return val;
+        }
+        
+        double XmlSettingsEx::getAttributeN(const string& tag, const string& attribute, double defaultValue, int which) {
+            vector<string> tags = ofSplitString(tag, ":");
+            
+            for(int i = 0; i<tags.size()-1; i++) pushTag(tags[i], 0);
+
+            double val = getAttribute(tags[tags.size()-1], attribute, defaultValue, which);
+            
+            for(int i = 0; i<tags.size()-1; i++) popTag();
+            return val;
+        }
+        
+        string XmlSettingsEx::getAttributeN(const string& tag, const string& attribute, const string& defaultValue, int which) {
+            
+            vector<string> tags = ofSplitString(tag, ":");
+            
+            for(int i = 0; i<tags.size()-1; i++) pushTag(tags[i], 0);
+            
+            string val = getAttribute(tags[tags.size()-1], attribute, defaultValue, which);
+            
+            for(int i = 0; i<tags.size()-1; i++) popTag();
+            return val;
+        }
+        
         bool XmlSettingsEx::validNode(const TiXmlNode* node, const string & named) {
             return (!isComment(node)) && (node->ValueStr() == named);
         }

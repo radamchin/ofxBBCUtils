@@ -78,6 +78,7 @@
 		1685B3421804CA5C0070382C /* bbcUtilsDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bbcUtilsDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1691445F18E4F44800A1005F /* XmlSettingsEx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XmlSettingsEx.cpp; sourceTree = "<group>"; };
 		1691446018E4F44800A1005F /* XmlSettingsEx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XmlSettingsEx.h; sourceTree = "<group>"; };
+		169780F81B42B0BB00F1DDFB /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
 		16A0D78C187A59280040F1F8 /* Config.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Config.cpp; sourceTree = "<group>"; };
 		16A0D78D187A59280040F1F8 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
 		16A0D791187A596B0040F1F8 /* tinyxml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxml.cpp; sourceTree = "<group>"; };
@@ -198,6 +199,15 @@
 				16A0D78D187A59280040F1F8 /* Config.h */,
 			);
 			path = src;
+			sourceTree = "<group>";
+		};
+		169780F71B42B0BB00F1DDFB /* data */ = {
+			isa = PBXGroup;
+			children = (
+				169780F81B42B0BB00F1DDFB /* config.xml */,
+			);
+			name = data;
+			path = bin/data;
 			sourceTree = "<group>";
 		};
 		16A0D78F187A596B0040F1F8 /* ofxXmlSettings */ = {
@@ -322,6 +332,7 @@
 			children = (
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
+				169780F71B42B0BB00F1DDFB /* data */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,

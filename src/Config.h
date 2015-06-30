@@ -10,7 +10,8 @@
 
 #include "XmlSettingsEx.h"
 
-#define CONFIG_GET(_key, _attr, _def) bbc::utils::Config::instance()->getAttribute("config:"_key, _attr, _def)
+#define CONFIG_GET(_key, _attr, _default) bbc::utils::Config::instance()->getAttribute("config:"_key, _attr, _default)
+#define CONFIG_GET_FROM_INDEX(_key, _attr, _default, _which) bbc::utils::Config::instance()->getAttributeN("config:"_key, _attr, _default, _which)
 
 namespace bbc {
 	namespace utils {
