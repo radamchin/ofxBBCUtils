@@ -35,7 +35,7 @@ void ofApp::setup()  {
     rand_bezier_animator.repeating = true;
     rand_bezier_animator.use_ease = false;
     rand_bezier_animator.start();
-      
+
 }
 
 void ofApp::testConfig() {
@@ -47,11 +47,10 @@ void ofApp::testConfig() {
     string s2 = CONFIG_GET_FROM_INDEX("colors:palette", "values", "empty1", 1);
     cout << s2 << endl;
     
-    string  i2 = CONFIG_GET_FROM_INDEX("colors:palette", "id", "empty1", 1);
+    string  i2 = CONFIG_GET_FROM_INDEX("colors:palette", "id", "empty2", 1);
     cout << i2 << endl;
     
-    
-    string s3 = CONFIG_GET_FROM_INDEX("colors:palette", "values", "empty2", 2);
+    string s3 = CONFIG_GET_FROM_INDEX("colors:palette", "values", "empty3", 2);
     cout << s3 << endl;
     
     bool mpe_enabled = Config::instance()->getAttribute("config:mpereadwillfail", "enabled", 1);
@@ -65,10 +64,9 @@ void ofApp::testConfig() {
     //string xml_str = Config::instance()->getXMLString("config:colors");
     //cout << "'" << xml_str << "'" << endl;
     
-   string xml_str;
-   TiXmlElement* elem = Config::instance()->getNode("config:colors"); // render_mode
+    string xml_str;
+    TiXmlElement* elem = Config::instance()->getNode("config:colors");
     
-   // ofXml xml;
     ofxXmlSettings xmls;
     
     if(elem) {
@@ -76,31 +74,25 @@ void ofApp::testConfig() {
         int i = 0;
         for (const TiXmlNode* node=elem->FirstChild(); node; node=node->NextSibling(), i++){
             if(Config::instance()->isComment(node)) {
-            //if(node->Type() == TiXmlNode::COMMENT){
                 cout << "This ones a Comment!" << endl << endl;
             }else{
                 Config::instance()->copyToString(node, xml_str);
-                
-          //      cout << "\t" << xml_str << endl;
-             //   xml.loadFromBuffer(xml_str); // convert to ofXML
-              //  cout << endl << xml.toString() << endl;
+                //  cout << "\t" << xml_str << endl;
+                //  xml.loadFromBuffer(xml_str); // convert to ofXML
+                //  cout << endl << xml.toString() << endl;
                 
                 xmls.loadFromBuffer(xml_str);
-                // now walk the ofXMLSetings node too.
                 
                 cout << "mode:" << i << " " << Config::instance()->makeString(&xmls) << endl;
             }
         }
         
-        
     }else{
         cout << "No node found" << endl;
     }
     
-    
     //ofxXmlSettings *cols_xml = bbc::utils::Config::instance()->getXMLSettingsNode("config:colors");
     //cout << "Found:" << endl << Config::instance()->makeString(cols_xml) << endl;
-    
     
     ofXml *cols_xml = bbc::utils::Config::instance()->getXMLNode("config:colors");
     cout << "Found:" << endl << cols_xml->toString() << endl;
