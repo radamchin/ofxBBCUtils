@@ -348,6 +348,8 @@ void iApp::logSetup(bool appending) {
      
     if(log_to_file) {
         
+        string log_name = app_name + ".log";
+        
         if(archive_logs) {
             
             // TODO: check logs/ dir and zip up anything over 1MB to logs/archive (cmd line zip util? or an addon)
@@ -357,7 +359,7 @@ void iApp::logSetup(bool appending) {
             // Win could use: win7 cmd option: http://superuser.com/questions/110991/can-you-zip-a-file-from-the-command-prompt-using-only-windows-built-in-capabili
         }
         
-        ofLogToFile("logs/" + app_name + ".log", appending);
+        ofLogToFile("logs/" + log_name, appending);
     }
     
     //ofSetLogLevel(OF_LOG_VERBOSE);
