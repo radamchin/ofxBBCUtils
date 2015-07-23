@@ -6,6 +6,9 @@
 string iApp::app_name = "iApp";
 string iApp::app_version = "1.0.0";
 
+// Archive (compress) logs that are 1MB
+#define IAPP_DEF_LOG_SIZE_ARCH_KB_MAX 1024
+
 using namespace bbc::utils;
 
 iApp::iApp(string _app_name, string _app_version, bool _log_to_file, bool _archive_logs) {
@@ -344,6 +347,7 @@ void iApp::drawCalibration(int alpha) {
 
 //-----------------------------------------------------------------------------
 
+
 void iApp::logSetup(bool appending) {
      
     if(log_to_file) {
@@ -352,11 +356,36 @@ void iApp::logSetup(bool appending) {
         
         if(archive_logs) {
             
-            // TODO: check logs/ dir and zip up anything over 1MB to logs/archive (cmd line zip util? or an addon)
+            ofFile f("logs/" + log_name);
             
-            // Mac could use: terminal gzip: http://superuser.com/questions/161706/command-to-gzip-a-folder
+            if(f.exists()) {
+                
+                uint64_t sz_kb = f.getSize() / 1024;
+                
+                if(sz_kb >= IAPP_DEF_LOG_SIZE_ARCH_KB_MAX) {
+                    
+                    ofFile parent_dir(f.getEnclosingDirectory());
+                    
+                    #if defined(TARGET_OSX)
+                    
+                        string cmd = "gzip " + f.getAbsolutePath() + " | mv " + f.getAbsolutePath() + ".gz " + parent_dir.getAbsolutePath() + "/" + ofGetTimestampString("%Y-%m-%d-%H-%M-%S") + "_" + app_name + ".log.gz";
+                        
+                        ofLogNotice("ARCHIVING LOG with") << cmd;
+                        
+                        string result = ofSystem(cmd);
+                        
+                        ofLogNotice("result") << result;
+                    
+                    #endif
+                    
+                    #if defined(TARGET_WIN32)
+                        // TODO: Win could use: win7 cmd option: http://superuser.com/questions/110991/can-you-zip-a-file-from-the-command-prompt-using-only-windows-built-in-capabili
+                    #endif
+
+                }
+                
+            }
             
-            // Win could use: win7 cmd option: http://superuser.com/questions/110991/can-you-zip-a-file-from-the-command-prompt-using-only-windows-built-in-capabili
         }
         
         ofLogToFile("logs/" + log_name, appending);

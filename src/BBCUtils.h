@@ -3,7 +3,7 @@
  
  BBCUtils
  
- General utilities, living here until somewhere more organized shows u
+ General utilities, living here until somewhere more organized shows up
  
  Adam Hinshaw 2013
  
