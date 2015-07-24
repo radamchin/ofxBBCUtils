@@ -1,5 +1,5 @@
 #include "iApp.h"
-#include "Config.h"
+#include "bbcConfig.h"
 
 #include "Poco/DateTimeParser.h"
 

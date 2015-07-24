@@ -6,7 +6,7 @@
 #include "CheckTimer.h"
 #include "FrameTimer.h"
 
-#include "Config.h"
+#include "bbcConfig.h"
 
 #include "ErpEase.h"
 

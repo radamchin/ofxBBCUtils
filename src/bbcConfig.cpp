@@ -1,5 +1,5 @@
 
-#include "Config.h"
+#include "bbcConfig.h"
 
 namespace bbc {
     namespace utils {

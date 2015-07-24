@@ -13,7 +13,7 @@
 #pragma once
 
 //#include "ErpEase.h"
-//#include "Config.h"
+//#include "bbcConfig.h"
 
 //#include "RandomBezierAnimator.h"
 //#include "BezierAnimator.h"
