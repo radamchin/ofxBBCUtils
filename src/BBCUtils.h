@@ -53,6 +53,14 @@ namespace bbc {
             out << "up:" << dys << "d," << hrs << "h," << mins << "m," << secs << "s";
             return out.str();
         }
+        
+        static string secondsToHMS(int totalSeconds) {
+            int hours   = floor(totalSeconds / 3600);
+            int minutes = floor((totalSeconds - (hours * 3600)) / 60);
+            int seconds = round(totalSeconds - (hours * 3600) - (minutes * 60));
+            
+            return ofToString(hours, 2, '0') + ":" + ofToString(minutes, 2, '0') + ":" + ofToString(seconds, 2, '0');
+        }
 
         static void setClipboard(string clippy) {
             // Found in ofxTextInputField
@@ -80,7 +88,6 @@ namespace bbc {
             #endif
             
             return (clip==NULL) ? "" : string(clip);
-
         }
         
         static const string getUnixTimeStamp(bool show_ms = false) {
