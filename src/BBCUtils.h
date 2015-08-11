@@ -61,7 +61,55 @@ namespace bbc {
             
             return ofToString(hours, 2, '0') + ":" + ofToString(minutes, 2, '0') + ":" + ofToString(seconds, 2, '0');
         }
+        
+       /* static string secondsToMS(int totalSeconds) {
+            int hours   = floor(totalSeconds / 3600);
+            int minutes = floor((totalSeconds - (hours * 3600)) / 60);
+            int seconds = round(totalSeconds - (hours * 3600) - (minutes * 60));
+            
+            return ofToString(minutes) + ":" + ofToString(seconds, 2, '0');
+        }
+        
+        static string minsToHMS(float totalMins) {
+            return secondsToHMS((int)(totalMins * 60));
+        }
+        
+        static string minsToMS(float totalMins) {
+            return secondsToMS((int)(totalMins * 60));
+        }*/
+        
+        static string msToHMS(int totalMS) {
+            
+            int totalSeconds = totalMS/1000.0;
+            
+            int ms = totalMS % 1000;
+            
+            int hours   = floor(totalSeconds / 3600);
+            int minutes = floor((totalSeconds - (hours * 3600)) / 60);
+            int seconds = round(totalSeconds - (hours * 3600) - (minutes * 60));
+            
+            return ofToString(hours, 2, '0') + ":" + ofToString(minutes, 2, '0') + ":" + ofToString(seconds, 2, '0');
+        }
+        
+        static string msToMS(int totalMS, bool show_ms = false, int ms_pad = 3) {
+            
+            int totalSeconds = totalMS/1000.0;
+            
+            int ms = totalMS % 1000;
+            
+            int hours   = floor(totalSeconds / 3600);
+            int minutes = floor((totalSeconds - (hours * 3600)) / 60);
+            int seconds = round(totalSeconds - (hours * 3600) - (minutes * 60));
+            
+            string ms_str = show_ms ? "." + ofToString(ms, ms_pad, '0') : "";
+            
+            /*if(show_ms) {
+             ms_str = "." + ms_pad ? ofToString(ms, 3, '0') : ofToString(ms);
+             }*/
 
+            return ofToString(minutes) + ":" + ofToString(seconds, 2, '0') + ms_str;
+        }
+        
         static void setClipboard(string clippy) {
             // Found in ofxTextInputField
             // if win32 code not working, could just bail out.
