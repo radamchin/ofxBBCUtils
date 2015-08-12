@@ -27,7 +27,12 @@
 		<palette id="moonrise kingdom" values="D91424,45B3BF,BABF2C,F2D22E,BF1717" />
 	</colors>	
 
-	<mpe enabled="0" is_master="1" />	
+	<mpe enabled="0" is_master="1" />
+    
+    
+    <window fullscreen="0" />
 	
+    <log />
+    
 </config>
 
