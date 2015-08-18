@@ -146,7 +146,32 @@ namespace bbc {
             return ofGetTimestampString(format.str());
         }
 
-        
+        static void recursiveFileSearchNameContains(const string & path, const string & search_str, vector<string> & results ) {
+            
+            // Get all files of a folder that contain a string (useful for searching by type, eg ".mp3")
+            
+            ofDirectory dir;
+            
+            dir.listDir(path);
+            
+            for(int i = 0; i < (int)dir.size(); i++){
+                
+                string file_path = dir.getPath(i);
+                
+                ofFile file(file_path);
+                
+                if(file.isDirectory()) {
+                    recursiveFileSearchNameContains(file_path, search_str, results);
+                }else{
+                    if( ofIsStringInString(file_path, search_str) ){
+                        results.push_back(file_path);
+                    }
+                }
+                
+            }
+            
+        }
+
 
     }
 }
