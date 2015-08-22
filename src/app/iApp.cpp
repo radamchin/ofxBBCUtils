@@ -367,14 +367,16 @@ void iApp::logSetup(bool appending) {
                     ofFile parent_dir(f.getEnclosingDirectory());
                     
                     #if defined(TARGET_OSX)
+                        string zip_cmd = "gzip '" + f.getAbsolutePath() + "'";
+                        ofLogNotice("ARCHIVING LOG with") << zip_cmd;
+                        string zip_result = ofSystem(zip_cmd);
+                        ofLogNotice("zip_result") << zip_result;
                     
-                        string cmd = "gzip " + f.getAbsolutePath() + " | mv " + f.getAbsolutePath() + ".gz " + parent_dir.getAbsolutePath() + "/" + ofGetTimestampString("%Y-%m-%d-%H-%M-%S") + "_" + app_name + ".log.gz";
-                        
-                        ofLogNotice("ARCHIVING LOG with") << cmd;
-                        
-                        string result = ofSystem(cmd);
-                        
-                        ofLogNotice("result") << result;
+                        string rename_cmd =  "mv '" + f.getAbsolutePath() + ".gz' '" + parent_dir.getAbsolutePath() + "/" + ofGetTimestampString("%Y-%m-%d-%H-%M-%S") + "_" + app_name + ".log.gz'";
+                        ofLogNotice("RENAMING LOG ARCHIVE with") << rename_cmd;
+                        string rename_result = ofSystem(rename_cmd);
+                        ofLogNotice("rename_result") << rename_result;
+                    
                     
                     #endif
                     
