@@ -35,6 +35,9 @@ void ofApp::setup()  {
     rand_bezier_animator.repeating = true;
     rand_bezier_animator.use_ease = false;
     rand_bezier_animator.start();
+    
+    
+    fps_tracker.setup();
 
 }
 
@@ -122,6 +125,8 @@ void ofApp::update(){
     frame_tweener.update();
     bezier_animator_a.update();
     rand_bezier_animator.update();
+    
+    if(ofGetFrameNum() % 60 == 0) fps_tracker.mark(); // add a line to mark second of time.
         
 }
 
@@ -136,6 +141,8 @@ void ofApp::draw(){
     ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate(), 2) + ", " + getUpTimeStr() + ", " + getUnixTimeStamp(true), 5, 15);
     
     ofSetColor(255);
+    
+    fps_tracker.draw(5, 100);
     
     testEasing();
     

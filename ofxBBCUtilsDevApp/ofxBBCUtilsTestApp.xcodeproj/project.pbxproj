@@ -69,6 +69,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		16132D221B970BB000A6F87C /* FPSTrackingWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FPSTrackingWidget.h; sourceTree = "<group>"; };
 		16409BE81926D1C80085BC67 /* iApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = iApp.cpp; sourceTree = "<group>"; };
 		16409BE91926D1C80085BC67 /* iApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iApp.h; sourceTree = "<group>"; };
 		167371831905277F00BED79F /* BezierAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BezierAnimator.h; sourceTree = "<group>"; };
@@ -157,6 +158,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		16132D211B970BB000A6F87C /* debug */ = {
+			isa = PBXGroup;
+			children = (
+				16132D221B970BB000A6F87C /* FPSTrackingWidget.h */,
+			);
+			path = debug;
+			sourceTree = "<group>";
+		};
 		16409BE71926D1C80085BC67 /* app */ = {
 			isa = PBXGroup;
 			children = (
@@ -190,6 +199,7 @@
 			children = (
 				16409BE71926D1C80085BC67 /* app */,
 				16B50CDE191865A200EE00AF /* timers */,
+				16132D211B970BB000A6F87C /* debug */,
 				1673718619052C3400BED79F /* BBCUtils.h */,
 				167371821905277F00BED79F /* animation */,
 				1691445F18E4F44800A1005F /* XmlSettingsEx.cpp */,

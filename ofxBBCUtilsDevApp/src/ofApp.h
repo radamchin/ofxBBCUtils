@@ -18,6 +18,8 @@
 
 #include "iApp.h"
 
+#include "FPSTrackingWidget.h"
+
 
 #define BBC_UTILS_DEV_VERSION "1.0.2"
 
@@ -62,5 +64,7 @@ class ofApp : public iApp{
         FrameTweener frame_tweener;
         BezierAnimator bezier_animator_a;
         RandomBezierAnimator rand_bezier_animator;
+    
+        FPSTrackingWidget fps_tracker;
     
 };
