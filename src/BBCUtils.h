@@ -282,9 +282,13 @@ namespace bbc {
         
         //---------------------------------------------------------------------------
         
-        static string vecToStr(const ofVec3f & v) {
+        static string vecToStr(const ofVec3f & v, int places = -1) {
             ostringstream out;
-            out << v.x << "," << v.y << "," << v.z;
+            if(places > -1) {
+                out << ofToString(v.x, places) << "," << ofToString(v.y, places) << "," << ofToString(v.z, places);
+            }else{
+                 out << v.x << "," << v.y << "," << v.z;
+            }
             return out.str();
         }
 
