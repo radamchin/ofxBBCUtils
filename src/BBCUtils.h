@@ -120,9 +120,9 @@ namespace bbc {
             
             Poco::Timespan difference = today - date;
             
-            int h = difference.totalHours();
-            int m = difference.totalMinutes();
-            int s = difference.totalSeconds();
+          //  int h = difference.totalHours();
+          //  int m = difference.totalMinutes();
+          //  int s = difference.totalSeconds();
             
             if(difference.totalHours() <= 24) {
                 return true;
@@ -151,7 +151,7 @@ namespace bbc {
             
             int totalSeconds = totalMS/1000.0;
             
-            int ms = totalMS % 1000;
+          //  int ms = totalMS % 1000;
             
             int hours   = floor(totalSeconds / 3600);
             int minutes = floor((totalSeconds - (hours * 3600)) / 60);
