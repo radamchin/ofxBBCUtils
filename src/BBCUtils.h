@@ -51,7 +51,7 @@ namespace bbc {
     namespace utils {
 		
         static const string getUpTimeStr(bool show_secs = true) {
-            // How long uas this app been running? Return formated string of such.
+            // Return formated string of how long has this app been running.
             
             unsigned long total_up_secs = ofGetElapsedTimeMillis() / 1000;
             
