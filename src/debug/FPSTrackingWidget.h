@@ -119,6 +119,7 @@ namespace bbc {
                // if(update_on_demand) update();
                 
                 ofPushStyle();
+                ofEnableAlphaBlending();
                 ofSetColor(255);
                 fbo.draw(x, y);
                

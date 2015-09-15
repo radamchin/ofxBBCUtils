@@ -51,7 +51,7 @@ namespace bbc {
     namespace utils {
 		
         static const string getUpTimeStr(bool show_secs = true) {
-            // How long uas this app been running? Return formated string of such.
+            // Return formated string of how long has this app been running.
             
             unsigned long total_up_secs = ofGetElapsedTimeMillis() / 1000;
             
@@ -120,9 +120,9 @@ namespace bbc {
             
             Poco::Timespan difference = today - date;
             
-            int h = difference.totalHours();
-            int m = difference.totalMinutes();
-            int s = difference.totalSeconds();
+          //  int h = difference.totalHours();
+          //  int m = difference.totalMinutes();
+          //  int s = difference.totalSeconds();
             
             if(difference.totalHours() <= 24) {
                 return true;
@@ -151,7 +151,7 @@ namespace bbc {
             
             int totalSeconds = totalMS/1000.0;
             
-            int ms = totalMS % 1000;
+          //  int ms = totalMS % 1000;
             
             int hours   = floor(totalSeconds / 3600);
             int minutes = floor((totalSeconds - (hours * 3600)) / 60);
@@ -282,9 +282,13 @@ namespace bbc {
         
         //---------------------------------------------------------------------------
         
-        static string vecToStr(const ofVec3f & v) {
+        static string vecToStr(const ofVec3f & v, int places = -1) {
             ostringstream out;
-            out << v.x << "," << v.y << "," << v.z;
+            if(places > -1) {
+                out << ofToString(v.x, places) << "," << ofToString(v.y, places) << "," << ofToString(v.z, places);
+            }else{
+                 out << v.x << "," << v.y << "," << v.z;
+            }
             return out.str();
         }
 

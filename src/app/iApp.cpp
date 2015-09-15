@@ -153,11 +153,11 @@ void iApp::cursorCheck() {
 void iApp::hideCursor(bool permanent) {
     // Cursor show and hide not working on mac in 0.8.0 : using workaroud from http://forum.openframeworks.cc/t/ofhidecursor-not-working-on-osx-10-8-v0-8-0/13379/3
     // Is working in 0.8.1 so do a OF compile check here
-    #ifdef __APPLE__
-        CGDisplayHideCursor(NULL);
-    #else
+   // #ifdef __APPLE__
+   //     CGDisplayHideCursor(NULL);
+   // #else
         ofHideCursor();
-    #endif
+   // #endif
     
     if(permanent) keep_cursor_hidden = true;
     
@@ -165,11 +165,11 @@ void iApp::hideCursor(bool permanent) {
 
 void iApp::showCursor() {
     
-    #ifdef __APPLE__
-        CGDisplayShowCursor(NULL);
-    #else
+   // #ifdef __APPLE__
+  //      CGDisplayShowCursor(NULL);
+  //  #else
         ofShowCursor();
-    #endif
+  //  #endif
     
     if(keep_cursor_hidden) keep_cursor_hidden = false;
 
