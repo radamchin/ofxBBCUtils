@@ -376,8 +376,6 @@ void iApp::logSetup(bool appending) {
                         ofLogNotice("RENAMING LOG ARCHIVE with") << rename_cmd;
                         string rename_result = ofSystem(rename_cmd);
                         ofLogNotice("rename_result") << rename_result;
-                    
-                    
                     #endif
                     
                     #if defined(TARGET_WIN32)
@@ -393,8 +391,14 @@ void iApp::logSetup(bool appending) {
         ofLogToFile("logs/" + log_name, appending);
     }
     
-    //ofSetLogLevel(OF_LOG_VERBOSE);
     
+    int level = CONFIG_GET("log", "level", 1);
+    // VERBOSE = 0  NOTICE = 1 WARNING = 2 ERROR = 3 FATAL_ERROR = 4 SILENT = 5
+    
+    if(level >= 0 && level <= (int)OF_LOG_SILENT) {
+        ofSetLogLevel( (ofLogLevel)level );
+    }
+        
 }
 
 void iApp::logHeader() {
