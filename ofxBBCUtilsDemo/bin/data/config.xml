@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Test config file   -->
+
+<config>
+	
+	<colors>
+		<palette id="@" values="FF0000,00FF00,0000FF" />
+		<palette id="X" values="FF0000,FFFFFF" />
+		<palette id="corona music" values="263973,194973,F2C12E,F2A516,F2F2F2" />
+		<palette id="beach" values="06CFD2,026369,F2F2EB,F2C12E,D61A3E" />
+		<palette id="pie party for all kulerist" values="690011,BF0426,CC2738,F2D99C,E5B96F" />
+		<palette id="warm cold" values="0F1999,276CCC,31D4FF,FF5400,CC2F02" />
+		<palette id="rainbow jimmies" values="F20574,9632A1,05DBF2,F21905,D7EDB7" />
+		<palette id="map" values="248A8A,C9FA58,F9E555,FAAC38,F2572A" />
+		<palette id="A" values="A6323B,BFA454,F2DBAE,BF814B,D9564A" />
+		<palette id="B" values="C53F2D,BF7F76,F2AED6,A8F472,AEBF76" />
+		<palette id="C" values="FFD1EC,A6668C,F2AED6,5BA656,B2F2AE" />
+		<palette id="D" values="F4EEC8,A6668C,F2AED6,76BABF,6FA1A6" />
+		<palette id="E" values="3E9654,0B6321,133001,30103D,310B63" />
+		<palette id="F" values="D96AA7,71328C,A6D982,7FBF3F,A2F252" />
+		<palette id="yellow teal" values="FFD900,FFFF7F,008971" />
+		<palette id="color1" values="E82C0C,FF530D,FF0000,E80C7A,FF0DFF" />
+		<palette id="poppies on blue sky" values="05DBF2,FDBD00,764300,F25C05,F93A00" />
+		<palette id="cat1" values="7F3E00,00BF99,007A7D,FFD102,719902" />
+		<palette id="casatualincorp2" values="D92323,F2F2F2,BFBFBF,747474,262626" />
+		<palette id="moonrise kingdom" values="D91424,45B3BF,BABF2C,F2D22E,BF1717" />
+	</colors>	
+
+	<mpe enabled="0" is_master="1" />
+    
+    <window fullscreen="0" />
+	
+    <log />
+    
+</config>
+

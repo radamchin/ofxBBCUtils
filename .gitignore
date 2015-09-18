@@ -1,6 +1,8 @@
 # ignory
-ofxBBCUtilsDevApp/bin/bbcUtilsDebug.app/*
+
+*.app
 *.xcuserdatad
+
 
 **.zip
 
