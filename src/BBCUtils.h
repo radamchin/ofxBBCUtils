@@ -65,6 +65,23 @@ namespace bbc {
             return out.str();
         }
         
+        static float HMSFtoSeconds(const string & input, int frame_rate = 25) {
+            // take 0:03:29:17 return (3*60) + 29 + ()
+            vector<string> parts = ofSplitString(input, ":", false, true);
+            if(parts.size() == 4) {
+                int hours = ofToInt(parts[0]);
+                int mins = ofToInt(parts[1]);
+                int secs = ofToInt(parts[2]);
+                float frames = ofToFloat(parts[3]);
+                
+                return (hours * 3600) + (mins * 60) + secs + (frames / (float)(frame_rate));
+            }else{
+                ofLogError("HMSFtoSeconds illegal part count. Can't parse") << parts.size() << " 4 expected '" << input << "'";
+                return -1.0;
+            }
+            
+        }
+        
         static string secondsToHMS(int totalSeconds) {
             int hours   = floor(totalSeconds / 3600);
             int minutes = floor((totalSeconds - (hours * 3600)) / 60);
