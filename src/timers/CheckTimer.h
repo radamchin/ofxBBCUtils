@@ -32,6 +32,7 @@ namespace bbc {
                 float getPosition();
                 float getPositionSeconds();
                 int getRemaining();
+                float getRemainingSeconds();
                 int getDuration();
                 
                 void expire();

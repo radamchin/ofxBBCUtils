@@ -62,7 +62,11 @@ namespace bbc {
         float CheckTimer::getPositionSeconds() {
             return getPosition() * (duration / 1000);
         }
-
+        
+        float CheckTimer::getRemainingSeconds() {
+            return (1.0-getPosition()) * (duration / 1000);
+        }
+        
         void CheckTimer::reset(bool log) {
             expiryTime = getCurrentTimeStamp() + duration;
             resetCount++;
