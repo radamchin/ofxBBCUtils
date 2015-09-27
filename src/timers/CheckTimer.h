@@ -29,9 +29,13 @@ namespace bbc {
                 void setup(string id, int duration);
             
                 bool isExpired();
+            
                 float getPosition();
                 float getPositionSeconds();
+            
                 int getRemaining();
+                float getRemainingSeconds();
+
                 int getDuration();
                 
                 void expire();

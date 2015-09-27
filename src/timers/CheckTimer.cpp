@@ -54,6 +54,10 @@ namespace bbc {
             int i = expiryTime - getCurrentTimeStamp();
             return i < 0 ? 0 : i;
         }
+        
+        float CheckTimer::getRemainingSeconds() {
+            return (1.0-getPosition()) * (duration / 1000);
+        }
 
         int CheckTimer::getDuration() {
             return duration;
