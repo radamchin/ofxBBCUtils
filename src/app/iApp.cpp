@@ -123,15 +123,18 @@ void iApp::update(ofEventArgs& args) {
     if(keep_cursor_hidden) hideCursor();
     
     if(auto_shutdown) {
-        
         Poco::LocalDateTime now;
         
-        if(now > shutdown_time) {
+        if( now > shutdown_time && canAutoShutdownNow() ) {
             ofLogWarning("iApp: AUTO SHUTDOWN was scheduled for now. Terminating app.");
             ofExit();
         }
     }
     
+}
+
+bool iApp::canAutoShutdownNow() {
+    return true;
 }
 
 void iApp::cursorCheck() {
@@ -140,24 +143,27 @@ void iApp::cursorCheck() {
     
     if(cursor_visible) {
         if(ofGetElapsedTimeMillis() >= cursor_timer) { // its been still long enough to auto hide it
-            
             hideCursor();
-            
            // cout << " hideCursor " << ofGetElapsedTimeMillis() << endl;
-            cursor_visible = false;
+            // cursor_visible = false;
         }
     }
     
 }
 
 void iApp::hideCursor(bool permanent) {
+    
+   // ofLogNotice("iApp::hideCursor");
+    
     // Cursor show and hide not working on mac in 0.8.0 : using workaroud from http://forum.openframeworks.cc/t/ofhidecursor-not-working-on-osx-10-8-v0-8-0/13379/3
     // Is working in 0.8.1 so do a OF compile check here
-   // #ifdef __APPLE__
-   //     CGDisplayHideCursor(NULL);
-   // #else
+    #ifdef __APPLE__
+        CGDisplayHideCursor(NULL);
+    #else
         ofHideCursor();
-   // #endif
+    #endif
+    
+    cursor_visible = false;
     
     if(permanent) keep_cursor_hidden = true;
     
@@ -165,11 +171,15 @@ void iApp::hideCursor(bool permanent) {
 
 void iApp::showCursor() {
     
-   // #ifdef __APPLE__
-  //      CGDisplayShowCursor(NULL);
-  //  #else
+    //ofLogNotice("iApp::showCursor");
+    
+    #ifdef __APPLE__
+        CGDisplayShowCursor(NULL);
+    #else
         ofShowCursor();
-  //  #endif
+    #endif
+    
+    cursor_visible = true;
     
     if(keep_cursor_hidden) keep_cursor_hidden = false;
 
@@ -177,10 +187,12 @@ void iApp::showCursor() {
 
 void iApp::cursorUpdate() {
     
+    // reset the timer that was counting down to when it restarts
+    
     //  cout << "cursorUpdate " << ofGetElapsedTimeMillis() << endl;
     
-    if(!cursor_visible) {
-        cursor_visible = true;
+    if(!cursor_visible) { // >> why??
+        // cursor_visible = true;
         showCursor();
     }
     
@@ -205,18 +217,21 @@ void iApp::mouseMoved( ofMouseEventArgs & mouse ) {
     ofBaseApp::mouseMoved(mouse);
     
     if(auto_hide_cursor) cursorUpdate();
+    
 }
 
 void iApp::mouseDragged( ofMouseEventArgs & mouse ) {
     ofBaseApp::mouseDragged(mouse);
     
     if(auto_hide_cursor) cursorUpdate();
+    
 }
 
 void iApp::mousePressed( ofMouseEventArgs & mouse ) {
     ofBaseApp::mousePressed(mouse);
     
     if(auto_hide_cursor) cursorUpdate();
+    
 }
 
 void iApp::mouseReleased( ofMouseEventArgs & mouse ) {
@@ -346,7 +361,6 @@ void iApp::drawCalibration(int alpha) {
 
 
 //-----------------------------------------------------------------------------
-
 
 void iApp::logSetup(bool appending) {
      

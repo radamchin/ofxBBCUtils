@@ -1,9 +1,6 @@
 /*
- 
     iApp: InstalationApp
- 
     Collection of utils for running an application in interactive installation type environment
- 
     Adam Hinshaw 17 May 2014
  
     TODO:
@@ -55,6 +52,11 @@ public:
         
 protected:
     
+    bool canAutoShutdownNow(); // to be extended to abort an auto shutdown
+    
+    void logHeader();
+    void logFooter();
+    
     bool log_to_file;
     bool archive_logs;
     
@@ -66,9 +68,6 @@ protected:
     bool auto_shutdown;
     
     Poco::LocalDateTime shutdown_time;
-    
-    void logHeader();
-    void logFooter();
     
     void logSetup(bool appending = true);
     
