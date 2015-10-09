@@ -151,6 +151,15 @@ void iApp::cursorCheck() {
     
 }
 
+void iApp::toggleCursor() {
+    
+    if(cursor_visible) {
+        hideCursor();
+    }else{
+        showCursor();
+    }
+}
+
 void iApp::hideCursor(bool permanent) {
     
    // ofLogNotice("iApp::hideCursor");

@@ -47,12 +47,14 @@ public:
     
     void exit(ofEventArgs & args);
     
-    void showCursor();
-    void hideCursor(bool permanent = false);
         
 protected:
     
     bool canAutoShutdownNow(); // to be extended to abort an auto shutdown
+    
+    void showCursor();
+    void toggleCursor();
+    void hideCursor(bool permanent = false);
     
     void logHeader();
     void logFooter();
