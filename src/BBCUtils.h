@@ -106,8 +106,6 @@ namespace bbc {
             return Poco::DateTimeFormatter::format(now, bbcSQLDayFormat);
         }
         
-        
-        
         static string getNowTime() {
             // just time "15:39:22"
             Poco::LocalDateTime now;
