@@ -69,6 +69,8 @@ iApp::iApp(string _app_name, string _app_version, bool _log_to_file, bool _archi
     if(CONFIG_GET("mouse", "hide", false)) { // override auto hide cursor
         auto_hide_cursor = false;
         hideCursor(true);
+    }else{
+      //  showCursor(); // work around 0.8.4 bug: https://github.com/openframeworks/openFrameworks/issues/3052#issuecomment-63941074
     }
     
     auto_shutdown = CONFIG_GET("shutdown", "enabled", false);
@@ -162,15 +164,15 @@ void iApp::toggleCursor() {
 
 void iApp::hideCursor(bool permanent) {
     
-   // ofLogNotice("iApp::hideCursor");
+    // ofLogNotice("iApp::hideCursor");
     
     // Cursor show and hide not working on mac in 0.8.0 : using workaroud from http://forum.openframeworks.cc/t/ofhidecursor-not-working-on-osx-10-8-v0-8-0/13379/3
     // Is working in 0.8.1 so do a OF compile check here
-    #ifdef __APPLE__
-        CGDisplayHideCursor(NULL);
-    #else
+    //#ifdef __APPLE__
+   //     CGDisplayHideCursor(NULL);
+   // #else
         ofHideCursor();
-    #endif
+   // #endif
     
     cursor_visible = false;
     
@@ -180,13 +182,13 @@ void iApp::hideCursor(bool permanent) {
 
 void iApp::showCursor() {
     
-    //ofLogNotice("iApp::showCursor");
+    ofLogNotice("iApp::showCursor");
     
-    #ifdef __APPLE__
-        CGDisplayShowCursor(NULL);
-    #else
+    //#ifdef __APPLE__
+   //     CGDisplayShowCursor(NULL);
+   // #else
         ofShowCursor();
-    #endif
+    //#endif
     
     cursor_visible = true;
     
