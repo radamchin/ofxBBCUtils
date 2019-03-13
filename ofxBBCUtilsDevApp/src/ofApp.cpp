@@ -100,6 +100,7 @@ void ofApp::testConfig() {
     ofXml *cols_xml = bbc::utils::Config::instance()->getXMLNode("config:colors");
     cout << "Found:" << endl << cols_xml->toString() << endl;
     
+    /* TODO: fix as remmed for 0.10 port as throwing errors
     cols_xml->setToChild(0); // set it to the first one.
     bool sibling_found = 1;
     int i = 0;
@@ -112,7 +113,7 @@ void ofApp::testConfig() {
         sibling_found = cols_xml->setToSibling();
     }
     
-    cout << i << " parsed." << endl;
+    cout << i << " parsed." << endl;*/
 
 }
 
@@ -195,13 +196,13 @@ void ofApp::testTimers(){
     
     if(a_timer->isExpired()) {
         ofSetColor(255, 0, 255);
-        ofCircle(30, 60, 10);
+        ofDrawCircle(30, 60, 10);
         a_timer->reset();
     }
        
     if(b_timer->isExpired()) {
         ofSetColor(255, 0, 0);
-        ofCircle(30, 90, 10);
+        ofDrawCircle(30, 90, 10);
         b_timer->reset();
     }
     
@@ -242,31 +243,31 @@ void ofApp::testEasing() {
     // Back Bounce Circ Cubic Elastic Expo Linear Quad Quart Quint Sine
     
     ofSetColor(255,255,0);
-    ofCircle( 20, ErpEase::sineIn(0, ofGetHeight(), fa), 10);
+    ofDrawCircle( 20, ErpEase::sineIn(0, ofGetHeight(), fa), 10);
     
     ofSetColor(0,255,255);
-    ofCircle( 40, ErpEase::sineOut(0, ofGetHeight(), fb), 10);
+    ofDrawCircle( 40, ErpEase::sineOut(0, ofGetHeight(), fb), 10);
     
     ofSetColor(255,0,255);
-    ofCircle( 60, ErpEase::sineInOut(0, ofGetHeight(), fc), 10);
+    ofDrawCircle( 60, ErpEase::sineInOut(0, ofGetHeight(), fc), 10);
     
     ofSetColor(255,255,0);
-    ofCircle( 80, ErpEase::elasticIn(0, ofGetHeight(), fa), 10);
+    ofDrawCircle( 80, ErpEase::elasticIn(0, ofGetHeight(), fa), 10);
     
     ofSetColor(0,255,255);
-    ofCircle( 100, ErpEase::elasticOut(0, ofGetHeight(), fb), 10);
+    ofDrawCircle( 100, ErpEase::elasticOut(0, ofGetHeight(), fb), 10);
     
     ofSetColor(255,0,255);
-    ofCircle( 120, ErpEase::elasticInOut(0, ofGetHeight(), fc), 10);
+    ofDrawCircle( 120, ErpEase::elasticInOut(0, ofGetHeight(), fc), 10);
     
     ofSetColor(255,255,0);
-    ofCircle( 140, ErpEase::bounceIn(0, ofGetHeight(), fa), 10);
+    ofDrawCircle( 140, ErpEase::bounceIn(0, ofGetHeight(), fa), 10);
     
     ofSetColor(0,255,255);
-    ofCircle( 160, ErpEase::bounceOut(0, ofGetHeight(), fb), 10);
+    ofDrawCircle( 160, ErpEase::bounceOut(0, ofGetHeight(), fb), 10);
     
     ofSetColor(255,0,255);
-    ofCircle( 180, ErpEase::bounceInOut(0, ofGetHeight(), fc), 10);
+    ofDrawCircle( 180, ErpEase::bounceInOut(0, ofGetHeight(), fc), 10);
 }
 
 //--------------------------------------------------------------
