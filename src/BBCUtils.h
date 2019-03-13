@@ -21,11 +21,11 @@
 
 #include "ofMain.h"
 
-#include "Poco/Timestamp.h"
-#include "Poco/DateTime.h"
-#include "Poco/DateTimeFormatter.h"
-#include "Poco/DateTimeParser.h"
-#include "Poco/DateTime.h"
+#include <Poco/Timestamp.h>
+#include <Poco/DateTime.h>
+#include <Poco/DateTimeFormatter.h>
+#include <Poco/DateTimeParser.h>
+#include <Poco/DateTime.h>
 
 // For Clipboard access
 #if (_MSC_VER)
