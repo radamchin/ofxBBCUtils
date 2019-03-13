@@ -1,2 +1,0 @@
-ofxBBCUtils
-ofxXmlSettings
