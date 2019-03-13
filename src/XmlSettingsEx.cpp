@@ -20,7 +20,7 @@ namespace bbc {
             TiXmlElement *elem = getElementForAttribute(tag, which);
             
             if (elem) {
-                helper_xml.loadFromBuffer( makeString(elem) );
+                helper_xml.parse( makeString(elem) );
             }else{
                 helper_xml.clear();
             }
