@@ -36,9 +36,9 @@
 
 #if (_MSC_VER)
 	// crazy no round function in math.h on win32 (or in OF)
-	static inline float round(float f){
+	/*static inline float round(float f){
 		return floor(f + .5);
-	}
+	}*/
 #endif
 
 
