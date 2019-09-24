@@ -300,26 +300,26 @@ void iApp::drawCalibration(int alpha) {
     
     // border
     ofRectMode(OF_RECTMODE_CORNER);
-    ofRect(hsw, hsw, w-sw, h-sw);
+    ofDrawRectangle(hsw, hsw, w-sw, h-sw);
     
     // diagonal lines
-    ofLine(hsw, hsw, w+hsw, h-hsw);
-    ofLine(-hsw, h-hsw, w-hsw, hsw);
+    ofDrawLine(hsw, hsw, w+hsw, h-hsw);
+    ofDrawLine(-hsw, h-hsw, w-hsw, hsw);
     
     // centre lines
-    ofLine(cx, 0, cx, h);
-    ofLine(0, cy, w, cy);
+    ofDrawLine(cx, 0, cx, h);
+    ofDrawLine(0, cy, w, cy);
     
     // horizontal 1/4 lines
-    ofLine(0, h/4, w, h/4);
-    ofLine(0, h-h/4, w, h-h/4);
+    ofDrawLine(0, h/4, w, h/4);
+    ofDrawLine(0, h-h/4, w, h-h/4);
     
     // Draw centre rect & circle
     ofRectMode(OF_RECTMODE_CENTER);
     
     float dim = min(w, h) * .66f;
     
-    ofEllipse(cx, cy, dim, dim);
+    ofDrawEllipse(cx, cy, dim, dim);
     
     ofSetLineWidth(1.0f);
     
@@ -338,8 +338,8 @@ void iApp::drawCalibration(int alpha) {
             case 3: ofSetColor(0,0,255, alpha); break;
         }
         
-        ofEllipse(0, y, mini_rad, mini_rad); // LHS
-        ofEllipse(w, y, mini_rad, mini_rad); // RHS
+        ofDrawEllipse(0, y, mini_rad, mini_rad); // LHS
+        ofDrawEllipse(w, y, mini_rad, mini_rad); // RHS
     }
     
     // Draw more comprehensive grid
@@ -357,13 +357,13 @@ void iApp::drawCalibration(int alpha) {
     // vertical lines
     for(int col = 1; col < wc; col++) {
         int gx = round(col * grid_x);
-        ofLine(gx, 0, gx, h);
+        ofDrawLine(gx, 0, gx, h);
     }
     
     // horizontal lines
     for(int row = 1; row < hc; row++) {
         int gy = round(row * grid_y);
-        ofLine(0, gy, w, gy);
+        ofDrawLine(0, gy, w, gy);
     }
     
     ofPopStyle();

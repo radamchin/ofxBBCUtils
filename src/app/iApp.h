@@ -1,5 +1,5 @@
 /*
-    iApp: InstalationApp
+    iApp: InstallationApp
     Collection of utils for running an application in interactive installation type environment
     Adam Hinshaw 17 May 2014
  
