@@ -78,34 +78,33 @@ namespace bbc {
                 }
                 
                 void drawDebug(int alpha = 255) {
-                    // draw the points along with the path and handles.
+                    // Draw the points along with the path and handles.
                     
                     ofPushStyle();
-                    
                     ofNoFill();
                     
                     ofSetColor(0,255,255,alpha);
                     
-                    ofBezier(start_pos.x, start_pos.y, control_a.x, control_a.y, control_b.x, control_b.y, end_pos.x, end_pos.y);
+                    ofDrawBezier(start_pos.x, start_pos.y, control_a.x, control_a.y, control_b.x, control_b.y, end_pos.x, end_pos.y);
                         //(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
                     
                     ofSetColor(255,255,0,alpha);
-                    ofEllipse(start_pos.x, start_pos.y, 10, 10);
+                    ofDrawEllipse(start_pos.x, start_pos.y, 10, 10);
                 
                     ofSetColor(255,0,255,alpha);
-                    ofEllipse(end_pos.x, end_pos.y, 10, 10);
+                    ofDrawEllipse(end_pos.x, end_pos.y, 10, 10);
                     
                     ofSetColor(255,255,255,alpha);
-                    ofEllipse(control_a.x, control_a.y, 5, 5);
-                    ofEllipse(control_b.x, control_b.y, 5, 5);
+                    ofDrawEllipse(control_a.x, control_a.y, 5, 5);
+                    ofDrawEllipse(control_b.x, control_b.y, 5, 5);
                     
                     ofSetColor(128,128,128,alpha);
-                    ofLine(control_a.x, control_a.y, start_pos.x, start_pos.y);
-                    ofLine(control_b.x, control_b.y, end_pos.x, end_pos.y);
+                    ofDrawLine(control_a.x, control_a.y, start_pos.x, start_pos.y);
+                    ofDrawLine(control_b.x, control_b.y, end_pos.x, end_pos.y);
                     
                     ofFill();
                     ofSetColor(255,0,0,alpha);
-                    ofEllipse(current_pos.x, current_pos.y, 5, 5);
+                    ofDrawEllipse(current_pos.x, current_pos.y, 8, 8);
 
                     ofPopStyle();
                 }

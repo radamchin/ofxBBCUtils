@@ -21,7 +21,7 @@
 #include "FPSTrackingWidget.h"
 
 
-#define BBC_UTILS_DEV_VERSION "1.0.2"
+#define BBC_UTILS_DEV_VERSION "1.0.3"
 
 using namespace bbc::utils;
 
