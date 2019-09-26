@@ -36,9 +36,9 @@
 
 #if (_MSC_VER)
 	// crazy no round function in math.h on win32 (or in OF)
-	static inline float round(float f){
+	/*static inline float round(float f){
 		return floor(f + .5);
-	}
+	}*/
 #endif
 
 
@@ -105,8 +105,6 @@ namespace bbc {
             Poco::LocalDateTime now;
             return Poco::DateTimeFormatter::format(now, bbcSQLDayFormat);
         }
-        
-        
         
         static string getNowTime() {
             // just time "15:39:22"
