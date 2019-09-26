@@ -41,6 +41,7 @@
 	}*/
 #endif
 
+#include "GLInfo.h"
 
 #define bbcSQLDateStampFormat "%Y-%m-%d %H:%M:%S"    // "YYYY-MM-DD HH:MM:SS" : Format SQLite needs to save dates (or could just use  DateTimeFormat::SORTABLE_FORMAT for this..)
 #define bbcSQLDayFormat "%Y-%m-%d"                   // "YYYY-MM-DD"
@@ -79,7 +80,6 @@ namespace bbc {
                 ofLogError("HMSFtoSeconds illegal part count. Can't parse") << parts.size() << " 4 expected '" << input << "'";
                 return -1.0;
             }
-            
         }
         
         static string secondsToHMS(int totalSeconds) {
@@ -105,8 +105,6 @@ namespace bbc {
             Poco::LocalDateTime now;
             return Poco::DateTimeFormatter::format(now, bbcSQLDayFormat);
         }
-        
-        
         
         static string getNowTime() {
             // just time "15:39:22"
@@ -167,7 +165,6 @@ namespace bbc {
         static string msToHMS(int totalMS) {
             
             int totalSeconds = totalMS/1000.0;
-            
           //  int ms = totalMS % 1000;
             
             int hours   = floor(totalSeconds / 3600);
@@ -233,19 +230,14 @@ namespace bbc {
         }
 
         static void recursiveFileSearchNameContains(const string & path, const string & search_str, vector<string> & results ) {
-            
             // Get all files of a folder that contain a string (useful for searching by type, eg ".mp3")
             
             ofDirectory dir;
-            
             dir.listDir(path);
             
             for(int i = 0; i < (int)dir.size(); i++){
-                
                 string file_path = dir.getPath(i);
-                
                 ofFile file(file_path);
-                
                 if(file.isDirectory()) {
                     recursiveFileSearchNameContains(file_path, search_str, results);
                 }else{
@@ -253,7 +245,6 @@ namespace bbc {
                         results.push_back(file_path);
                     }
                 }
-                
             }
             
         }
@@ -311,8 +302,10 @@ namespace bbc {
 
         static void printGLStats() {
             
+           // ofLogNotice("\tGL") << ofGetGLInfoStringMin();
+            
             // Dump opengl info
-            ofLogNotice("\tGL") << "Vendor:   " << (char*)glGetString(GL_VENDOR);
+           /* ofLogNotice("\tGL") << "Vendor:   " << (char*)glGetString(GL_VENDOR);
             ofLogNotice("\tGL") << "Renderer: " << (char*)glGetString(GL_RENDERER);
             ofLogNotice("\tGL") << "Version:  " << (char*)glGetString(GL_VERSION);
             ofLogNotice("\tGL") << "GLSL:     " << (char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
@@ -322,8 +315,9 @@ namespace bbc {
             glGetIntegerv(GL_MAX_TEXTURE_SIZE, &GlMaxTextureSize);
             ofLogNotice("\tGL") << "MaxTexSize:" << GlMaxTextureSize; // px?
             
-            ofLogNotice("ofFbo") << "checkGLSupport:" << ofFbo::checkGLSupport() << ", maxColorAttachments=" << ofFbo::maxColorAttachments() << ", maxDrawBuffers=" << ofFbo::maxDrawBuffers() <<
-            ", maxSamples=" << ofFbo::maxSamples();
+            */
+            
+           // ofLogNotice("ofFbo") << "checkGLSupport:" << ofFbo::checkGLSupport() << ", maxColorAttachments=" << ofFbo::maxColorAttachments() << ", maxDrawBuffers=" << ofFbo::maxDrawBuffers() << ", maxSamples=" << ofFbo::maxSamples();
             
             if(ofIsGLProgrammableRenderer()) {
                 ofLogNotice("\tofGL Using Programmable Renderer");
