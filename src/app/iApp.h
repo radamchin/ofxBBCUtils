@@ -1,9 +1,6 @@
 /*
- 
-    iApp: InstalationApp
- 
+    iApp: InstallationApp
     Collection of utils for running an application in interactive installation type environment
- 
     Adam Hinshaw 17 May 2014
  
     TODO:
@@ -50,10 +47,17 @@ public:
     
     void exit(ofEventArgs & args);
     
-    void showCursor();
-    void hideCursor(bool permanent = false);
         
 protected:
+    
+    bool canAutoShutdownNow(); // to be extended to abort an auto shutdown
+    
+    void showCursor();
+    void toggleCursor();
+    void hideCursor(bool permanent = false);
+    
+    void logHeader();
+    void logFooter();
     
     bool log_to_file;
     bool archive_logs;
@@ -66,9 +70,6 @@ protected:
     bool auto_shutdown;
     
     Poco::LocalDateTime shutdown_time;
-    
-    void logHeader();
-    void logFooter();
     
     void logSetup(bool appending = true);
     

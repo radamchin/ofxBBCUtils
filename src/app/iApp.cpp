@@ -69,6 +69,8 @@ iApp::iApp(string _app_name, string _app_version, bool _log_to_file, bool _archi
     if(CONFIG_GET("mouse", "hide", false)) { // override auto hide cursor
         auto_hide_cursor = false;
         hideCursor(true);
+    }else{
+      //  showCursor(); // work around 0.8.4 bug: https://github.com/openframeworks/openFrameworks/issues/3052#issuecomment-63941074
     }
     
     auto_shutdown = CONFIG_GET("shutdown", "enabled", false);
@@ -123,15 +125,18 @@ void iApp::update(ofEventArgs& args) {
     if(keep_cursor_hidden) hideCursor();
     
     if(auto_shutdown) {
-        
         Poco::LocalDateTime now;
         
-        if(now > shutdown_time) {
+        if( now > shutdown_time && canAutoShutdownNow() ) {
             ofLogWarning("iApp: AUTO SHUTDOWN was scheduled for now. Terminating app.");
             ofExit();
         }
     }
     
+}
+
+bool iApp::canAutoShutdownNow() {
+    return true;
 }
 
 void iApp::cursorCheck() {
@@ -140,24 +145,36 @@ void iApp::cursorCheck() {
     
     if(cursor_visible) {
         if(ofGetElapsedTimeMillis() >= cursor_timer) { // its been still long enough to auto hide it
-            
             hideCursor();
-            
            // cout << " hideCursor " << ofGetElapsedTimeMillis() << endl;
-            cursor_visible = false;
+            // cursor_visible = false;
         }
     }
     
 }
 
+void iApp::toggleCursor() {
+    
+    if(cursor_visible) {
+        hideCursor();
+    }else{
+        showCursor();
+    }
+}
+
 void iApp::hideCursor(bool permanent) {
+    
+    // ofLogNotice("iApp::hideCursor");
+    
     // Cursor show and hide not working on mac in 0.8.0 : using workaroud from http://forum.openframeworks.cc/t/ofhidecursor-not-working-on-osx-10-8-v0-8-0/13379/3
     // Is working in 0.8.1 so do a OF compile check here
-   // #ifdef __APPLE__
+    //#ifdef __APPLE__
    //     CGDisplayHideCursor(NULL);
    // #else
         ofHideCursor();
    // #endif
+    
+    cursor_visible = false;
     
     if(permanent) keep_cursor_hidden = true;
     
@@ -165,11 +182,15 @@ void iApp::hideCursor(bool permanent) {
 
 void iApp::showCursor() {
     
-   // #ifdef __APPLE__
-  //      CGDisplayShowCursor(NULL);
-  //  #else
+    ofLogNotice("iApp::showCursor");
+    
+    //#ifdef __APPLE__
+   //     CGDisplayShowCursor(NULL);
+   // #else
         ofShowCursor();
-  //  #endif
+    //#endif
+    
+    cursor_visible = true;
     
     if(keep_cursor_hidden) keep_cursor_hidden = false;
 
@@ -177,10 +198,12 @@ void iApp::showCursor() {
 
 void iApp::cursorUpdate() {
     
+    // reset the timer that was counting down to when it restarts
+    
     //  cout << "cursorUpdate " << ofGetElapsedTimeMillis() << endl;
     
-    if(!cursor_visible) {
-        cursor_visible = true;
+    if(!cursor_visible) { // >> why??
+        // cursor_visible = true;
         showCursor();
     }
     
@@ -205,18 +228,21 @@ void iApp::mouseMoved( ofMouseEventArgs & mouse ) {
     ofBaseApp::mouseMoved(mouse);
     
     if(auto_hide_cursor) cursorUpdate();
+    
 }
 
 void iApp::mouseDragged( ofMouseEventArgs & mouse ) {
     ofBaseApp::mouseDragged(mouse);
     
     if(auto_hide_cursor) cursorUpdate();
+    
 }
 
 void iApp::mousePressed( ofMouseEventArgs & mouse ) {
     ofBaseApp::mousePressed(mouse);
     
     if(auto_hide_cursor) cursorUpdate();
+    
 }
 
 void iApp::mouseReleased( ofMouseEventArgs & mouse ) {
@@ -274,26 +300,26 @@ void iApp::drawCalibration(int alpha) {
     
     // border
     ofRectMode(OF_RECTMODE_CORNER);
-    ofRect(hsw, hsw, w-sw, h-sw);
+    ofDrawRectangle(hsw, hsw, w-sw, h-sw);
     
     // diagonal lines
-    ofLine(hsw, hsw, w+hsw, h-hsw);
-    ofLine(-hsw, h-hsw, w-hsw, hsw);
+    ofDrawLine(hsw, hsw, w+hsw, h-hsw);
+    ofDrawLine(-hsw, h-hsw, w-hsw, hsw);
     
     // centre lines
-    ofLine(cx, 0, cx, h);
-    ofLine(0, cy, w, cy);
+    ofDrawLine(cx, 0, cx, h);
+    ofDrawLine(0, cy, w, cy);
     
     // horizontal 1/4 lines
-    ofLine(0, h/4, w, h/4);
-    ofLine(0, h-h/4, w, h-h/4);
+    ofDrawLine(0, h/4, w, h/4);
+    ofDrawLine(0, h-h/4, w, h-h/4);
     
     // Draw centre rect & circle
     ofRectMode(OF_RECTMODE_CENTER);
     
     float dim = min(w, h) * .66f;
     
-    ofEllipse(cx, cy, dim, dim);
+    ofDrawEllipse(cx, cy, dim, dim);
     
     ofSetLineWidth(1.0f);
     
@@ -312,8 +338,8 @@ void iApp::drawCalibration(int alpha) {
             case 3: ofSetColor(0,0,255, alpha); break;
         }
         
-        ofEllipse(0, y, mini_rad, mini_rad); // LHS
-        ofEllipse(w, y, mini_rad, mini_rad); // RHS
+        ofDrawEllipse(0, y, mini_rad, mini_rad); // LHS
+        ofDrawEllipse(w, y, mini_rad, mini_rad); // RHS
     }
     
     // Draw more comprehensive grid
@@ -331,13 +357,13 @@ void iApp::drawCalibration(int alpha) {
     // vertical lines
     for(int col = 1; col < wc; col++) {
         int gx = round(col * grid_x);
-        ofLine(gx, 0, gx, h);
+        ofDrawLine(gx, 0, gx, h);
     }
     
     // horizontal lines
     for(int row = 1; row < hc; row++) {
         int gy = round(row * grid_y);
-        ofLine(0, gy, w, gy);
+        ofDrawLine(0, gy, w, gy);
     }
     
     ofPopStyle();
@@ -346,7 +372,6 @@ void iApp::drawCalibration(int alpha) {
 
 
 //-----------------------------------------------------------------------------
-
 
 void iApp::logSetup(bool appending) {
      
