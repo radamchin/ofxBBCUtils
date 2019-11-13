@@ -23,16 +23,20 @@ namespace bbc {
             
         public:
             
+            bool use_3d;
             bool use_ease;
             
-            BezierAnimator(bool _use_ease = true) {
+            BezierAnimator(bool _use_ease = true, bool _use_3d = false) {
                 use_ease = _use_ease;
+                use_3d = _use_3d;
             }
             
             void start(float start_x, float start_y, float a_x, float a_y, float b_x, float b_y, float end_x, float end_y, int frame_duration) {
                 
+                if(use_3d) ofLogWarning("BezierAnimator::start") << "You have used a 2d method but use_3d is enabled, Your beziers will be 2d only";
+                
                 start_pos.set(start_x, start_y);
-                current_pos.set(start_x, start_y);
+                current_pos.set(start_pos);
                 end_pos.set(end_x, end_y);
                 
                 control_a.set(a_x, a_y);
@@ -40,8 +44,20 @@ namespace bbc {
                 
                 FrameTweener::start(frame_duration); // super method
             }
+            void start(float start_x, float start_y, float start_z, float a_x, float a_y, float a_z, float b_x, float b_y, float b_z, float end_x, float end_y, float end_z, int frame_duration) {
+                
+                start_pos.set(start_x, start_y, start_z);
+                current_pos.set(start_pos);
+                end_pos.set(end_x, end_y, end_z);
+                
+                control_a.set(a_x, a_y, a_z);
+                control_b.set(b_x, b_y, b_z);
+                
+                FrameTweener::start(frame_duration); // super method
+            }
             
             void start(ofPoint & _start_pos, ofPoint & _control_a, ofPoint & _control_b, ofPoint & _end_pos, float frame_duration) {
+                //Note:  This would support 3d.
                 
                 start_pos.set(_start_pos);
                 current_pos.set(_start_pos);
@@ -54,6 +70,8 @@ namespace bbc {
             }
             
             void start(ofVec2f & _start_pos, ofVec2f & _control_a, ofVec2f & _control_b, ofVec2f & _end_pos, float frame_duration) {
+                
+                if(use_3d) ofLogWarning("BezierAnimator::start") << "You have used a 2d method but use_3d is enabled, Your beziers will be 2d only";
                 
                 start_pos.set(_start_pos);
                 current_pos.set(_start_pos);
@@ -87,6 +105,10 @@ namespace bbc {
                 
                 current_pos.x = bezierPoint(start_pos.x, control_a.x, control_b.x, end_pos.x, pos);
                 current_pos.y = bezierPoint(start_pos.y, control_a.y, control_b.y, end_pos.y, pos);
+                
+                if(use_3d) {
+                    current_pos.z = bezierPoint(start_pos.z, control_a.z, control_b.z, end_pos.z, pos);
+                }
             }
             
             void drawDebug(int alpha = 255, float r = 10.0) {
@@ -97,26 +119,59 @@ namespace bbc {
                 
                 ofSetColor(0,255,255,alpha);
                 
-                ofDrawBezier(start_pos.x, start_pos.y, control_a.x, control_a.y, control_b.x, control_b.y, end_pos.x, end_pos.y);
-                //(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
+                if(use_3d) {
                 
-                ofSetColor(255,255,0,alpha);
-                ofDrawEllipse(start_pos.x, start_pos.y, r, r);
+                    ofDrawBezier(start_pos.x, start_pos.y, start_pos.z,
+                                 control_a.x, control_a.y, control_a.z,
+                                 control_b.x, control_b.y, control_b.z,
+                                 end_pos.x,     end_pos.y, end_pos.z);
+                    
+                    ofSetColor(255,255,0,alpha);
+                    ofDrawEllipse(start_pos.x, start_pos.y, start_pos.z, r, r);
+                    
+                    ofSetColor(255,0,255,alpha);
+                    ofDrawEllipse(end_pos.x, end_pos.y, end_pos.z, r, r);
+                    
+                    // Draw control points / handles
+                    ofSetColor(255,255,255,alpha);
+                    ofDrawEllipse(control_a.x, control_a.y, control_a.z, r/2, r/2);
+                    ofDrawEllipse(control_b.x, control_b.y, control_b.z, r/2, r/2);
+                    
+                    ofSetColor(128,128,128,alpha);
+                    ofDrawLine(control_a.x, control_a.y, control_a.z, start_pos.x, start_pos.y, start_pos.z);
+                    ofDrawLine(control_b.x, control_b.y, control_b.z, end_pos.x, end_pos.y, end_pos.z);
+                    
+                    // Draw the position of object along bezier path
+                    ofFill();
+                    ofSetColor(255,0,0,alpha);
+                    ofDrawEllipse(current_pos.x, current_pos.y, current_pos.z, r*.8, r*.8);
+                    
+                }else{
                 
-                ofSetColor(255,0,255,alpha);
-                ofDrawEllipse(end_pos.x, end_pos.y, r, r);
+                    ofDrawBezier(start_pos.x, start_pos.y, control_a.x, control_a.y, control_b.x, control_b.y, end_pos.x, end_pos.y);
+                    //(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
+                    
+                    ofSetColor(255,255,0,alpha);
+                    ofDrawEllipse(start_pos.x, start_pos.y, r, r);
+                    
+                    ofSetColor(255,0,255,alpha);
+                    ofDrawEllipse(end_pos.x, end_pos.y, r, r);
+                    
+                    // Draw control points / handles
+                    ofSetColor(255,255,255,alpha);
+                    ofDrawEllipse(control_a.x, control_a.y, r/2, r/2);
+                    ofDrawEllipse(control_b.x, control_b.y, r/2, r/2);
+                    
+                    ofSetColor(128,128,128,alpha);
+                    ofDrawLine(control_a.x, control_a.y, start_pos.x, start_pos.y);
+                    ofDrawLine(control_b.x, control_b.y, end_pos.x, end_pos.y);
+                    
+                     // Draw the position of object along bezier path
+                    ofFill();
+                    ofSetColor(255,0,0,alpha);
+                    ofDrawEllipse(current_pos.x, current_pos.y, r*.8, r*.8);
                 
-                ofSetColor(255,255,255,alpha);
-                ofDrawEllipse(control_a.x, control_a.y, r/2, r/2);
-                ofDrawEllipse(control_b.x, control_b.y, r/2, r/2);
-                
-                ofSetColor(128,128,128,alpha);
-                ofDrawLine(control_a.x, control_a.y, start_pos.x, start_pos.y);
-                ofDrawLine(control_b.x, control_b.y, end_pos.x, end_pos.y);
-                
-                ofFill();
-                ofSetColor(255,0,0,alpha);
-                ofDrawEllipse(current_pos.x, current_pos.y, r*.8, r*.8);
+                }
                 
                 ofPopStyle();
             }
@@ -129,11 +184,13 @@ namespace bbc {
                 return current_pos.y;
             }
             
-            ofVec2f getPosition() {
-                return current_pos;
-            
+            float getZ() {
+                return current_pos.z;
             }
             
+            ofPoint getPosition() {
+                return current_pos;
+            }
             
             string toString(){
                 ostringstream out;
@@ -143,16 +200,15 @@ namespace bbc {
             
         protected:
             
-            ofVec2f start_pos;
-            ofVec2f current_pos;
-            ofVec2f end_pos;
+            ofPoint start_pos;
+            ofPoint current_pos;
+            ofPoint end_pos;
             
-            ofVec2f control_a; // control point for the start_pos
-            ofVec2f control_b; // control point for the end_pos
+            ofPoint control_a; // Control point for the start_pos
+            ofPoint control_b; // Control point for the end_pos
             
-            // TODO: this should be in core, or an bbc IAPP util thing?  bbcBezierPoint?
             float bezierPoint(float a, float b, float c, float d, float t) {
-                // Taken from Processing PGraphics
+                // Taken from Processing 1.0? PGraphics
                 float t1 = 1.0 - t;
                 return a*t1*t1*t1 + 3*b*t*t1*t1 + 3*c*t*t*t1 + d*t*t*t;
             }
@@ -160,4 +216,5 @@ namespace bbc {
         };
         
     }
+    
 }
