@@ -41,15 +41,27 @@
 	}*/
 #endif
 
-#include "GLInfo.h"
-
 #define bbcSQLDateStampFormat "%Y-%m-%d %H:%M:%S"    // "YYYY-MM-DD HH:MM:SS" : Format SQLite needs to save dates (or could just use  DateTimeFormat::SORTABLE_FORMAT for this..)
 #define bbcSQLDayFormat "%Y-%m-%d"                   // "YYYY-MM-DD"
 #define bbcSQLTimeFormat "%H:%M:%S"                  // "HH:MM:SS"
 
-
 namespace bbc {
     namespace utils {
+
+		typedef struct {
+			string version;
+			string vendor;
+			string renderer;
+
+			bool bPointSpritesSupported;
+			bool bVboSupported;
+			bool bShadersSupported;
+			int maxTextureSize;
+			int maxDimensions[2];
+			int maxLights;
+
+		} commonOpenGlInfo;
+
 		
         static const string getUpTimeStr(bool show_secs = true) {
             // Return formated string of how long has this app been running.
@@ -193,6 +205,8 @@ namespace bbc {
             return ofToString(minutes) + ":" + ofToString(seconds, 2, '0') + ms_str;
         }
         
+		//--------------------------------------------------------------------------------------
+
         static void setClipboard(string clippy) {
             // Found in ofxTextInputField
             // if win32 code not working, could just bail out.
@@ -300,6 +314,7 @@ namespace bbc {
             return out.str();
         }
 
+<<<<<<< HEAD
         // see: https://stackoverflow.com/questions/5100718/integer-to-hex-string-in-c
         template< typename T >
         static std::string intToWebHex( T i ) {
@@ -310,25 +325,62 @@ namespace bbc {
             return stream.str();
         }
         
+=======
+		//---------------------------------------------------------------------------
+		
+		static void getGLInfo(commonOpenGlInfo & info) {
+
+			info.version = (char*)glGetString(GL_VERSION);
+			info.vendor = (char*)glGetString(GL_VENDOR);
+			info.renderer = (char*)glGetString(GL_RENDERER);
+			info.bVboSupported = info.bShadersSupported = info.bPointSpritesSupported = false;
+
+#ifndef TARGET_OPENGLES
+			if (glewIsSupported("GL_VERSION_1_4  GL_ARB_point_sprite")) {
+				info.bPointSpritesSupported = true;
+			}
+
+			if (glewIsSupported("GL_ARB_vertex_buffer_object")) {
+				info.bVboSupported = true;
+			}
+
+			if (glewIsSupported("GL_ARB_vertex_shader")) {
+				info.bShadersSupported = true;
+			}
+
+			glGetIntegerv(GL_MAX_VIEWPORT_DIMS, info.maxDimensions);
+
+#else
+
+			// TODO work out equiv. look ups in glm?
+
+#endif
+
+			glGetIntegerv(GL_MAX_TEXTURE_SIZE, &info.maxTextureSize);
+			glGetIntegerv(GL_MAX_LIGHTS, &info.maxLights);
+
+		}
+
+		static string getGLInfoStringMin() {
+			ostringstream out;
+
+			commonOpenGlInfo info;
+			getGLInfo(info);
+
+			out << "v=" << info.version << ", vendor=" << info.vendor << ", maxTex=" << info.maxTextureSize;
+
+#ifndef TARGET_OPENGLES
+			out << ", maxView=" << info.maxDimensions[0] << "," << info.maxDimensions[1];
+#endif
+
+			return out.str();
+		}
+
+>>>>>>> e809d8d307d0c767f238154f708143940b4f0f4f
         static void printGLStats() {
             
-           // ofLogNotice("\tGL") << ofGetGLInfoStringMin();
-            
-            // Dump opengl info
-           /* ofLogNotice("\tGL") << "Vendor:   " << (char*)glGetString(GL_VENDOR);
-            ofLogNotice("\tGL") << "Renderer: " << (char*)glGetString(GL_RENDERER);
-            ofLogNotice("\tGL") << "Version:  " << (char*)glGetString(GL_VERSION);
-            ofLogNotice("\tGL") << "GLSL:     " << (char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
-            //ofLogNotice("\tGL") << "Extensions:" << (char*)glGetString(GL_EXTENSIONS);
-            
-            int GlMaxTextureSize;
-            glGetIntegerv(GL_MAX_TEXTURE_SIZE, &GlMaxTextureSize);
-            ofLogNotice("\tGL") << "MaxTexSize:" << GlMaxTextureSize; // px?
-            
-            */
-            
-           // ofLogNotice("ofFbo") << "checkGLSupport:" << ofFbo::checkGLSupport() << ", maxColorAttachments=" << ofFbo::maxColorAttachments() << ", maxDrawBuffers=" << ofFbo::maxDrawBuffers() << ", maxSamples=" << ofFbo::maxSamples();
-            
+			ofLogNotice("\tGL") << getGLInfoStringMin();
+
             if(ofIsGLProgrammableRenderer()) {
                 ofLogNotice("\tofGL Using Programmable Renderer");
             }

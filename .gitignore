@@ -16,3 +16,10 @@
 *.sdf
 *.opensdf
 *.xccheckout
+
+# VS files.
+**.rc
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**/obj/

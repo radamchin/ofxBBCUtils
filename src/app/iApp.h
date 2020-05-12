@@ -14,8 +14,6 @@
 #include "ofMain.h"
 #include "ofEvents.h"
 
-#include "BBCUtils.h" // at moment to get at the custom round method for WIN32
-
 #include "Poco/LocalDateTime.h"
 
 class iApp : public ofBaseApp{

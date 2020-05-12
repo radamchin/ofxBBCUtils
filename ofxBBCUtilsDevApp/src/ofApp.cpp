@@ -36,7 +36,10 @@ void ofApp::setup()  {
     rand_bezier_animator.use_ease = false;
     rand_bezier_animator.start();
     
-    
+	cout << "\tGL: " << bbc::utils::getGLInfoStringMin();
+	//bbc::utils::printGLStats();
+	//ofLogNotice("GL should have printed above here");
+
     fps_tracker.setup();
 
 }
