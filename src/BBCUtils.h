@@ -313,8 +313,9 @@ namespace bbc {
             }
             return out.str();
         }
-
-<<<<<<< HEAD
+        
+        //---------------------------------------------------------------------------
+        
         // see: https://stackoverflow.com/questions/5100718/integer-to-hex-string-in-c
         template< typename T >
         static std::string intToWebHex( T i ) {
@@ -325,7 +326,6 @@ namespace bbc {
             return stream.str();
         }
         
-=======
 		//---------------------------------------------------------------------------
 		
 		static void getGLInfo(commonOpenGlInfo & info) {
@@ -376,7 +376,6 @@ namespace bbc {
 			return out.str();
 		}
 
->>>>>>> e809d8d307d0c767f238154f708143940b4f0f4f
         static void printGLStats() {
             
 			ofLogNotice("\tGL") << getGLInfoStringMin();
