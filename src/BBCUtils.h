@@ -300,6 +300,16 @@ namespace bbc {
             return out.str();
         }
 
+        // see: https://stackoverflow.com/questions/5100718/integer-to-hex-string-in-c
+        template< typename T >
+        static std::string intToWebHex( T i ) {
+            std::stringstream stream;
+            stream << "#"
+            << std::setfill ('0') << std::setw(sizeof(T)*2)
+            << std::hex << i;
+            return stream.str();
+        }
+        
         static void printGLStats() {
             
            // ofLogNotice("\tGL") << ofGetGLInfoStringMin();
