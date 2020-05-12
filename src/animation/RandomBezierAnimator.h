@@ -30,6 +30,11 @@ namespace bbc {
                 repeating = _repeating;
             }
             
+            void setup( ofParameter<ofRectangle> & rect) {
+                setRange(rect);
+                ofLogNotice("RandomBezierAnimator:setup") << range;
+            }
+            
             void setup( ofRectangle & rect) {
                 range.set(rect);
                 ofLogNotice("RandomBezierAnimator:setup") << range;
@@ -38,6 +43,10 @@ namespace bbc {
             void setup(float rx, float ry, float rw, float rh) {
                 setRange(rx,ry,rw,rh);
                 ofLogNotice("RandomBezierAnimator:setup") << range;
+            }
+            
+            void setRange(ofParameter<ofRectangle> & rect) {
+                setRange(rect->x, rect->y, rect->width, rect->height);
             }
             
             void setRange(ofRectangle & rect) {
