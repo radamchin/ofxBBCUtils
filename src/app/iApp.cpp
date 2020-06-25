@@ -109,7 +109,6 @@ void iApp::setup() {
     ofBaseApp::setup();
     ofLogNotice("iApp:setup");
     // NOT SURE THIS WILL WORK?
-    
 }
 
 void iApp::draw(ofEventArgs & args) {
@@ -430,7 +429,7 @@ void iApp::logHeader() {
     ofLogNotice("");
     ofLogNotice("--------------------------------------");
     ofLogNotice("--- START ") << app_name << " app v" << app_version << " @ " << ofGetTimestampString("%H:%M:%S %d-%m-%Y");
-    ofLogNotice("--- ") << "oF:" << OF_VERSION_MAJOR << "." << OF_VERSION_MINOR << "." << OF_VERSION_PATCH << " platform:" << ofGetTargetPlatform();
+    ofLogNotice("--- ") << "oF:" << OF_VERSION_MAJOR << "." << OF_VERSION_MINOR << "." << OF_VERSION_PATCH << ", platform:" << ofGetTargetPlatform();
     // TODO: log OS version and name + opengl properties, free gpu memory?
     ofLogNotice("--------------------------------------");
     
