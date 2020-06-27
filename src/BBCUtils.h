@@ -44,6 +44,8 @@
 #define bbcSQLDateStampFormat "%Y-%m-%d %H:%M:%S"    // "YYYY-MM-DD HH:MM:SS" : Format SQLite needs to save dates (or could just use  DateTimeFormat::SORTABLE_FORMAT for this..)
 #define bbcSQLDayFormat "%Y-%m-%d"                   // "YYYY-MM-DD"
 #define bbcSQLTimeFormat "%H:%M:%S"                  // "HH:MM:SS"
+#define bbcSQLTimeFormatWithMS "%H:%M:%S:%i"	    //"HH:MM:SS:MSS"
+// see: https://pocoproject.org/docs/Poco.DateTimeFormatter.html
 
 namespace bbc {
     namespace utils {
@@ -119,10 +121,16 @@ namespace bbc {
         }
         
         static string getNowTime() {
-            // just time "15:39:22"
+            // Time "15:39:22"
             Poco::LocalDateTime now;
             return Poco::DateTimeFormatter::format(now, bbcSQLTimeFormat);
         }
+
+		static string getNowTimeWithMS() {
+			// time with ms "15:39:22:230"
+			Poco::LocalDateTime now;
+			return Poco::DateTimeFormatter::format(now, bbcSQLTimeFormatWithMS);
+		}
         
         static unsigned int getNowSeconds() {
             return ofGetUnixTime();
