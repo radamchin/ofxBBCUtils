@@ -380,31 +380,62 @@ void iApp::logSetup(bool appending) {
         
         if(archive_logs) {
             
-            ofFile f("logs/" + log_name);
+            ofFile log_file("logs/" + log_name);
             
-            if(f.exists()) {
+            if(log_file.exists()) {
                 
-                uint64_t sz_kb = f.getSize() / 1024;
+                uint64_t sz_kb = log_file.getSize() / 1024;
                 
                 if(sz_kb >= IAPP_DEF_LOG_SIZE_ARCH_KB_MAX) {
                     
-                    ofFile parent_dir(f.getEnclosingDirectory());
+                    ofFile parent_dir(log_file.getEnclosingDirectory());
                     
                     #if defined(TARGET_OSX)
-                        string zip_cmd = "gzip '" + f.getAbsolutePath() + "'";
+                        string zip_cmd = "gzip '" + log_file.getAbsolutePath() + "'";
                         ofLogNotice("ARCHIVING LOG with") << zip_cmd;
                         string zip_result = ofSystem(zip_cmd);
                         ofLogNotice("zip_result") << zip_result;
                     
-                        string rename_cmd =  "mv '" + f.getAbsolutePath() + ".gz' '" + parent_dir.getAbsolutePath() + "/" + ofGetTimestampString("%Y-%m-%d-%H-%M-%S") + "_" + app_name + ".log.gz'";
+                        string rename_cmd =  "mv '" + log_file.getAbsolutePath() + ".gz' '" + parent_dir.getAbsolutePath() + "/" + ofGetTimestampString("%Y-%m-%d-%H-%M-%S") + "_" + app_name + ".log.gz'";
                         ofLogNotice("RENAMING LOG ARCHIVE with") << rename_cmd;
                         string rename_result = ofSystem(rename_cmd);
                         ofLogNotice("rename_result") << rename_result;
                     #endif
                     
                     #if defined(TARGET_WIN32)
-                        // TODO: Win could use: win7 cmd option: http://superuser.com/questions/110991/can-you-zip-a-file-from-the-command-prompt-using-only-windows-built-in-capabili
-                    #endif
+
+                        // TODO: Win7 could use: http://superuser.com/questions/110991/can-you-zip-a-file-from-the-command-prompt-using-only-windows-built-in-capabili
+
+						// Assume windows 10, which comes with tar.exe
+						// https://superuser.com/questions/201371/create-zip-folder-from-the-command-line-windows
+						// tar.exe -a -c -f out.zip in.txt
+						// 
+
+						string input_path = log_file.getAbsolutePath();
+
+						stringstream output;
+						output << parent_dir.getAbsolutePath() << "\\" << ofGetTimestampString("%Y-%m-%d-%H-%M-%S") << "_" << app_name << ".log.zip";
+						string output_path = output.str();
+						ofLogToConsole();
+
+						string zip_cmd = "tar.exe -acf \"" + output_path + "\" \"" + input_path + "\"";
+
+						// Note: This will currently have the fullpath to the log inside the zip
+						// TODO: fix this above
+
+						// e.g, tar.exe -cvzf "E:\userfiles\Documents\........\bin\data\logs\2020-06-27-10-32-28_APPNAME.log.zip" "E:\userfiles\Documents\........\bin\data\logs\APPNAME.log"
+					
+						ofLogNotice("ARCHIVING LOG with") << zip_cmd;
+
+						string zip_result = ofSystem(zip_cmd);
+
+						// ofLogNotice("zip_result") << zip_result;
+
+						// remove the original log file (f
+						bool success = log_file.remove();
+						ofLogNotice("Existing log file removed") << success;
+
+					#endif
 
                 }
                 
@@ -412,7 +443,12 @@ void iApp::logSetup(bool appending) {
             
         }
         
-        ofLogToFile("logs/" + log_name, appending);
+		string log_path = "logs/" + log_name;
+
+		ofLogToConsole();
+		ofLogNotice(app_name) << "Logging output to file:" << log_path;
+
+        ofLogToFile(log_path, appending);
     }
     
     
