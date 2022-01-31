@@ -392,6 +392,82 @@ namespace bbc {
                 ofLogNotice("\tofGL Using Programmable Renderer");
             }
             
+            ofLogNotice("IsGLProgrammableRenderer") << ofIsGLProgrammableRenderer();
+            ofLogNotice("GL-Version-Major") << ofGetGLRenderer()->getGLVersionMajor();
+            ofLogNotice("GL-Version-Minor") << ofGetGLRenderer()->getGLVersionMinor();
+            ofLogNotice("GLSL Version") << ofGLSLVersionFromGL(ofGetGLRenderer()->getGLVersionMajor(), ofGetGLRenderer()->getGLVersionMinor());
+
+        }
+        
+        static ofMesh gridMesh;
+            
+        static void drawBackgroundGrid(float size, const ofColor& onColor, const ofColor& offColor) {
+            // taken from https://github.com/openframeworks/openFrameworks/issues/5217
+            float w = ofGetViewportWidth(), h = ofGetViewportHeight();
+            gridMesh.clear();
+            gridMesh.setMode(OF_PRIMITIVE_TRIANGLES);
+        #ifndef TARGET_EMSCRIPTEN
+        #ifdef TARGET_OPENGLES
+            if(ofIsGLProgrammableRenderer()) gridMesh.setUsage(GL_STREAM_DRAW);
+        #else
+         //   gridMesh.setUsage(GL_STREAM_DRAW);
+        #endif
+        #endif
+
+            std::vector<glm::vec3> verts;
+
+            for (std::size_t y = 0; y < 3; ++y){
+                for (std::size_t x = 0; x < 3; ++x) {
+                    verts.push_back({x * size, y * size, 0.f});
+                }
+            }
+
+            std::vector<ofColor> colors = { onColor, offColor };
+
+            float twoSize = size * 2;
+
+            for (std::size_t y = 0; y < h; y += twoSize){
+                for (std::size_t x = 0; x < w; x += twoSize){
+                    glm::vec3 offset(x, y, 0.f);
+                    for (std::size_t i = 0; i < 2; ++i){
+                        gridMesh.addVertex(verts[i + 0] + offset);
+                        gridMesh.addColor(colors[i]);
+                        gridMesh.addVertex(verts[i + 3] + offset);
+                        gridMesh.addColor(colors[i]);
+                        gridMesh.addVertex(verts[i + 4] + offset);
+                        gridMesh.addColor(colors[i]);
+                        gridMesh.addVertex(verts[i + 0] + offset);
+                        gridMesh.addColor(colors[i]);
+                        gridMesh.addVertex(verts[i + 4] + offset);
+                        gridMesh.addColor(colors[i]);
+                        gridMesh.addVertex(verts[i + 1] + offset);
+                        gridMesh.addColor(colors[i]);
+
+                        std::size_t j = colors.size() - i - 1;
+
+                        gridMesh.addVertex(verts[i + 3] + offset);
+                        gridMesh.addColor(colors[j]);
+                        gridMesh.addVertex(verts[i + 6] + offset);
+                        gridMesh.addColor(colors[j]);
+                        gridMesh.addVertex(verts[i + 7] + offset);
+                        gridMesh.addColor(colors[j]);
+                        gridMesh.addVertex(verts[i + 3] + offset);
+                        gridMesh.addColor(colors[j]);
+                        gridMesh.addVertex(verts[i + 7] + offset);
+                        gridMesh.addColor(colors[j]);
+                        gridMesh.addVertex(verts[i + 4] + offset);
+                        gridMesh.addColor(colors[j]);
+                    }
+                }
+            }
+
+            GLboolean depthMaskEnabled;
+            glGetBooleanv(GL_DEPTH_WRITEMASK,&depthMaskEnabled);
+            glDepthMask(GL_FALSE);
+            gridMesh.draw();
+            if(depthMaskEnabled){
+                glDepthMask(GL_TRUE);
+            }
         }
 
     }
