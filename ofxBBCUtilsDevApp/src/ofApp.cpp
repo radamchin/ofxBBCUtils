@@ -39,7 +39,8 @@ void ofApp::setup()  {
 	cout << "\tGL: " << bbc::utils::getGLInfoStringMin();
 	//bbc::utils::printGLStats();
 	//ofLogNotice("GL should have printed above here");
-
+    
+    fps_tracker.bgCol = ofColor(192,192,192,212);
     fps_tracker.setup();
 
 }
