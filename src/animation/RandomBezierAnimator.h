@@ -21,6 +21,7 @@ namespace bbc {
             
             float control_rand;
             
+            
             bool repeating;
             
             //--------------------------------------------
@@ -59,6 +60,14 @@ namespace bbc {
             
             void setZRange(float front, float back) {
                 z_range.set(front, back);
+            }
+            
+            float getZRangeFront() {
+                return z_range.x;
+            }
+            
+            float getZRangeBack() {
+                return z_range.y;
             }
             
             void start( ofPoint & start_pos, int _duration_frames = 200 ) {
@@ -144,6 +153,14 @@ namespace bbc {
                 BezierAnimator::start( sx,sy, ax,ay, bx,by, ex,ey, _duration_frames );
             }
             
+            void start( float sx, float sy, float ax, float ay, float bx, float by, float ex, float ey, int frame_total ) {
+                 BezierAnimator::start( sx,sy, ax,ay, bx,by, ex,ey, frame_total );
+            }
+            
+            void start( float sx, float sy, float sz, float ax, float ay, float az, float bx, float by, float bz, float ex, float ey, float ez, int frame_total ) {
+                BezierAnimator::start( sx,sy,sz, ax,ay,az, bx,by,bz, ex,ey,ez, frame_total );
+            }
+            
             void setFrameTotal( int n) {
                 frame_total = n; // change the duraiton a tween takes. (Prop of FrameTweener class)
             }
@@ -172,11 +189,19 @@ namespace bbc {
                 return out.str();
             }
             
+            ofRectangle getRange() {
+                // return a copy of the range
+                ofRectangle result;
+                result.set(range);
+                return result;
+            }
+
+            
         private:
             
             ofRectangle range;
-            
             ofVec2f z_range; // x,y used to define a z range. x == closest to camera.
+            
             
             void next() {
                 

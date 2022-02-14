@@ -31,7 +31,7 @@ namespace bbc {
                 use_3d = _use_3d;
             }
             
-            void start(float start_x, float start_y, float a_x, float a_y, float b_x, float b_y, float end_x, float end_y, int frame_duration) {
+            virtual void start(float start_x, float start_y, float a_x, float a_y, float b_x, float b_y, float end_x, float end_y, int frame_duration) {
                 
                 if(use_3d) ofLogWarning("BezierAnimator::start") << "You have used a 2d method but use_3d is enabled, Your beziers will be 2d only";
                 
@@ -44,7 +44,8 @@ namespace bbc {
                 
                 FrameTweener::start(frame_duration); // super method
             }
-            void start(float start_x, float start_y, float start_z, float a_x, float a_y, float a_z, float b_x, float b_y, float b_z, float end_x, float end_y, float end_z, int frame_duration) {
+            
+            virtual void start(float start_x, float start_y, float start_z, float a_x, float a_y, float a_z, float b_x, float b_y, float b_z, float end_x, float end_y, float end_z, int frame_duration) {
                 
                 start_pos.set(start_x, start_y, start_z);
                 current_pos.set(start_pos);
@@ -56,7 +57,7 @@ namespace bbc {
                 FrameTweener::start(frame_duration); // super method
             }
             
-            void start(ofPoint & _start_pos, ofPoint & _control_a, ofPoint & _control_b, ofPoint & _end_pos, float frame_duration) {
+            virtual void start(ofPoint & _start_pos, ofPoint & _control_a, ofPoint & _control_b, ofPoint & _end_pos, float frame_duration) {
                 //Note:  This would support 3d.
                 
                 start_pos.set(_start_pos);
@@ -69,7 +70,7 @@ namespace bbc {
                 FrameTweener::start(frame_duration); // super method
             }
             
-            void start(ofVec2f & _start_pos, ofVec2f & _control_a, ofVec2f & _control_b, ofVec2f & _end_pos, float frame_duration) {
+            virtual void start(ofVec2f & _start_pos, ofVec2f & _control_a, ofVec2f & _control_b, ofVec2f & _end_pos, float frame_duration) {
                 
                 if(use_3d) ofLogWarning("BezierAnimator::start") << "You have used a 2d method but use_3d is enabled, Your beziers will be 2d only";
                 

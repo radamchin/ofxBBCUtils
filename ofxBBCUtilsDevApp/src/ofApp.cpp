@@ -24,11 +24,14 @@ void ofApp::setup()  {
     
     frame_tweener.start(600);
     
-    ofVec2f start_pos = ofVec2f(200,200);
-    ofVec2f end_pos = ofVec2f(ofGetWidth()-200,  ofGetHeight()-200);
+    ofPoint start_pos = ofPoint(200,200);
+    ofPoint end_pos = ofPoint(ofGetWidth()-200,  ofGetHeight()-200);
     
     //bezier_animator_a.start(start_pos.x, start_pos.y, start_pos.x-50,start_pos.y+50, end_pos.x+50,end_pos.y-50, end_pos.x, end_pos.y, 400);
-    bezier_animator_a.start(start_pos, start_pos+300, end_pos-300, end_pos, 500);
+    ofPoint start_cntrl = start_pos+300;
+    ofPoint end_cntrl = end_pos-300;
+    
+    bezier_animator_a.start(start_pos,  start_cntrl, end_cntrl, end_pos, 500);
     bezier_animator_a.use_ease = true;
     
     rand_bezier_animator.setup(10,10,ofGetWidth()-20, ofGetHeight()-20);
