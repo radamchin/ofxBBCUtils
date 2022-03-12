@@ -21,11 +21,11 @@
 
 #include "ofMain.h"
 
-#include "Poco/Timestamp.h"
-#include "Poco/DateTime.h"
-#include "Poco/DateTimeFormatter.h"
-#include "Poco/DateTimeParser.h"
-#include "Poco/DateTime.h"
+#include <Poco/Timestamp.h>
+#include <Poco/DateTime.h>
+#include <Poco/DateTimeFormatter.h>
+#include <Poco/DateTimeParser.h>
+#include <Poco/DateTime.h>
 
 // For Clipboard access
 #if (_MSC_VER)
@@ -36,19 +36,34 @@
 
 #if (_MSC_VER)
 	// crazy no round function in math.h on win32 (or in OF)
-	static inline float round(float f){
+	/*static inline float round(float f){
 		return floor(f + .5);
-	}
+	}*/
 #endif
-
 
 #define bbcSQLDateStampFormat "%Y-%m-%d %H:%M:%S"    // "YYYY-MM-DD HH:MM:SS" : Format SQLite needs to save dates (or could just use  DateTimeFormat::SORTABLE_FORMAT for this..)
 #define bbcSQLDayFormat "%Y-%m-%d"                   // "YYYY-MM-DD"
 #define bbcSQLTimeFormat "%H:%M:%S"                  // "HH:MM:SS"
-
+#define bbcSQLTimeFormatWithMS "%H:%M:%S:%i"	    //"HH:MM:SS:MSS"
+// see: https://pocoproject.org/docs/Poco.DateTimeFormatter.html
 
 namespace bbc {
     namespace utils {
+
+		typedef struct {
+			string version;
+			string vendor;
+			string renderer;
+
+			bool bPointSpritesSupported;
+			bool bVboSupported;
+			bool bShadersSupported;
+			int maxTextureSize;
+			int maxDimensions[2];
+			int maxLights;
+
+		} commonOpenGlInfo;
+
 		
         static const string getUpTimeStr(bool show_secs = true) {
             // Return formated string of how long has this app been running.
@@ -79,9 +94,8 @@ namespace bbc {
                 ofLogError("HMSFtoSeconds illegal part count. Can't parse") << parts.size() << " 4 expected '" << input << "'";
                 return -1.0;
             }
-            
         }
-
+        
         static string secondsToHMS(int totalSeconds) {
             int hours   = floor(totalSeconds / 3600);
             int minutes = floor((totalSeconds - (hours * 3600)) / 60);
@@ -107,10 +121,16 @@ namespace bbc {
         }
         
         static string getNowTime() {
-            // just time "15:39:22"
+            // Time "15:39:22"
             Poco::LocalDateTime now;
             return Poco::DateTimeFormatter::format(now, bbcSQLTimeFormat);
         }
+
+		static string getNowTimeWithMS() {
+			// time with ms "15:39:22:230"
+			Poco::LocalDateTime now;
+			return Poco::DateTimeFormatter::format(now, bbcSQLTimeFormatWithMS);
+		}
         
         static unsigned int getNowSeconds() {
             return ofGetUnixTime();
@@ -165,7 +185,6 @@ namespace bbc {
         static string msToHMS(int totalMS) {
             
             int totalSeconds = totalMS/1000.0;
-            
           //  int ms = totalMS % 1000;
             
             int hours   = floor(totalSeconds / 3600);
@@ -194,6 +213,8 @@ namespace bbc {
             return ofToString(minutes) + ":" + ofToString(seconds, 2, '0') + ms_str;
         }
         
+		//--------------------------------------------------------------------------------------
+
         static void setClipboard(string clippy) {
             // Found in ofxTextInputField
             // if win32 code not working, could just bail out.
@@ -231,19 +252,14 @@ namespace bbc {
         }
 
         static void recursiveFileSearchNameContains(const string & path, const string & search_str, vector<string> & results ) {
-            
             // Get all files of a folder that contain a string (useful for searching by type, eg ".mp3")
             
             ofDirectory dir;
-            
             dir.listDir(path);
             
             for(int i = 0; i < (int)dir.size(); i++){
-                
                 string file_path = dir.getPath(i);
-                
                 ofFile file(file_path);
-                
                 if(file.isDirectory()) {
                     recursiveFileSearchNameContains(file_path, search_str, results);
                 }else{
@@ -251,7 +267,6 @@ namespace bbc {
                         results.push_back(file_path);
                     }
                 }
-                
             }
             
         }
@@ -306,27 +321,153 @@ namespace bbc {
             }
             return out.str();
         }
+        
+        //---------------------------------------------------------------------------
+        
+        // see: https://stackoverflow.com/questions/5100718/integer-to-hex-string-in-c
+        template< typename T >
+        static std::string intToWebHex( T i ) {
+            std::stringstream stream;
+            stream << "#"
+            << std::setfill ('0') << std::setw(sizeof(T)*2)
+            << std::hex << i;
+            return stream.str();
+        }
+        
+		//---------------------------------------------------------------------------
+		
+		static void getGLInfo(commonOpenGlInfo & info) {
+
+			info.version = (char*)glGetString(GL_VERSION);
+			info.vendor = (char*)glGetString(GL_VENDOR);
+			info.renderer = (char*)glGetString(GL_RENDERER);
+			info.bVboSupported = info.bShadersSupported = info.bPointSpritesSupported = false;
+
+#ifndef TARGET_OPENGLES
+			if (glewIsSupported("GL_VERSION_1_4  GL_ARB_point_sprite")) {
+				info.bPointSpritesSupported = true;
+			}
+
+			if (glewIsSupported("GL_ARB_vertex_buffer_object")) {
+				info.bVboSupported = true;
+			}
+
+			if (glewIsSupported("GL_ARB_vertex_shader")) {
+				info.bShadersSupported = true;
+			}
+
+			glGetIntegerv(GL_MAX_VIEWPORT_DIMS, info.maxDimensions);
+
+#else
+
+			// TODO work out equiv. look ups in glm?
+
+#endif
+
+			glGetIntegerv(GL_MAX_TEXTURE_SIZE, &info.maxTextureSize);
+			glGetIntegerv(GL_MAX_LIGHTS, &info.maxLights);
+
+		}
+
+		static string getGLInfoStringMin() {
+			ostringstream out;
+
+			commonOpenGlInfo info;
+			getGLInfo(info);
+
+			out << "v=" << info.version << ", vendor=" << info.vendor << ", maxTex=" << info.maxTextureSize;
+
+#ifndef TARGET_OPENGLES
+			out << ", maxView=" << info.maxDimensions[0] << "," << info.maxDimensions[1];
+#endif
+
+			return out.str();
+		}
 
         static void printGLStats() {
             
-            // Dump opengl info
-            ofLogNotice("\tGL") << "Vendor:   " << (char*)glGetString(GL_VENDOR);
-            ofLogNotice("\tGL") << "Renderer: " << (char*)glGetString(GL_RENDERER);
-            ofLogNotice("\tGL") << "Version:  " << (char*)glGetString(GL_VERSION);
-            ofLogNotice("\tGL") << "GLSL:     " << (char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
-            //ofLogNotice("\tGL") << "Extensions:" << (char*)glGetString(GL_EXTENSIONS);
-            
-            int GlMaxTextureSize;
-            glGetIntegerv(GL_MAX_TEXTURE_SIZE, &GlMaxTextureSize);
-            ofLogNotice("\tGL") << "MaxTexSize:" << GlMaxTextureSize; // px?
-            
-            ofLogNotice("ofFbo") << "checkGLSupport:" << ofFbo::checkGLSupport() << ", maxColorAttachments=" << ofFbo::maxColorAttachments() << ", maxDrawBuffers=" << ofFbo::maxDrawBuffers() <<
-            ", maxSamples=" << ofFbo::maxSamples();
-            
+			ofLogNotice("\tGL") << getGLInfoStringMin();
+
             if(ofIsGLProgrammableRenderer()) {
                 ofLogNotice("\tofGL Using Programmable Renderer");
             }
             
+            ofLogNotice("IsGLProgrammableRenderer") << ofIsGLProgrammableRenderer();
+            ofLogNotice("GL-Version-Major") << ofGetGLRenderer()->getGLVersionMajor();
+            ofLogNotice("GL-Version-Minor") << ofGetGLRenderer()->getGLVersionMinor();
+            ofLogNotice("GLSL Version") << ofGLSLVersionFromGL(ofGetGLRenderer()->getGLVersionMajor(), ofGetGLRenderer()->getGLVersionMinor());
+
+        }
+        
+        static ofMesh gridMesh;
+            
+        static void drawBackgroundGrid(float size, const ofColor& onColor, const ofColor& offColor) {
+            // taken from https://github.com/openframeworks/openFrameworks/issues/5217
+            float w = ofGetViewportWidth(), h = ofGetViewportHeight();
+            gridMesh.clear();
+            gridMesh.setMode(OF_PRIMITIVE_TRIANGLES);
+        #ifndef TARGET_EMSCRIPTEN
+        #ifdef TARGET_OPENGLES
+            if(ofIsGLProgrammableRenderer()) gridMesh.setUsage(GL_STREAM_DRAW);
+        #else
+         //   gridMesh.setUsage(GL_STREAM_DRAW);
+        #endif
+        #endif
+
+            std::vector<glm::vec3> verts;
+
+            for (std::size_t y = 0; y < 3; ++y){
+                for (std::size_t x = 0; x < 3; ++x) {
+                    verts.push_back({x * size, y * size, 0.f});
+                }
+            }
+
+            std::vector<ofColor> colors = { onColor, offColor };
+
+            float twoSize = size * 2;
+
+            for (std::size_t y = 0; y < h; y += twoSize){
+                for (std::size_t x = 0; x < w; x += twoSize){
+                    glm::vec3 offset(x, y, 0.f);
+                    for (std::size_t i = 0; i < 2; ++i){
+                        gridMesh.addVertex(verts[i + 0] + offset);
+                        gridMesh.addColor(colors[i]);
+                        gridMesh.addVertex(verts[i + 3] + offset);
+                        gridMesh.addColor(colors[i]);
+                        gridMesh.addVertex(verts[i + 4] + offset);
+                        gridMesh.addColor(colors[i]);
+                        gridMesh.addVertex(verts[i + 0] + offset);
+                        gridMesh.addColor(colors[i]);
+                        gridMesh.addVertex(verts[i + 4] + offset);
+                        gridMesh.addColor(colors[i]);
+                        gridMesh.addVertex(verts[i + 1] + offset);
+                        gridMesh.addColor(colors[i]);
+
+                        std::size_t j = colors.size() - i - 1;
+
+                        gridMesh.addVertex(verts[i + 3] + offset);
+                        gridMesh.addColor(colors[j]);
+                        gridMesh.addVertex(verts[i + 6] + offset);
+                        gridMesh.addColor(colors[j]);
+                        gridMesh.addVertex(verts[i + 7] + offset);
+                        gridMesh.addColor(colors[j]);
+                        gridMesh.addVertex(verts[i + 3] + offset);
+                        gridMesh.addColor(colors[j]);
+                        gridMesh.addVertex(verts[i + 7] + offset);
+                        gridMesh.addColor(colors[j]);
+                        gridMesh.addVertex(verts[i + 4] + offset);
+                        gridMesh.addColor(colors[j]);
+                    }
+                }
+            }
+
+            GLboolean depthMaskEnabled;
+            glGetBooleanv(GL_DEPTH_WRITEMASK,&depthMaskEnabled);
+            glDepthMask(GL_FALSE);
+            gridMesh.draw();
+            if(depthMaskEnabled){
+                glDepthMask(GL_TRUE);
+            }
         }
 
     }

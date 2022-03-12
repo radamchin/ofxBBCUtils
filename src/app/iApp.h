@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
     iApp: InstalationApp
+=======
+    iApp: InstallationApp
+>>>>>>> dev
     Collection of utils for running an application in interactive installation type environment
     Adam Hinshaw 17 May 2014
  
@@ -14,15 +18,13 @@
 #include "ofMain.h"
 #include "ofEvents.h"
 
-#include "BBCUtils.h" // at moment to get at the custom round method for WIN32
-
 #include "Poco/LocalDateTime.h"
 
 class iApp : public ofBaseApp{
     
 public:
     
-    iApp(string _app_name = "", string _app_version = "", bool _log_to_file = false, bool _archive_logs = true);
+    iApp(const string _app_name = "", const string _app_version = "", bool _log_to_file = false, bool _archive_logs = true);
     
     static string app_name;
     static string app_version;

@@ -19,6 +19,11 @@ namespace bbc {
             
         public:
             
+            ofColor bgCol = ofColor::white;
+            ofColor fillCol = ofColor(0,255,0,128);
+            ofColor markCol = ofColor::black;
+            ofColor playheadCol = ofColor(255,0,0,128);
+            
             float base_fps;
             
             int update_freq;
@@ -59,9 +64,9 @@ namespace bbc {
                 
                 fbo.begin();
                     ofClear(0,0,0,0);
-                    ofSetColor(255);
+                    ofSetColor(bgCol);
                     ofFill();
-                    ofRect(0,0,fbo.getWidth(),h);
+                    ofDrawRectangle(0,0,fbo.getWidth(),h);
                 fbo.end();
 
             }
@@ -78,24 +83,24 @@ namespace bbc {
                 ofPushMatrix();
                 ofPushStyle();
 
-                // draw next line
-
+                // Draw next line
+                
                 fbo.begin();
 
                     // clear line first
                     ofFill();
-                    ofSetColor(255);
-                    ofRect(draw_pos, 0, 1, h);
+                    ofSetColor(bgCol);
+                    ofDrawRectangle(draw_pos, 0, 1, h);
 
                     // float ft = 60.0; //ofGetTargetFrameRate();
 
-                    ofSetColor(0,255,0,128);
+                    ofSetColor(fillCol);
                     float f = MIN(base_fps, ofGetFrameRate());
                     float lp = f/base_fps;
                     float ly = h-(lp*h);
                     //ofLogNotice("FPSTracking") << draw_pos << " " << f << " " << lp << " " << ly;
 
-                    ofRect(draw_pos, ly, 1, h-ly);
+                    ofDrawRectangle(draw_pos, ly, 1, h-ly);
                 fbo.end();
                 
                 ofPopStyle();
@@ -103,13 +108,13 @@ namespace bbc {
                 
             }
             
-            void mark(ofColor col = ofColor::black) {
+            void mark() {
                 // mark the timeline right now for reference
                 ofPushStyle();
                 fbo.begin();
-                    ofSetColor(col);
+                    ofSetColor(markCol);
                     ofFill();
-                    ofRect(draw_pos, 0, 1, h);
+                    ofDrawRectangle(draw_pos, 0, 1, h);
                 fbo.end();
                 ofPopStyle();
             }
@@ -124,9 +129,9 @@ namespace bbc {
                 fbo.draw(x, y);
                
                 // draw a colour marker of where play head is
-                ofSetColor(255,0,0,128);
+                ofSetColor(playheadCol);
                 ofFill();
-                ofRect(x+draw_pos-1, y, 3, h);
+                ofDrawRectangle(x+draw_pos-1, y, 3, h);
                 
                 ofPopStyle();
             }

@@ -24,11 +24,14 @@ void ofApp::setup()  {
     
     frame_tweener.start(600);
     
-    ofVec2f start_pos = ofVec2f(200,200);
-    ofVec2f end_pos = ofVec2f(ofGetWidth()-200,  ofGetHeight()-200);
+    ofPoint start_pos = ofPoint(200,200);
+    ofPoint end_pos = ofPoint(ofGetWidth()-200,  ofGetHeight()-200);
     
     //bezier_animator_a.start(start_pos.x, start_pos.y, start_pos.x-50,start_pos.y+50, end_pos.x+50,end_pos.y-50, end_pos.x, end_pos.y, 400);
-    bezier_animator_a.start(start_pos, start_pos+300, end_pos-300, end_pos, 500);
+    ofPoint start_cntrl = start_pos+300;
+    ofPoint end_cntrl = end_pos-300;
+    
+    bezier_animator_a.start(start_pos,  start_cntrl, end_cntrl, end_pos, 500);
     bezier_animator_a.use_ease = true;
     
     rand_bezier_animator.setup(10,10,ofGetWidth()-20, ofGetHeight()-20);
@@ -36,7 +39,11 @@ void ofApp::setup()  {
     rand_bezier_animator.use_ease = false;
     rand_bezier_animator.start();
     
+	cout << "\tGL: " << bbc::utils::getGLInfoStringMin();
+	//bbc::utils::printGLStats();
+	//ofLogNotice("GL should have printed above here");
     
+    fps_tracker.bgCol = ofColor(192,192,192,212);
     fps_tracker.setup();
 
 }
@@ -100,6 +107,7 @@ void ofApp::testConfig() {
     ofXml *cols_xml = bbc::utils::Config::instance()->getXMLNode("config:colors");
     cout << "Found:" << endl << cols_xml->toString() << endl;
     
+    /* TODO: fix as remmed for 0.10 port as throwing errors
     cols_xml->setToChild(0); // set it to the first one.
     bool sibling_found = 1;
     int i = 0;
@@ -112,7 +120,7 @@ void ofApp::testConfig() {
         sibling_found = cols_xml->setToSibling();
     }
     
-    cout << i << " parsed." << endl;
+    cout << i << " parsed." << endl;*/
 
 }
 
@@ -133,7 +141,9 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     
-    ofBackgroundGradient(ofColor::lightGray, ofColor::darkGray);
+    //ofBackgroundGradient(ofColor::lightGray, ofColor::darkGray);
+    drawBackgroundGrid(20.0f, ofColor(32), ofColor(64));
+    
     //ofBackgroundHex(0xAAAAAA);
     
     drawCalibration(192);
@@ -195,13 +205,13 @@ void ofApp::testTimers(){
     
     if(a_timer->isExpired()) {
         ofSetColor(255, 0, 255);
-        ofCircle(30, 60, 10);
+        ofDrawCircle(30, 60, 10);
         a_timer->reset();
     }
        
     if(b_timer->isExpired()) {
         ofSetColor(255, 0, 0);
-        ofCircle(30, 90, 10);
+        ofDrawCircle(30, 90, 10);
         b_timer->reset();
     }
     
@@ -242,31 +252,31 @@ void ofApp::testEasing() {
     // Back Bounce Circ Cubic Elastic Expo Linear Quad Quart Quint Sine
     
     ofSetColor(255,255,0);
-    ofCircle( 20, ErpEase::sineIn(0, ofGetHeight(), fa), 10);
+    ofDrawCircle( 20, ErpEase::sineIn(0, ofGetHeight(), fa), 10);
     
     ofSetColor(0,255,255);
-    ofCircle( 40, ErpEase::sineOut(0, ofGetHeight(), fb), 10);
+    ofDrawCircle( 40, ErpEase::sineOut(0, ofGetHeight(), fb), 10);
     
     ofSetColor(255,0,255);
-    ofCircle( 60, ErpEase::sineInOut(0, ofGetHeight(), fc), 10);
+    ofDrawCircle( 60, ErpEase::sineInOut(0, ofGetHeight(), fc), 10);
     
     ofSetColor(255,255,0);
-    ofCircle( 80, ErpEase::elasticIn(0, ofGetHeight(), fa), 10);
+    ofDrawCircle( 80, ErpEase::elasticIn(0, ofGetHeight(), fa), 10);
     
     ofSetColor(0,255,255);
-    ofCircle( 100, ErpEase::elasticOut(0, ofGetHeight(), fb), 10);
+    ofDrawCircle( 100, ErpEase::elasticOut(0, ofGetHeight(), fb), 10);
     
     ofSetColor(255,0,255);
-    ofCircle( 120, ErpEase::elasticInOut(0, ofGetHeight(), fc), 10);
+    ofDrawCircle( 120, ErpEase::elasticInOut(0, ofGetHeight(), fc), 10);
     
     ofSetColor(255,255,0);
-    ofCircle( 140, ErpEase::bounceIn(0, ofGetHeight(), fa), 10);
+    ofDrawCircle( 140, ErpEase::bounceIn(0, ofGetHeight(), fa), 10);
     
     ofSetColor(0,255,255);
-    ofCircle( 160, ErpEase::bounceOut(0, ofGetHeight(), fb), 10);
+    ofDrawCircle( 160, ErpEase::bounceOut(0, ofGetHeight(), fb), 10);
     
     ofSetColor(255,0,255);
-    ofCircle( 180, ErpEase::bounceInOut(0, ofGetHeight(), fc), 10);
+    ofDrawCircle( 180, ErpEase::bounceInOut(0, ofGetHeight(), fc), 10);
 }
 
 //--------------------------------------------------------------

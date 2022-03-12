@@ -109,7 +109,6 @@ void iApp::setup() {
     ofBaseApp::setup();
     ofLogNotice("iApp:setup");
     // NOT SURE THIS WILL WORK?
-    
 }
 
 void iApp::draw(ofEventArgs & args) {
@@ -300,26 +299,26 @@ void iApp::drawCalibration(int alpha) {
     
     // border
     ofRectMode(OF_RECTMODE_CORNER);
-    ofRect(hsw, hsw, w-sw, h-sw);
+    ofDrawRectangle(hsw, hsw, w-sw, h-sw);
     
     // diagonal lines
-    ofLine(hsw, hsw, w+hsw, h-hsw);
-    ofLine(-hsw, h-hsw, w-hsw, hsw);
+    ofDrawLine(hsw, hsw, w+hsw, h-hsw);
+    ofDrawLine(-hsw, h-hsw, w-hsw, hsw);
     
     // centre lines
-    ofLine(cx, 0, cx, h);
-    ofLine(0, cy, w, cy);
+    ofDrawLine(cx, 0, cx, h);
+    ofDrawLine(0, cy, w, cy);
     
     // horizontal 1/4 lines
-    ofLine(0, h/4, w, h/4);
-    ofLine(0, h-h/4, w, h-h/4);
+    ofDrawLine(0, h/4, w, h/4);
+    ofDrawLine(0, h-h/4, w, h-h/4);
     
     // Draw centre rect & circle
     ofRectMode(OF_RECTMODE_CENTER);
     
     float dim = min(w, h) * .66f;
     
-    ofEllipse(cx, cy, dim, dim);
+    ofDrawEllipse(cx, cy, dim, dim);
     
     ofSetLineWidth(1.0f);
     
@@ -338,8 +337,8 @@ void iApp::drawCalibration(int alpha) {
             case 3: ofSetColor(0,0,255, alpha); break;
         }
         
-        ofEllipse(0, y, mini_rad, mini_rad); // LHS
-        ofEllipse(w, y, mini_rad, mini_rad); // RHS
+        ofDrawEllipse(0, y, mini_rad, mini_rad); // LHS
+        ofDrawEllipse(w, y, mini_rad, mini_rad); // RHS
     }
     
     // Draw more comprehensive grid
@@ -357,13 +356,13 @@ void iApp::drawCalibration(int alpha) {
     // vertical lines
     for(int col = 1; col < wc; col++) {
         int gx = round(col * grid_x);
-        ofLine(gx, 0, gx, h);
+        ofDrawLine(gx, 0, gx, h);
     }
     
     // horizontal lines
     for(int row = 1; row < hc; row++) {
         int gy = round(row * grid_y);
-        ofLine(0, gy, w, gy);
+        ofDrawLine(0, gy, w, gy);
     }
     
     ofPopStyle();
@@ -381,31 +380,62 @@ void iApp::logSetup(bool appending) {
         
         if(archive_logs) {
             
-            ofFile f("logs/" + log_name);
+            ofFile log_file("logs/" + log_name);
             
-            if(f.exists()) {
+            if(log_file.exists()) {
                 
-                uint64_t sz_kb = f.getSize() / 1024;
+                uint64_t sz_kb = log_file.getSize() / 1024;
                 
                 if(sz_kb >= IAPP_DEF_LOG_SIZE_ARCH_KB_MAX) {
                     
-                    ofFile parent_dir(f.getEnclosingDirectory());
+                    ofFile parent_dir(log_file.getEnclosingDirectory());
                     
                     #if defined(TARGET_OSX)
-                        string zip_cmd = "gzip '" + f.getAbsolutePath() + "'";
+                        string zip_cmd = "gzip '" + log_file.getAbsolutePath() + "'";
                         ofLogNotice("ARCHIVING LOG with") << zip_cmd;
                         string zip_result = ofSystem(zip_cmd);
                         ofLogNotice("zip_result") << zip_result;
                     
-                        string rename_cmd =  "mv '" + f.getAbsolutePath() + ".gz' '" + parent_dir.getAbsolutePath() + "/" + ofGetTimestampString("%Y-%m-%d-%H-%M-%S") + "_" + app_name + ".log.gz'";
+                        string rename_cmd =  "mv '" + log_file.getAbsolutePath() + ".gz' '" + parent_dir.getAbsolutePath() + "/" + ofGetTimestampString("%Y-%m-%d-%H-%M-%S") + "_" + app_name + ".log.gz'";
                         ofLogNotice("RENAMING LOG ARCHIVE with") << rename_cmd;
                         string rename_result = ofSystem(rename_cmd);
                         ofLogNotice("rename_result") << rename_result;
                     #endif
                     
                     #if defined(TARGET_WIN32)
-                        // TODO: Win could use: win7 cmd option: http://superuser.com/questions/110991/can-you-zip-a-file-from-the-command-prompt-using-only-windows-built-in-capabili
-                    #endif
+
+                        // TODO: Win7 could use: http://superuser.com/questions/110991/can-you-zip-a-file-from-the-command-prompt-using-only-windows-built-in-capabili
+
+						// Assume windows 10, which comes with tar.exe
+						// https://superuser.com/questions/201371/create-zip-folder-from-the-command-line-windows
+						// tar.exe -a -c -f out.zip in.txt
+						// 
+
+						string input_path = log_file.getAbsolutePath();
+
+						stringstream output;
+						output << parent_dir.getAbsolutePath() << "\\" << ofGetTimestampString("%Y-%m-%d-%H-%M-%S") << "_" << app_name << ".log.zip";
+						string output_path = output.str();
+						ofLogToConsole();
+
+						string zip_cmd = "tar.exe -acf \"" + output_path + "\" \"" + input_path + "\"";
+
+						// Note: This will currently have the fullpath to the log inside the zip
+						// TODO: fix this above
+
+						// e.g, tar.exe -cvzf "E:\userfiles\Documents\........\bin\data\logs\2020-06-27-10-32-28_APPNAME.log.zip" "E:\userfiles\Documents\........\bin\data\logs\APPNAME.log"
+					
+						ofLogNotice("ARCHIVING LOG with") << zip_cmd;
+
+						string zip_result = ofSystem(zip_cmd);
+
+						// ofLogNotice("zip_result") << zip_result;
+
+						// remove the original log file (f
+						bool success = log_file.remove();
+						ofLogNotice("Existing log file removed") << success;
+
+					#endif
 
                 }
                 
@@ -413,7 +443,12 @@ void iApp::logSetup(bool appending) {
             
         }
         
-        ofLogToFile("logs/" + log_name, appending);
+		string log_path = "logs/" + log_name;
+
+		ofLogToConsole();
+		ofLogNotice(app_name) << "Logging output to file:" << log_path;
+
+        ofLogToFile(log_path, appending);
     }
     
     
@@ -430,7 +465,7 @@ void iApp::logHeader() {
     ofLogNotice("");
     ofLogNotice("--------------------------------------");
     ofLogNotice("--- START ") << app_name << " app v" << app_version << " @ " << ofGetTimestampString("%H:%M:%S %d-%m-%Y");
-    ofLogNotice("--- ") << "oF:" << OF_VERSION_MAJOR << "." << OF_VERSION_MINOR << "." << OF_VERSION_PATCH << " platform:" << ofGetTargetPlatform();
+    ofLogNotice("--- ") << "oF:" << OF_VERSION_MAJOR << "." << OF_VERSION_MINOR << "." << OF_VERSION_PATCH << ", platform:" << ofGetTargetPlatform();
     // TODO: log OS version and name + opengl properties, free gpu memory?
     ofLogNotice("--------------------------------------");
     

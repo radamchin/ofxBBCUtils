@@ -1,6 +1,8 @@
 # ignory
-ofxBBCUtilsDevApp/bin/bbcUtilsDebug.app/*
+
+*.app
 *.xcuserdatad
+
 
 **.zip
 
@@ -14,3 +16,10 @@ ofxBBCUtilsDevApp/bin/bbcUtilsDebug.app/*
 *.sdf
 *.opensdf
 *.xccheckout
+
+# VS files.
+**.rc
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**/obj/
