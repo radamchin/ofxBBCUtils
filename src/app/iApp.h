@@ -20,7 +20,7 @@ class iApp : public ofBaseApp{
     
 public:
     
-    iApp(string _app_name = "", string _app_version = "", bool _log_to_file = false, bool _archive_logs = true);
+    iApp(const string _app_name = "", const string _app_version = "", bool _log_to_file = false, bool _archive_logs = true);
     
     static string app_name;
     static string app_version;
