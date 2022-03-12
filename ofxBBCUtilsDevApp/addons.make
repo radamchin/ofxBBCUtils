@@ -1,3 +1,3 @@
-ofxBBCUtils
-ofxPoco
 ofxXmlSettings
+ofxPoco
+ofxBBCUtils

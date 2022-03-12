@@ -3,6 +3,10 @@
 *.app
 *.xcuserdatad
 
+# Xcode
+*.plist
+*.xcconfig
+*.xcodeproj
 
 **.zip
 
