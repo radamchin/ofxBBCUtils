@@ -212,6 +212,13 @@ namespace bbc {
 
             return ofToString(minutes) + ":" + ofToString(seconds, 2, '0') + ms_str;
         }
+    
+        static float msToFrames( const int ms, unsigned int frameRate = 0) {
+            
+            frameRate = (frameRate == 0) ? ofGetFrameRate() : frameRate;
+            
+            return frameRate*(ms/1000.0);
+        }
         
 		//--------------------------------------------------------------------------------------
 

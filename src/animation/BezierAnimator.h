@@ -102,14 +102,21 @@ namespace bbc {
                     //return;
                 }
                 
-                float pos = use_ease ? ErpEase::quadInOut(0.0, 1.0, step) : step;
+                updateProgress( getProgress() );
                 
-                current_pos.x = bezierPoint(start_pos.x, control_a.x, control_b.x, end_pos.x, pos);
-                current_pos.y = bezierPoint(start_pos.y, control_a.y, control_b.y, end_pos.y, pos);
+            }
+            
+            void updateProgress( const float & p, bool updateFrameTweener = false ) {
+                
+                current_pos.x = bezierPoint(start_pos.x, control_a.x, control_b.x, end_pos.x, p);
+                current_pos.y = bezierPoint(start_pos.y, control_a.y, control_b.y, end_pos.y, p);
                 
                 if(use_3d) {
-                    current_pos.z = bezierPoint(start_pos.z, control_a.z, control_b.z, end_pos.z, pos);
+                    current_pos.z = bezierPoint(start_pos.z, control_a.z, control_b.z, end_pos.z, p);
                 }
+                
+                if(updateFrameTweener) FrameTweener::setProgress(p);
+                
             }
             
             void drawDebug(int alpha = 255, float r = 10.0) {
@@ -187,6 +194,10 @@ namespace bbc {
             
             float getZ() {
                 return current_pos.z;
+            }
+            
+            float getProgress() {
+                return use_ease ? ErpEase::quadInOut(0.0, 1.0, FrameTweener::step) : FrameTweener::step; // FrameTweener::getPosition()
             }
             
             ofPoint getPosition() {

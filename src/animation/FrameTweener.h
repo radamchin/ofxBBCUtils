@@ -76,6 +76,11 @@ namespace bbc {
                     
                     completed(true); // let listener know this is completed but interupted
                 }
+                
+                void setProgress( float p ) {
+                    
+                    frame_counter = frame_total * p;
+                }
             
                 float getPosition() {
                     return step;
