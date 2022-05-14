@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<Testbed>
+	<Mirror>
+		<Enabled>0</Enabled>
+		<Columns>1</Columns>
+		<Rows>10</Rows>
+		<Color>255, 0, 0, 255</Color>
+	</Mirror>
+	<Title>The fellowship of the ring</Title>
+	<Other_one>
+		<Position>-1.69, 2.3, 3.14159</Position>
+		<Rectem>5, 6, 0, 249, 480</Rectem>
+	</Other_one>
+</Testbed>

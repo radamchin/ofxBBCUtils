@@ -20,6 +20,7 @@
 
 #include "FPSTrackingWidget.h"
 
+#include "ofParameterSerialiser.h"
 
 #define BBC_UTILS_DEV_VERSION "1.0.3"
 
@@ -45,6 +46,7 @@ class ofApp : public iApp{
 		void gotMessage(ofMessage msg);
     
         void testConfig();
+        void testOfParamSerialiser();
         void testTimers();
         void testEasing();
         void testAnimators();

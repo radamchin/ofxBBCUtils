@@ -3,14 +3,16 @@
 using namespace bbc::utils;
 
 //--------------------------------------------------------------
-
 ofApp::ofApp():iApp("BBC_UTILS_DEV_TEST", BBC_UTILS_DEV_VERSION, false) {
     // How to pass configurable values into iApp, very not great.
     
 }
 
+//--------------------------------------------------------------
 void ofApp::setup()  {        
     ofSetWindowTitle("bbcUtils: dev test app");
+    
+    testOfParamSerialiser();
     
     testConfig();
     
@@ -48,6 +50,7 @@ void ofApp::setup()  {
 
 }
 
+//--------------------------------------------------------------
 void ofApp::testConfig() {
 
     //string s = Config::instance()->getAttribute("config:colors:palette", "values", "empty");
@@ -124,6 +127,49 @@ void ofApp::testConfig() {
 
 }
 
+void ofApp::testOfParamSerialiser(){
+    
+    ofParameterGroup mirrorGroup;
+    ofParameter<bool> doMirror{"Enabled", false};
+    ofParameter<int> columns{"Columns", 1, 0, 16};
+    ofParameter<float> rows{"Rows", 10.0, 0.0, 16.0};
+    ofParameter<ofColor> color{"Color", ofColor::red };
+   
+    mirrorGroup.setName("Mirror");
+    mirrorGroup.add( doMirror );
+    mirrorGroup.add( columns );
+    mirrorGroup.add( rows );
+    mirrorGroup.add( color );
+    
+    ofParameterGroup otherGroup;
+    ofParameter<ofPoint> pos{"Position", ofPoint(-1,0.3,PI)};
+    ofParameter<ofRectangle> rect{"Rectem", ofRectangle(5,6,249,480)};
+    ofParameter<void> testBut{"Button"};
+    
+    otherGroup.setName("Other one");
+    otherGroup.add(pos);
+    otherGroup.add(rect);
+    
+    ofParameter<string> title{"Title", "The fellowship of the ring"};
+    
+    ofParameterSerialiser serialiser;
+    serialiser.setName("Testbed");
+    
+    serialiser.addGroup(mirrorGroup);
+    serialiser.addParameter(title);
+    serialiser.addParameter(testBut);
+    serialiser.addGroup(otherGroup);
+    
+    // Now the serialiser is loaded we can recall it from disk?
+    
+   // serialiser.saveToFile("param_serialisation.xml");
+  //  serialiser.saveToFile("param_serialisation.json");
+    
+    serialiser.loadFromFile("param_serialisation.xml");
+    
+    ofLogNotice("Pos") << pos;
+    
+}
 //--------------------------------------------------------------
 void ofApp::update(){
     
@@ -164,6 +210,7 @@ void ofApp::draw(){
     
 }
 
+//--------------------------------------------------------------
 void ofApp::testClipboard() {
     
     // get whats in the clipboard and draw it to screen?
@@ -178,6 +225,7 @@ void ofApp::testClipboard() {
     
 }
 
+//--------------------------------------------------------------
 void ofApp::testAnimators() {
     
     ofSetColor(255,0, 255);
@@ -201,6 +249,7 @@ void ofApp::testAnimators() {
 }
 
 
+//--------------------------------------------------------------
 void ofApp::testTimers(){
     
     if(a_timer->isExpired()) {
@@ -236,7 +285,7 @@ void ofApp::testTimers(){
 
 }
 
-
+//--------------------------------------------------------------
 void ofApp::testEasing() {
     
     // Test Easing.
