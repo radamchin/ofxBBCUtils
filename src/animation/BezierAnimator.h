@@ -23,12 +23,12 @@ namespace bbc {
             
         public:
             
-            bool use_3d;
             bool use_ease;
+            bool use_3d;
             
-            BezierAnimator(bool _use_ease = true, bool _use_3d = false) {
-                use_ease = _use_ease;
-                use_3d = _use_3d;
+            BezierAnimator(bool _ease = true, bool _3d = false) {
+                use_ease = _ease;
+                use_3d = _3d;
             }
             
             virtual void start(float start_x, float start_y, float a_x, float a_y, float b_x, float b_y, float end_x, float end_y, int frame_duration) {
@@ -88,6 +88,15 @@ namespace bbc {
                 start(start_pos, control_a, control_b, end_pos, frame_total);
             }
             
+            void stop() {
+                //
+                FrameTweener::stop();
+            }
+            
+            void resume() {
+                FrameTweener::resume();
+            }
+            
             void interupt() {
                 ofLogNotice("BezierAnimator interupt");
                 FrameTweener::interupt();
@@ -103,7 +112,6 @@ namespace bbc {
                 }
                 
                 updateProgress( getProgress() );
-                
             }
             
             void updateProgress( const float & p, bool updateFrameTweener = false ) {

@@ -21,7 +21,6 @@ namespace bbc {
             
             float control_rand;
             
-            
             bool repeating;
             
             //--------------------------------------------

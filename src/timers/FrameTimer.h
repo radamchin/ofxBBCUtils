@@ -22,7 +22,10 @@ namespace bbc {
             
             public:
                 
-                FrameTimer(int frames_duration, bool auto_reset = false);
+                FrameTimer(int frames_duration = 360, bool auto_reset = false);
+                ~FrameTimer();
+            
+                void setup(int frames_duration, bool auto_reset = false);
                 
                 void update(); // short cut for step
                 void step(); // update
@@ -35,16 +38,12 @@ namespace bbc {
                 int getCounter();
                 string toString();
                 
-            private:	
-                
-                void init(int frames_duration, bool auto_reset);
-                
+            private:
+            
                 int _duration;
                 int _counter;
 
                 bool _auto_reset;
-                
-                ~FrameTimer();
             
         };
 

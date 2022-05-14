@@ -30,7 +30,7 @@ namespace bbc {
 					_running = false;
 					_complete = true;
             
-					 step = 0.0;
+					step = 0.0;
                 }
                 
                 void start(int _frame_total = 100) {
@@ -52,7 +52,15 @@ namespace bbc {
                     _complete = false;
                     _running = true;
                 }
+            
+                void stop() {
+                    _running = false;
+                }
                 
+                void resume() {
+                    _running = true;
+                }
+            
                 void update() {
                     
                     if(_complete) return;
@@ -78,7 +86,6 @@ namespace bbc {
                 }
                 
                 void setProgress( float p ) {
-                    
                     frame_counter = frame_total * p;
                 }
             
