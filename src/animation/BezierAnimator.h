@@ -21,16 +21,27 @@ namespace bbc {
         
         class BezierAnimator : public FrameTweener {
             
+        private:
+            
+            
+            
         public:
             
             bool use_ease;
             bool use_3d;
             
+            EaseKind ease_kind = EaseKind::QuadInOut;
+            ErpEase::easeFunc ease;
+            
+            
+            //--------------------------------------------------------------
             BezierAnimator(bool _ease = true, bool _3d = false) {
                 use_ease = _ease;
                 use_3d = _3d;
+                ease = ErpEase::getEaseFunctionPointer(ease_kind);
             }
             
+            //--------------------------------------------------------------
             virtual void start(float start_x, float start_y, float a_x, float a_y, float b_x, float b_y, float end_x, float end_y, int frame_duration) {
                 
                 if(use_3d) ofLogWarning("BezierAnimator::start") << "You have used a 2d method but use_3d is enabled, Your beziers will be 2d only";
@@ -204,14 +215,34 @@ namespace bbc {
                 return current_pos.z;
             }
             
-            float getProgress() {
-                return use_ease ? ErpEase::quadInOut(0.0, 1.0, FrameTweener::step) : FrameTweener::step; // FrameTweener::getPosition()
+            //--------------------------------------------------------------
+            float getProgress( bool raw = false ) {
+                if(raw) return FrameTweener::step;
+                return use_ease ? ease(0.0, 1.0, FrameTweener::step) : FrameTweener::step; // FrameTweener::getPosition()
             }
             
+            //--------------------------------------------------------------
             ofPoint getPosition() {
                 return current_pos;
             }
             
+            //--------------------------------------------------------------
+            void setEase( bool state, EaseKind kind = EaseKind::None ) {
+                use_ease = state;
+                if(state == true && kind != EaseKind::None ) {
+                    setEaseKind(kind);
+                }
+            }
+            
+            //--------------------------------------------------------------
+            void setEaseKind( EaseKind kind ) {
+                
+                ease_kind = kind;
+                // set our custom ease function
+                ease = ErpEase::getEaseFunctionPointer(ease_kind);
+            }
+            
+            //--------------------------------------------------------------
             string toString(){
                 ostringstream out;
                 out << "{BezierAnimator " << FrameTweener::toShortString() << "}";

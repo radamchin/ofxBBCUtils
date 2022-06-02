@@ -40,7 +40,9 @@ void ofApp::setup()  {
     
     rand_bezier_animator.setup(10,10,ofGetWidth()-20, ofGetHeight()-20);
     rand_bezier_animator.repeating = true;
-    rand_bezier_animator.use_ease = false;
+    // rand_bezier_animator.use_ease = true;
+    rand_bezier_animator.setEase(true);
+    rand_bezier_animator.setEaseKind(EaseKind::BounceOut);
     rand_bezier_animator.start();
     
 	cout << "\tGL: " << bbc::utils::getGLInfoStringMin();
