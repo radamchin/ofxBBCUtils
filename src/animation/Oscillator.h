@@ -40,7 +40,7 @@ namespace bbc {
         public:
             ofParameterGroup params;
             
-            ofParameter<bool> enabled;
+            ofParameter<bool> enabled{"Enabled", false};
             ofParameter<float> speed;
             
             float step;
@@ -82,7 +82,7 @@ namespace bbc {
                 params.setName("Osc. " + _name + "");
                 //params.add( enabled.set("Enabled [Osc. " + _name + "]", false) );
                 //speed.setName("Speed [Osc. " + _name + "]");
-                params.add( enabled.set("Enabled", false) );
+                params.add( enabled );
                 speed.setName("Speed");
                 params.add( speed );
                 
