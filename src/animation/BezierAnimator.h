@@ -56,6 +56,7 @@ namespace bbc {
                 FrameTweener::start(frame_duration); // super method
             }
             
+            //--------------------------------------------------------------
             virtual void start(float start_x, float start_y, float start_z, float a_x, float a_y, float a_z, float b_x, float b_y, float b_z, float end_x, float end_y, float end_z, int frame_duration) {
                 
                 start_pos.set(start_x, start_y, start_z);
@@ -68,6 +69,7 @@ namespace bbc {
                 FrameTweener::start(frame_duration); // super method
             }
             
+            //--------------------------------------------------------------
             virtual void start(ofPoint & _start_pos, ofPoint & _control_a, ofPoint & _control_b, ofPoint & _end_pos, float frame_duration) {
                 //Note:  This would support 3d.
                 
@@ -81,6 +83,7 @@ namespace bbc {
                 FrameTweener::start(frame_duration); // super method
             }
             
+            //--------------------------------------------------------------
             virtual void start(ofVec2f & _start_pos, ofVec2f & _control_a, ofVec2f & _control_b, ofVec2f & _end_pos, float frame_duration) {
                 
                 if(use_3d) ofLogWarning("BezierAnimator::start") << "You have used a 2d method but use_3d is enabled, Your beziers will be 2d only";
@@ -95,24 +98,28 @@ namespace bbc {
                 FrameTweener::start(frame_duration); // super method
             }
             
+            //--------------------------------------------------------------
             void repeat() {
                 start(start_pos, control_a, control_b, end_pos, frame_total);
             }
             
+            //--------------------------------------------------------------
             void stop() {
-                //
                 FrameTweener::stop();
             }
             
+            //--------------------------------------------------------------
             void resume() {
                 FrameTweener::resume();
             }
             
+            //--------------------------------------------------------------
             void interupt() {
                 ofLogNotice("BezierAnimator interupt");
                 FrameTweener::interupt();
             }
             
+            //--------------------------------------------------------------
             void update() {
                 
                 FrameTweener::update();
@@ -125,6 +132,7 @@ namespace bbc {
                 updateProgress( getProgress() );
             }
             
+            //--------------------------------------------------------------
             void updateProgress( const float & p, bool updateFrameTweener = false ) {
                 
                 current_pos.x = bezierPoint(start_pos.x, control_a.x, control_b.x, end_pos.x, p);
@@ -138,6 +146,7 @@ namespace bbc {
                 
             }
             
+            //--------------------------------------------------------------
             void drawDebug(int alpha = 255, float r = 10.0) {
                 // Draw the points along with the path and handles.
                 
@@ -202,15 +211,18 @@ namespace bbc {
                 
                 ofPopStyle();
             }
+            //--------------------------------------------------------------
             
             float getX() {
                 return current_pos.x;
             }
             
+            //--------------------------------------------------------------
             float getY() {
                 return current_pos.y;
             }
             
+            //--------------------------------------------------------------
             float getZ() {
                 return current_pos.z;
             }
@@ -258,6 +270,7 @@ namespace bbc {
             ofPoint control_a; // Control point for the start_pos
             ofPoint control_b; // Control point for the end_pos
             
+            //--------------------------------------------------------------
             float bezierPoint(float a, float b, float c, float d, float t) {
                 // Taken from Processing 1.0? PGraphics
                 float t1 = 1.0 - t;
