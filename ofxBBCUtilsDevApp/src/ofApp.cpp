@@ -2,6 +2,8 @@
 
 using namespace bbc::utils;
 
+#include "ErpEase.h"
+
 //--------------------------------------------------------------
 ofApp::ofApp():iApp("BBC_UTILS_DEV_TEST", BBC_UTILS_DEV_VERSION, false) {
     // How to pass configurable values into iApp, very not great.
@@ -47,6 +49,9 @@ void ofApp::setup()  {
     
     fps_tracker.bgCol = ofColor(192,192,192,212);
     fps_tracker.setup();
+    
+    // Ease function pointers
+    testEaseFunc = ErpEase::getEaseFunctionPointer(EaseKind::CircInOut);
 
 }
 
@@ -192,7 +197,7 @@ void ofApp::draw(){
     
     //ofBackgroundHex(0xAAAAAA);
     
-    drawCalibration(192);
+    drawCalib(192);
     
     ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate(), 2) + ", " + getUpTimeStr() + ", " + getUnixTimeStamp(true), 5, 15);
     
@@ -326,6 +331,17 @@ void ofApp::testEasing() {
     
     ofSetColor(255,0,255);
     ofDrawCircle( 180, ErpEase::bounceInOut(0, ofGetHeight(), fc), 10);
+    
+    // Special ease lookup by type
+    ofSetColor(ofColor::pink);
+    ofDrawCircle( 200, ErpEase::easeByKind(EaseKind::QuadInOut, 0, ofGetHeight(), fc), 10);
+    
+    ofSetColor(ofColor::orange);
+    ofDrawCircle( 220, ErpEase::easeByKind(EaseKind::QuintInOut, 0, ofGetHeight(), fc), 10);
+    
+    // Test easeFunc pointer
+    ofSetColor(ofColor::wheat);
+    ofDrawCircle( 240, testEaseFunc(0, ofGetHeight(), fc), 10);
 }
 
 //--------------------------------------------------------------

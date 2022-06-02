@@ -67,6 +67,9 @@ class ofApp : public iApp{
         BezierAnimator bezier_animator_a;
         RandomBezierAnimator rand_bezier_animator;
     
+        ErpEase::easeFunc testEaseFunc;
+        
+    
         FPSTrackingWidget fps_tracker;
     
 };
