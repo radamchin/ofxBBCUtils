@@ -41,7 +41,7 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
-    void drawCalibration(int alpha = 255);
+    void drawCalib(int alpha = 255);
     
     void exit(ofEventArgs & args);
     

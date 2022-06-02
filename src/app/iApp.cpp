@@ -1,4 +1,5 @@
 #include "iApp.h"
+#include "BBCUtils.h"
 #include "bbcConfig.h"
 
 #include "Poco/DateTimeParser.h"
@@ -273,99 +274,9 @@ void iApp::exit(ofEventArgs & args) {
 
 //------------------------------------------------------------------------------------------------------
 
-void iApp::drawCalibration(int alpha) {
+void iApp::drawCalib(int alpha) {
     
-    /*
-     Draw a screen calibration graphic, useful for projection calibration,
-     */
-    
-    ofPushStyle();
-    
-    float sw = 2.0f;
-    ofSetLineWidth(sw);
-    
-    float w = ofGetWidth();
-    float h = ofGetHeight();
-    
-    float cx = w / 2.0;
-    float cy = h / 2.0;
-    
-    float hsw = sw / 2.0;
-    
-    ofSetCircleResolution(36);
-    
-    ofSetColor(255, alpha);
-    ofNoFill();
-    
-    // border
-    ofRectMode(OF_RECTMODE_CORNER);
-    ofDrawRectangle(hsw, hsw, w-sw, h-sw);
-    
-    // diagonal lines
-    ofDrawLine(hsw, hsw, w+hsw, h-hsw);
-    ofDrawLine(-hsw, h-hsw, w-hsw, hsw);
-    
-    // centre lines
-    ofDrawLine(cx, 0, cx, h);
-    ofDrawLine(0, cy, w, cy);
-    
-    // horizontal 1/4 lines
-    ofDrawLine(0, h/4, w, h/4);
-    ofDrawLine(0, h-h/4, w, h-h/4);
-    
-    // Draw centre rect & circle
-    ofRectMode(OF_RECTMODE_CENTER);
-    
-    float dim = min(w, h) * .66f;
-    
-    ofDrawEllipse(cx, cy, dim, dim);
-    
-    ofSetLineWidth(1.0f);
-    
-    // Draw circles at the sides
-    int n = 8;
-    float mini_rad = h / n;
-    float y;
-    
-    for(int i = 0; i<n-1; i++) {
-        y = (mini_rad)+(i*mini_rad);
-        int c = i % 4;
-        switch(c) {
-            case 0: ofSetColor(255, alpha); break;
-            case 1: ofSetColor(255,0,0, alpha); break;
-            case 2: ofSetColor(0,255,0, alpha); break;
-            case 3: ofSetColor(0,0,255, alpha); break;
-        }
-        
-        ofDrawEllipse(0, y, mini_rad, mini_rad); // LHS
-        ofDrawEllipse(w, y, mini_rad, mini_rad); // RHS
-    }
-    
-    // Draw more comprehensive grid
-    
-    // do this at the ratio of the screen?
-    // TODO: make the ratio dynamic too reading getWidth and getHeight
-    float wc = 16.0f;
-    float hc = 9.0f;
-    
-    float grid_x = w / wc;
-    float grid_y = h / hc;
-    
-    ofSetColor(255, alpha);
-    
-    // vertical lines
-    for(int col = 1; col < wc; col++) {
-        int gx = round(col * grid_x);
-        ofDrawLine(gx, 0, gx, h);
-    }
-    
-    // horizontal lines
-    for(int row = 1; row < hc; row++) {
-        int gy = round(row * grid_y);
-        ofDrawLine(0, gy, w, gy);
-    }
-    
-    ofPopStyle();
+    bbc::utils::drawCalibration(alpha);
     
 }
 
