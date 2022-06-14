@@ -101,7 +101,7 @@ namespace bbc {
             //------------------------------------------------------------------------
             float update() {
                 
-                if(!_setup) return;
+				if (!_setup) return 0;
                 
                 step += speed.get();
                 
@@ -134,11 +134,11 @@ namespace bbc {
             }
             
             //------------------------------------------------------------------------
-            float setSpeed( float v ) {
+            void setSpeed( float v ) {
                 speed = v;
             }
             
-            float setSpeedRange( float _min, float _max ) {
+            void setSpeedRange( float _min, float _max ) {
                 speed.setMin(_min);
                 speed.setMax(_max);
             }
