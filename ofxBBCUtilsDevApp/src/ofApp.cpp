@@ -199,7 +199,7 @@ void ofApp::draw(){
     
     //ofBackgroundHex(0xAAAAAA);
     
-    drawCalib(192);
+    drawCalibration(192, ofColor::white, 4);
     
     ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate(), 2) + ", " + getUpTimeStr() + ", " + getUnixTimeStamp(true), 5, 15);
     
@@ -240,8 +240,7 @@ void ofApp::testAnimators() {
     
     ofSetColor(255,0, 192);
     ofDrawBitmapString(bezier_animator_a.toString(), 350, 40);
-    
-    
+        
     ofSetColor(255,0, 128);
     ofDrawBitmapString(rand_bezier_animator.toString(), 350, 55);
     

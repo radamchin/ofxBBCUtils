@@ -477,15 +477,15 @@ namespace bbc {
             }
         }
     
-        static void drawCalibration(int alpha = 255) {
+        //---------------------------------------------------------------------------
+        static void drawCalibration(int alpha = 255, const ofColor mainColor = ofColor::white, float thickness =  2.0f) {
             /*
              Draw a screen calibration graphic, useful for projection calibration,
              */
             
             ofPushStyle();
             
-            float sw = 2.0f;
-            ofSetLineWidth(sw);
+            ofSetLineWidth(thickness);
             
             float w = ofGetWidth();
             float h = ofGetHeight();
@@ -493,20 +493,20 @@ namespace bbc {
             float cx = w / 2.0;
             float cy = h / 2.0;
             
-            float hsw = sw / 2.0;
+            float half_thick = thickness / 2.0;
             
             ofSetCircleResolution(36);
             
-            ofSetColor(255, alpha);
+            ofSetColor(mainColor, alpha);
             ofNoFill();
             
             // border
             ofRectMode(OF_RECTMODE_CORNER);
-            ofDrawRectangle(hsw, hsw, w-sw, h-sw);
+            ofDrawRectangle(half_thick, half_thick, w-thickness, h-thickness);
             
             // diagonal lines
-            ofDrawLine(hsw, hsw, w+hsw, h-hsw);
-            ofDrawLine(-hsw, h-hsw, w-hsw, hsw);
+            ofDrawLine(half_thick, half_thick, w+half_thick, h-half_thick);
+            ofDrawLine(-half_thick, h-half_thick, w-half_thick, half_thick);
             
             // centre lines
             ofDrawLine(cx, 0, cx, h);
