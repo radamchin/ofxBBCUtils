@@ -523,10 +523,36 @@ namespace bbc {
             
             ofDrawEllipse(cx, cy, dim, dim);
             
-            ofSetLineWidth(1.0f);
+            // Draw more comprehensive grid
+            
+            // do this at the ratio of the screen?
+            // TODO: make the ratio dynamic too reading getWidth and getHeight
+            float wc = 16.0f;
+            float hc = 9.0f;
+            
+            float grid_x = w / wc;
+            float grid_y = h / hc;
+            
+            ofSetColor(mainColor, alpha);
+            
+            ofSetLineWidth(half_thick);
+            // vertical lines
+            for(int col = 1; col < wc; col++) {
+                int gx = round(col * grid_x);
+                ofDrawLine(gx, 0, gx, h);
+            }
+            
+            // horizontal lines
+            for(int row = 1; row < hc; row++) {
+                int gy = round(row * grid_y);
+                ofDrawLine(0, gy, w, gy);
+            }
+            
+            ofSetLineWidth(thickness);
             
             // Draw circles at the sides
-            int n = 8;
+            
+            int n = 6;
             float mini_rad = h / n;
             float y;
             
@@ -544,29 +570,6 @@ namespace bbc {
                 ofDrawEllipse(w, y, mini_rad, mini_rad); // RHS
             }
             
-            // Draw more comprehensive grid
-            
-            // do this at the ratio of the screen?
-            // TODO: make the ratio dynamic too reading getWidth and getHeight
-            float wc = 16.0f;
-            float hc = 9.0f;
-            
-            float grid_x = w / wc;
-            float grid_y = h / hc;
-            
-            ofSetColor(255, alpha);
-            
-            // vertical lines
-            for(int col = 1; col < wc; col++) {
-                int gx = round(col * grid_x);
-                ofDrawLine(gx, 0, gx, h);
-            }
-            
-            // horizontal lines
-            for(int row = 1; row < hc; row++) {
-                int gy = round(row * grid_y);
-                ofDrawLine(0, gy, w, gy);
-            }
             
             ofPopStyle();
             
