@@ -29,33 +29,48 @@ class ofParameterSerialiser {
     
 public:
     
+    //------------------------------------------------------------------------------
     ofParameterSerialiser() {
         setName("ofParameterSerialiser");
         filename = "ofparams_serialised";
     }
+    
+    //------------------------------------------------------------------------------
     ~ofParameterSerialiser() {
         
     }
     
+    //------------------------------------------------------------------------------
     void setFilename( const std::string _filename  ) {
         filename = _filename;
     }
     
+    //------------------------------------------------------------------------------
     void setName( const std::string name ) {
         // set the name of the group that will be saved as rot
         group.setName(name);
     }
     
+    //------------------------------------------------------------------------------
     /* Add parameters of groups to save */
     template< typename T > // ofAbstractParameter
     void addParameter( ofParameter<T> & p ){
         group.add(p);
     }
     
-    void addGroup( ofParameterGroup & _group ){
-        group.add(_group);       
-   }
+    //------------------------------------------------------------------------------
+    /* Generic Add - works with group or param */
+    template< typename T >
+    void add( ofParameter<T> & p ){
+       group.add(p);
+    }
     
+    //------------------------------------------------------------------------------
+    void addGroup( ofParameterGroup & _group ){
+         group.add(_group);
+    }
+    
+    //------------------------------------------------------------------------------
     void saveToFile( std::string _filename = ""){
         
         if(_filename.empty()) {
@@ -80,7 +95,8 @@ public:
             ofLogError("ofParameterSerialiser") << extension << " not recognized, only .xml and .json supported by now";
         }
     }
-
+    
+    //------------------------------------------------------------------------------
     void loadFromFile( std::string _filename = "" ){
         
         if(_filename.empty()) {
@@ -102,11 +118,13 @@ public:
         }
     }
     
+    //------------------------------------------------------------------------------
     template<class T>
     void saveTo(T & serializer){
         ofSerialize(serializer, group);
     }
-
+    
+    //------------------------------------------------------------------------------
     template<class T>
     void loadFrom(T & serializer){
         ofDeserialize(serializer, group);
