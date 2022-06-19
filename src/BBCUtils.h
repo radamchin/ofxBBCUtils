@@ -297,28 +297,27 @@ namespace bbc {
         // These could have alts. that operate on the string passes instead
         // i.e, void setToUpperCase void setToLowerCase
         
-        static string toUpperCase(const string &  str) {
-            string strUpper = "";
+        static string toUpperCase( const string & str ) {
+            ostringstream out;
             
             for( int i=0; i<str.length(); i++ ) {
-                strUpper += toupper( str[ i ] );
+                out << toupper( str[ i ] );
             }
             
-            return strUpper;
+            return out.str();
         }
         
-        static string toLowerCase(const string & str) {
-            string strLower = "";
+        static string toLowerCase( const string & str ) {
+            ostringstream out;
             
             for( int i=0; i<str.length(); i++ ){
-                strLower += tolower( str[ i ] );
+                out << tolower( str[ i ] );
             }
             
-            return strLower;
+            return out.str();
         }
         
         //---------------------------------------------------------------------------
-        
         static string vecToStr(const ofVec3f & v, int places = -1) {
             ostringstream out;
             if(places > -1) {
@@ -342,7 +341,6 @@ namespace bbc {
         }
         
 		//---------------------------------------------------------------------------
-		
 		static void getGLInfo(commonOpenGlInfo & info) {
 
 			info.version = (char*)glGetString(GL_VERSION);
@@ -376,7 +374,8 @@ namespace bbc {
 
 		}
 
-		static string getGLInfoStringMin() {
+		//---------------------------------------------------------------------------
+        static string getGLInfoStringMin() {
 			ostringstream out;
 
 			commonOpenGlInfo info;
@@ -391,6 +390,7 @@ namespace bbc {
 			return out.str();
 		}
 
+        //---------------------------------------------------------------------------
         static void printGLStats() {
             
 			ofLogNotice("\tGL") << getGLInfoStringMin();
@@ -406,10 +406,12 @@ namespace bbc {
 
         }
         
-        static ofMesh gridMesh;
-            
+        //---------------------------------------------------------------------------
         static void drawBackgroundGrid(float size, const ofColor& onColor, const ofColor& offColor) {
             // taken from https://github.com/openframeworks/openFrameworks/issues/5217
+
+            static ofMesh gridMesh;
+            
             float w = ofGetViewportWidth(), h = ofGetViewportHeight();
             gridMesh.clear();
             gridMesh.setMode(OF_PRIMITIVE_TRIANGLES);
@@ -476,7 +478,7 @@ namespace bbc {
                 glDepthMask(GL_TRUE);
             }
         }
-    
+        
         //---------------------------------------------------------------------------
         static void drawCalibration(int alpha = 255, const ofColor mainColor = ofColor::white, float thickness =  2.0f) {
             /*
