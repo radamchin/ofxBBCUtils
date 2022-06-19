@@ -4,7 +4,7 @@
 //
 //  Created by Adam Hinshaw on 29/3/22.
 //
-//  Back and forth at a speed
+//  Back and forth between two values at a speed
 //
 
 /**
@@ -25,8 +25,6 @@ namespace bbc {
     namespace utils {
         
         //------------------------------------------------------------------------
-    
-
         enum OscillatorType {
             OSC_TYPE_SINE = 0,
             OSC_TYPE_SAW,
@@ -61,8 +59,8 @@ namespace bbc {
                 range_start = 0.0;
                 range_end = 1.0;
             }
-            //------------------------------------------------------------------------
             
+            //------------------------------------------------------------------------
             void setup() {
                 setup("");
             }
@@ -95,9 +93,29 @@ namespace bbc {
                 enabled = b;
             }
             
+            //------------------------------------------------------------------------
             bool getEnabled() {
                 return enabled ;
             }
+            
+            //------------------------------------------------------------------------
+            void mapStepTo( int i ) {
+                mapStepTo( (float)i );
+            }
+            
+            //------------------------------------------------------------------------
+            void mapStepTo( float f ) {
+            
+               if(type == OSC_TYPE_SINE) {
+                   // What radian value would yeild a result of i, between range_start and range_end?
+                   // map i between -1..1, arc sin 
+                   float n = ofMap(f, range_start, range_end, -1, 1);
+                   step = asin(n);
+               }
+               // TODO: other types when implemented
+               
+            }
+           
             //------------------------------------------------------------------------
             float update() {
                 
@@ -138,6 +156,7 @@ namespace bbc {
                 speed = v;
             }
             
+            //------------------------------------------------------------------------
             void setSpeedRange( float _min, float _max ) {
                 speed.setMin(_min);
                 speed.setMax(_max);
@@ -149,6 +168,7 @@ namespace bbc {
                 range_end = b;
             }
             
+            //------------------------------------------------------------------------
             void setType(  OscillatorType t ) {
                 type = t;
             }
