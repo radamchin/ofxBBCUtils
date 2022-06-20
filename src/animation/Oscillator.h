@@ -104,12 +104,17 @@ namespace bbc {
             }
             
             //------------------------------------------------------------------------
-            void mapStepTo( float f ) {
+            void mapStepTo( float val ) {
             
                if(type == OSC_TYPE_SINE) {
-                   // What radian value would yeild a result of i, between range_start and range_end?
-                   // map i between -1..1, arc sin 
-                   float n = ofMap(f, range_start, range_end, -1, 1);
+                   
+                   // What radian value would yeild a result of val, between range_start and range_end.
+                   // map val between -1..1, arc sin
+                   
+                   // TODO: handle < 0: So if a oscillator is going backwards in last update, we want this to resume going backwards?
+                   // TODO: handle when f is outside of the range, as it will jump.
+                   
+                   float n = ofMap(val, range_start, range_end, 0, 1);
                    step = asin(n);
                }
                // TODO: other types when implemented
@@ -119,7 +124,7 @@ namespace bbc {
             //------------------------------------------------------------------------
             float update() {
                 
-				if (!_setup) return 0;
+				if (!_setup || !enabled) return 0;
                 
                 step += speed.get();
                 
