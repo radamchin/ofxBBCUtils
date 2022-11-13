@@ -9,7 +9,7 @@
 
 /**
     TODO:
-    * Implement Saw: Linear    
+        DONE * Implement Saw: Linear    
     * Implement Square: ON / OFF
     * Support some kind of combining of outputs of multiple to create detailed waves? Average between them? Visualise to proof. Think multiple sine waves
  
@@ -27,8 +27,8 @@ namespace bbc {
         //------------------------------------------------------------------------
         enum OscillatorType {
             OSC_TYPE_SINE = 0,
-            OSC_TYPE_SAW,
-            OSC_TYPE_SQUARE
+            OSC_TYPE_SAW, // linear tween
+            OSC_TYPE_SQUARE // on off
         };
    
         //------------------------------------------------------------------------
@@ -116,8 +116,14 @@ namespace bbc {
                    
                    float n = ofMap(val, range_start, range_end, 0, 1);
                    step = asin(n);
+                   
+               } else if( type == OSC_TYPE_SAW ) {
+                   step = ofMap(val, range_start, range_end, 0, 1);
+                   
+               }else if( type == OSC_TYPE_SQUARE ) {
+                   // TODO: other types when implemented
+                   
                }
-               // TODO: other types when implemented
                
             }
            
@@ -138,8 +144,16 @@ namespace bbc {
                     return sin(step);
                     
                 }else if(type == OSC_TYPE_SAW) {
-                    // TODO a linear variation
-                    // return  if odd, -1 .. 0, even, 0 ..1
+                    
+                    // A linear variation
+                    int i = floor(step);
+                    float f = step - i;
+                    // Note: might not need the ternary tests for 0 =, trying to make sure it hits the final value.
+                    if(i % 2 == 0) { //  even, 0 ..1
+                        return f == 0 ? 1 : f;
+                    }else{  // if odd, -1 .. 0,
+                        return f == 0 ? -1 : -(1-f);
+                    }
                     
                 }else if(type == OSC_TYPE_SQUARE) {
                     
