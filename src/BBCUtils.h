@@ -576,7 +576,19 @@ namespace bbc {
             ofPopStyle();
             
         }
+    
+    
 
+        //---------------------------------------------------------------------------
+            
+        static float getAngleRadiansBetweenPoints( ofVec2f & a, ofVec2f & b ) {
+            
+            float fx = b.x - a.x;
+            float fy = b.y - a.y;
+            
+            return atan2(fy, fx);
+        }
+    
     }
     
 }
