@@ -219,6 +219,7 @@ namespace ErpEase {
             case BounceOut: return &bounceOut;
             
         }
+        return &linearInOut;
     }
 
     //------------------------------------------------------------------

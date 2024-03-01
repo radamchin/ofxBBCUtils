@@ -258,7 +258,7 @@ namespace bbc {
             return ofGetTimestampString(format.str());
         }
 
-        static void recursiveFileSearchNameContains(const string & path, const string & search_str, vector<string> & results ) {
+        static inline void recursiveFileSearchNameContains(const string & path, const string & search_str, vector<string> & results ) {
             // Get all files of a folder that contain a string (useful for searching by type, eg ".mp3")
             
             ofDirectory dir;
