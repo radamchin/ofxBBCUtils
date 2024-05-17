@@ -54,7 +54,35 @@ void ofApp::setup()  {
     
     // Ease function pointers
     testEaseFunc = ErpEase::getEaseFunctionPointer(EaseKind::CircInOut);
-
+    
+    
+    sineOscillator.setup("Sine", 0.005);
+    //sineOscillator.setOutputRange(0, 1);
+    sineOscillator.setEnabled( true );
+    // sineOscillator.setOutputRange(8, 64);
+    
+    sinePlotter.setup(24,48);
+    
+    sawOscillator.setup("Saw", 0.005);
+    sawOscillator.setType( bbc::utils::OSC_TYPE_SAW );
+    sawOscillator.setEnabled( true );
+    
+    sawPlotter.setup(24,48);
+    
+    // Square, is a binary / blinking vibe
+    squareOscillator.setup("Square", 0.005);
+    squareOscillator.setType( bbc::utils::OSC_TYPE_SQUARE );
+    squareOscillator.setEnabled( true );
+    
+    squarePlotter.setup(24,48);
+    
+    // Randomesque but uses perlin noise.
+    noiseOscillator.setup("Noise", 0.005);
+    noiseOscillator.setType( bbc::utils::OSC_TYPE_NOISE );
+    noiseOscillator.setEnabled( true );
+    
+    
+    noisePlotter.setup(24,48);
 }
 
 //--------------------------------------------------------------
@@ -187,6 +215,7 @@ void ofApp::update(){
     bezier_animator_a.update();
     rand_bezier_animator.update();
     
+    
     if(ofGetFrameNum() % 60 == 0) fps_tracker.mark(); // add a line to mark second of time.
         
 }
@@ -212,6 +241,8 @@ void ofApp::draw(){
     testTimers();
     
     testAnimators();
+    
+    testOscillators();
     
     testClipboard();
     
@@ -343,6 +374,88 @@ void ofApp::testEasing() {
     // Test easeFunc pointer
     ofSetColor(ofColor::wheat);
     ofDrawCircle( 240, testEaseFunc(0, ofGetHeight(), fc), 10);
+}
+
+
+//--------------------------------------------------------------
+void ofApp::testOscillators() {
+        
+    /**
+            TODO: Get Square working
+            TODO: Get little plotter working to show an x,y debug histiry graph below.
+            TODO: Get Noise working
+     
+     
+     */
+    
+    ofPushStyle();
+    ofPushMatrix();
+    
+    int DW = 320+180;
+    int DH = 180;
+    int PADX = 50;
+    int PADY = 50;
+        
+    ofTranslate( PADX, ofGetHeight()-DH-PADY ); //  ofGetWidth()-DW-
+    
+    // draw bg box
+    ofSetColor(ofColor::white, 64);
+    ofFill();
+    ofDrawRectangle(0, 0, DW, DH);
+    
+    ofDrawBitmapStringHighlight( "Oscillators:", 5, -10);
+    
+    float max_r = 60; // how big our circle is that shows this value.
+    
+    float dx = 1 * max_r;
+    float dy = DH * .5;
+    
+    float v = sineOscillator.update();
+    sinePlotter.add(v);
+    
+    float r = max_r * v;
+    ofSetColor(ofColor::pink, 192);
+    ofDrawCircle( dx, dy, r ); // d*.5, DH*.5
+    ofDrawBitmapStringHighlight( "Sine", dx, DH * .75);
+    //ofDrawBitmapStringHighlight(sineOscillator.toString(), 5, DH * .25);
+    sinePlotter.draw(dx); // 0, 0); // DH-sinePlotter.getHeight());
+    
+    
+    v = sawOscillator.update();
+    sawPlotter.add(v);
+    
+    r = max_r * v;
+    ofSetColor(ofColor::lemonChiffon, 192);
+    dx += max_r * 2;
+    ofDrawCircle( dx, dy, r );
+    ofDrawBitmapStringHighlight( "Saw", dx, DH * .75);
+    //ofDrawBitmapStringHighlight(sawOscillator.toString(), 5, DH * .66);
+    sawPlotter.draw(dx); // 0, 0); // DH-sinePlotter.getHeight());
+    
+    
+    v = squareOscillator.update();
+    squarePlotter.add(v);
+    r = max_r * v;
+    ofSetColor(ofColor::cadetBlue, 192);
+    dx += max_r * 2;
+    ofDrawCircle( dx, dy, r );
+    ofDrawBitmapStringHighlight( "Square", dx, DH * .75);
+    //ofDrawBitmapStringHighlight(squareOscillator.toString(), 5, DH * .85);
+    squarePlotter.draw(dx);
+    
+    
+    v = noiseOscillator.update();
+    noisePlotter.add(v);
+    r = max_r * v;
+    ofSetColor(ofColor::seaGreen, 192);
+    dx += max_r * 2;
+    ofDrawCircle( dx, dy, r );
+    ofDrawBitmapStringHighlight( "Noise", dx, DH * .75);
+    //ofDrawBitmapStringHighlight(noiseOscillator.toString(), 5, DH * 1);
+    noisePlotter.draw(dx);
+    
+    ofPopMatrix();
+    ofPopStyle();
 }
 
 //--------------------------------------------------------------

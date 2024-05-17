@@ -8,10 +8,19 @@
 //
 
 /**
-    TODO:
-        DONE * Implement Saw: Linear    
-    * Implement Square: ON / OFF
-    * Support some kind of combining of outputs of multiple to create detailed waves? Average between them? Visualise to proof. Think multiple sine waves
+
+ TODO:
+ 
+ * Match step affect on time to the SINE.
+        + So 2 plotters with same step will be at similar position?
+        + use PI??
+ 
+ * OSC_TYPE_NOISE use perlin or inbuilt noce
+    -see: https://necessarydisorder.wordpress.com/2017/11/15/drawing-from-noise-and-then-making-animated-loopy-gifs-from-there/
+        - note the golan levin cicular loop concept
+                - NOTE: there is ofSignedNoise() too to do our ramp
+ 
+ * Support some kind of combining of outputs of multiple to create detailed waves? Average between them? Visualise to proof. Think multiple sine waves
  
  */
 
@@ -27,8 +36,9 @@ namespace bbc {
         //------------------------------------------------------------------------
         enum OscillatorType {
             OSC_TYPE_SINE = 0,
-            OSC_TYPE_SAW, // linear tween
-            OSC_TYPE_SQUARE // on off
+            OSC_TYPE_SAW,       // linear tween
+            OSC_TYPE_SQUARE,    // on off
+            OSC_TYPE_NOISE      // noise based
         };
    
         //------------------------------------------------------------------------
@@ -106,6 +116,8 @@ namespace bbc {
             //------------------------------------------------------------------------
             void mapStepTo( float val ) {
             
+                // update step value to an external value. Pre-set it.
+            
                if(type == OSC_TYPE_SINE) {
                    
                    // What radian value would yeild a result of val, between range_start and range_end.
@@ -118,10 +130,17 @@ namespace bbc {
                    step = asin(n);
                    
                } else if( type == OSC_TYPE_SAW ) {
+                   
                    step = ofMap(val, range_start, range_end, 0, 1);
                    
                }else if( type == OSC_TYPE_SQUARE ) {
-                   // TODO: other types when implemented
+                   
+                   // TODO: Implement for square
+                   
+                   
+               }else if( type == OSC_TYPE_NOISE ) {
+                   
+                   // TODO: implement for noise
                    
                }
                
@@ -141,6 +160,7 @@ namespace bbc {
             float getRawValue() { // -1.0..1.0
                 
                 if(type == OSC_TYPE_SINE) {
+                    
                     return sin(step);
                     
                 }else if(type == OSC_TYPE_SAW) {
@@ -148,14 +168,30 @@ namespace bbc {
                     // A linear variation
                     int i = floor(step);
                     float f = step - i;
-                    // Note: might not need the ternary tests for 0 =, trying to make sure it hits the final value.
-                    if(i % 2 == 0) { //  even, 0 ..1
+                    // Note: Might not need the ternary tests for 0 =, trying to make sure it hits the final value.
+                    if(i % 2 == 0) { // Even, 0..1
                         return f == 0 ? 1 : f;
-                    }else{  // if odd, -1 .. 0,
+                    }else{  // Odd, -1..0,
                         return f == 0 ? -1 : -(1-f);
                     }
                     
                 }else if(type == OSC_TYPE_SQUARE) {
+                    
+                    // Use same linear variation but hard cut it.
+                    int i = floor(step);
+                    if(i % 2 == 0) { // Even
+                        return 1;
+                    } else { // Odd
+                        return -1;
+                    }
+                    
+                    
+                }else if(type == OSC_TYPE_NOISE) {
+                    
+                    float n = ofNoise(step); // 0..1
+                    //return n;
+                    // could use ofSignedNoise(step) isntead as one call.
+                    return (n * 2) - 1; // -1..1
                     
                 }
                 
@@ -164,7 +200,15 @@ namespace bbc {
             
             //------------------------------------------------------------------------
             float getValue() {
+                
+                // getRawValue =  -1..1
                 float p = getRawValue();
+                
+                if(type != OSC_TYPE_SAW) {
+                    // Make this 0..1 relative / normalised
+                    p = (p + 1) * .5;
+                }
+                
                 float dist = range_end - range_start;
                 float v = range_start + abs(dist * p);
                 return v;
@@ -195,7 +239,7 @@ namespace bbc {
             //------------------------------------------------------------------------
             string toString() {
                 ostringstream out;
-                out << "[Oscillator '" << name << "' val=" << getValue() << ", raw=" << getRawValue() << ", type:" << type << ", speed=" << speed << " {" << speed.getMin() << "," << speed.getMax() << "}" << ", range={" << range_start << "," << range_end << "}" << " ]";
+                out << "[Oscillator '" << name << "' val=" << getValue() << ", raw=" << getRawValue() << ", type:" << type << ", speed=" << speed << " {" << speed.getMin() << "," << speed.getMax() << "}" << ", range={" << range_start << "," << range_end << "}" << ", step:" << step << " ]";
                 return out.str();
             }
             

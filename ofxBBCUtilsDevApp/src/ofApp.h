@@ -13,12 +13,14 @@
 #include "FrameTweener.h"
 #include "BezierAnimator.h"
 #include "RandomBezierAnimator.h"
+#include "Oscillator.h"
 
 #include "BBCUtils.h"
 
 #include "iApp.h"
 
 #include "FPSTrackingWidget.h"
+#include "MiniPlotter.h"
 
 #include "ofParameterSerialiser.h"
 
@@ -51,6 +53,7 @@ class ofApp : public iApp{
         void testEasing();
         void testAnimators();
         void testClipboard();
+        void testOscillators();
     
     private:
     
@@ -63,6 +66,18 @@ class ofApp : public iApp{
         float fb;
         float fc;
     
+        bbc::utils::Oscillator sineOscillator;
+        bbc::utils::MiniPlotter sinePlotter;
+    
+        bbc::utils::Oscillator sawOscillator;    
+        bbc::utils::MiniPlotter sawPlotter;
+    
+        bbc::utils::Oscillator squareOscillator;
+        bbc::utils::MiniPlotter squarePlotter;
+        
+        bbc::utils::Oscillator noiseOscillator;
+        bbc::utils::MiniPlotter noisePlotter;
+
         FrameTweener frame_tweener;
         BezierAnimator bezier_animator_a;
         RandomBezierAnimator rand_bezier_animator;
