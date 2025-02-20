@@ -21,18 +21,13 @@ namespace bbc {
         
         class BezierAnimator : public FrameTweener {
             
-        private:
-            
-            
-            
         public:
             
-            bool use_ease;
             bool use_3d;
             
+            bool use_ease;            
             EaseKind ease_kind = EaseKind::QuadInOut;
             ErpEase::easeFunc ease;
-            
             
             //--------------------------------------------------------------
             BezierAnimator(bool _ease = true, bool _3d = false) {
@@ -152,6 +147,7 @@ namespace bbc {
                 
                 ofPushStyle();
                 ofNoFill();
+                ofEnableAlphaBlending();
                 
                 ofSetColor(0,255,255,alpha);
                 
@@ -208,7 +204,7 @@ namespace bbc {
                     ofDrawEllipse(current_pos.x, current_pos.y, r*.8, r*.8);
                 
                 }
-                
+                ofDisableAlphaBlending();
                 ofPopStyle();
             }
             //--------------------------------------------------------------

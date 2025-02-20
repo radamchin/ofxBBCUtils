@@ -77,6 +77,9 @@ class ofApp : public iApp{
         
         bbc::utils::Oscillator noiseOscillator;
         bbc::utils::MiniPlotter noisePlotter;
+        
+        bbc::utils::Oscillator noise2Oscillator;
+        bbc::utils::MiniPlotter noise2Plotter;
 
         FrameTweener frame_tweener;
         BezierAnimator bezier_animator_a;

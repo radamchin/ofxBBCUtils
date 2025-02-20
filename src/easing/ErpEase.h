@@ -223,7 +223,7 @@ namespace ErpEase {
     }
 
     //------------------------------------------------------------------
-    // Call an ease by an enum
+    // Call an ease by an Enum
     static float easeByKind(EaseKind kind, float start, float stop, float amt) {
         easeFunc func = ErpEase::getEaseFunctionPointer( kind );
         return func(start, stop, amt);

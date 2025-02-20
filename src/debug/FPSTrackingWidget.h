@@ -71,9 +71,9 @@ namespace bbc {
 
             }
             
-            void update( ofEventArgs & args) {
+            void update( ofEventArgs & args ) {
                 
-                if(ofGetFrameNum() % update_freq != 0) return;
+                if( ofGetFrameNum() % update_freq != 0) return;
                 
                 draw_pos++;
                 if(draw_pos >= fbo.getWidth()){

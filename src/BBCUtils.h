@@ -580,7 +580,6 @@ namespace bbc {
     
 
         //---------------------------------------------------------------------------
-            
         static float getAngleRadiansBetweenPoints( ofVec2f & a, ofVec2f & b ) {
             
             float fx = b.x - a.x;
@@ -588,6 +587,47 @@ namespace bbc {
             
             return atan2(fy, fx);
         }
+    
+        //---------------------------------------------------------------------------
+        // Get an offset point along a line at a normalised offset
+        static ofVec2f getPointOnLine(const ofVec2f& start, const ofVec2f& end, float offset = 0.5) {
+           
+            // Calculate the direction vector
+            ofVec2f dir = end - start;
+
+            // Calculate the offset distances
+            float dist = offset * dir.length();
+
+            // Normalize the direction vector to get the unit vector
+            dir.normalize();
+
+            // Calculate the new start and end points
+            ofVec2f newPos = start + dir * dist;
+            return newPos;
+        }
+    
+        //---------------------------------------------------------------------------
+        // Draw a line with percentage offsets
+        static void drawOffsetLine(const ofVec2f& start, const ofVec2f& end, float startOffsetPercent = 0.0, float endOffsetPercent = 0.0, float lineWidth = 2.0) {
+           
+            // Calculate the direction vector
+           ofVec2f direction = end - start;
+
+           // Calculate the offset distances
+           float startOffsetDistance = startOffsetPercent * direction.length();
+           float endOffsetDistance = endOffsetPercent * direction.length();
+
+           // Normalize the direction vector to get the unit vector
+           direction.normalize();
+
+           // Calculate the new start and end points
+           ofVec2f newStart = start + direction * startOffsetDistance;
+           ofVec2f newEnd = end - direction * endOffsetDistance;
+
+           // Draw the line
+           ofSetLineWidth(lineWidth);
+           ofDrawLine(newStart, newEnd);
+       }
     
     }
     

@@ -56,33 +56,24 @@ void ofApp::setup()  {
     testEaseFunc = ErpEase::getEaseFunctionPointer(EaseKind::CircInOut);
     
     
-    sineOscillator.setup("Sine", 0.005);
-    //sineOscillator.setOutputRange(0, 1);
-    sineOscillator.setEnabled( true );
-    // sineOscillator.setOutputRange(8, 64);
-    
+    sineOscillator.setup("Sine", 0.005).setEnabled( true );
     sinePlotter.setup(24,48);
     
-    sawOscillator.setup("Saw", 0.005);
-    sawOscillator.setType( bbc::utils::OSC_TYPE_SAW );
-    sawOscillator.setEnabled( true );
-    
+    sawOscillator.setup("Saw", 0.005).setType( bbc::utils::OSC_TYPE_SAW ).setEnabled( true );
     sawPlotter.setup(24,48);
     
     // Square, is a binary / blinking vibe
-    squareOscillator.setup("Square", 0.005);
-    squareOscillator.setType( bbc::utils::OSC_TYPE_SQUARE );
-    squareOscillator.setEnabled( true );
-    
+    squareOscillator.setup("Square", 0.005).setType( bbc::utils::OSC_TYPE_SQUARE ).setEnabled( true );
     squarePlotter.setup(24,48);
     
     // Randomesque but uses perlin noise.
-    noiseOscillator.setup("Noise", 0.005);
-    noiseOscillator.setType( bbc::utils::OSC_TYPE_NOISE );
-    noiseOscillator.setEnabled( true );
-    
-    
+    noiseOscillator.setup("Noise", 0.005).setType( bbc::utils::OSC_TYPE_NOISE ).setEnabled( true );
     noisePlotter.setup(24,48);
+    
+    noise2Oscillator.setup("Noise2", 0.005).setType( bbc::utils::OSC_TYPE_NOISE2 ).setEnabled( true );
+    noise2Plotter.setup(24,48);
+    
+    
 }
 
 //--------------------------------------------------------------
@@ -225,10 +216,9 @@ void ofApp::draw(){
     
     //ofBackgroundGradient(ofColor::lightGray, ofColor::darkGray);
     drawBackgroundGrid(20.0f, ofColor(32), ofColor(64));
-    
     //ofBackgroundHex(0xAAAAAA);
     
-    drawCalibration(192, ofColor::white, 4);
+   // drawCalibration(192, ofColor::white, 4);
     
     ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate(), 2) + ", " + getUpTimeStr() + ", " + getUnixTimeStamp(true), 5, 15);
     
@@ -236,15 +226,35 @@ void ofApp::draw(){
     
     fps_tracker.draw(5, 100);
     
-    testEasing();
+  //  testEasing();
     
-    testTimers();
+  //  testTimers();
     
-    testAnimators();
+  //  testAnimators();
     
-    testOscillators();
+ //   testOscillators();
     
-    testClipboard();
+  //  testClipboard();
+  
+    
+    // Test smaller utils
+    
+    ofVec2f ta(100,100);
+    ofVec2f tb(600,600);
+    
+    ofVec2f a = bbc::utils::getPointOnLine(ta, tb, 0.2 );
+    ofVec2f b = bbc::utils::getPointOnLine(ta, tb, 0.9 );
+    
+    ofSetLineWidth(10);
+    ofSetColor(ofColor::antiqueWhite, 192);
+    ofDrawLine( ta, tb );
+    
+    ofSetLineWidth(5);
+    ofSetColor(ofColor::darkGoldenRod, 192);
+    ofDrawLine( a, b );
+    
+    ofSetColor(ofColor::limeGreen, 192);
+    bbc::utils::drawOffsetLine(ta, tb, .33, .33, 8);
     
 }
 
@@ -380,18 +390,12 @@ void ofApp::testEasing() {
 //--------------------------------------------------------------
 void ofApp::testOscillators() {
         
-    /**
-            TODO: Get Square working
-            TODO: Get little plotter working to show an x,y debug histiry graph below.
-            TODO: Get Noise working
-     
-     
-     */
-    
     ofPushStyle();
     ofPushMatrix();
     
-    int DW = 320+180;
+    float MAX_R = 60; // how big our circle is that shows this value.
+    
+    int DW = 320+(MAX_R*4.5);
     int DH = 180;
     int PADX = 50;
     int PADY = 50;
@@ -405,54 +409,64 @@ void ofApp::testOscillators() {
     
     ofDrawBitmapStringHighlight( "Oscillators:", 5, -10);
     
-    float max_r = 60; // how big our circle is that shows this value.
     
-    float dx = 1 * max_r;
+    float dx = 1 * MAX_R;
     float dy = DH * .5;
     
     float v = sineOscillator.update();
     sinePlotter.add(v);
     
-    float r = max_r * v;
+    float r = MAX_R * v;
     ofSetColor(ofColor::pink, 192);
     ofDrawCircle( dx, dy, r ); // d*.5, DH*.5
     ofDrawBitmapStringHighlight( "Sine", dx, DH * .75);
     //ofDrawBitmapStringHighlight(sineOscillator.toString(), 5, DH * .25);
-    sinePlotter.draw(dx); // 0, 0); // DH-sinePlotter.getHeight());
+    sinePlotter.draw(dx-sinePlotter.getWidth()/2); // 0, 0); // DH-sinePlotter.getHeight());
     
     
     v = sawOscillator.update();
     sawPlotter.add(v);
     
-    r = max_r * v;
+    r = MAX_R * v;
     ofSetColor(ofColor::lemonChiffon, 192);
-    dx += max_r * 2;
+    dx += MAX_R * 2;
     ofDrawCircle( dx, dy, r );
     ofDrawBitmapStringHighlight( "Saw", dx, DH * .75);
     //ofDrawBitmapStringHighlight(sawOscillator.toString(), 5, DH * .66);
-    sawPlotter.draw(dx); // 0, 0); // DH-sinePlotter.getHeight());
+    sawPlotter.draw(dx-sawPlotter.getWidth()/2); // 0, 0); // DH-sinePlotter.getHeight());
     
     
     v = squareOscillator.update();
     squarePlotter.add(v);
-    r = max_r * v;
+    r = MAX_R * v;
     ofSetColor(ofColor::cadetBlue, 192);
-    dx += max_r * 2;
+    dx += MAX_R * 2;
     ofDrawCircle( dx, dy, r );
     ofDrawBitmapStringHighlight( "Square", dx, DH * .75);
     //ofDrawBitmapStringHighlight(squareOscillator.toString(), 5, DH * .85);
-    squarePlotter.draw(dx);
+    squarePlotter.draw(dx-squarePlotter.getWidth()/2);
     
     
     v = noiseOscillator.update();
     noisePlotter.add(v);
-    r = max_r * v;
+    r = MAX_R * v;
     ofSetColor(ofColor::seaGreen, 192);
-    dx += max_r * 2;
+    dx += MAX_R * 2;
     ofDrawCircle( dx, dy, r );
     ofDrawBitmapStringHighlight( "Noise", dx, DH * .75);
     //ofDrawBitmapStringHighlight(noiseOscillator.toString(), 5, DH * 1);
-    noisePlotter.draw(dx);
+    noisePlotter.draw(dx-noisePlotter.getWidth()/2);
+    
+    
+    v = noise2Oscillator.update();
+    noise2Plotter.add(v);
+    r = MAX_R * v;
+    ofSetColor(ofColor::gold, 192);
+    dx += MAX_R * 2;
+    ofDrawCircle( dx, dy, r );
+    ofDrawBitmapStringHighlight( "Noise2", dx, DH * .75);
+    //ofDrawBitmapStringHighlight(noise2Oscillator.toString(), 5, DH * 1);
+    noise2Plotter.draw(dx-noise2Plotter.getWidth()/2);
     
     ofPopMatrix();
     ofPopStyle();

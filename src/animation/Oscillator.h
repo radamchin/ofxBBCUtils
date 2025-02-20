@@ -38,7 +38,8 @@ namespace bbc {
             OSC_TYPE_SINE = 0,
             OSC_TYPE_SAW,       // linear tween
             OSC_TYPE_SQUARE,    // on off
-            OSC_TYPE_NOISE      // noise based
+            OSC_TYPE_NOISE,      // noise based
+            OSC_TYPE_NOISE2      //
         };
    
         //------------------------------------------------------------------------
@@ -71,19 +72,19 @@ namespace bbc {
             }
             
             //------------------------------------------------------------------------
-            void setup() {
-                setup("");
+            Oscillator & setup() {
+                return setup("");
             }
             
-            void setup( const string _name ) {
-                setup(_name, 0.5, 0.0, 1.0);
+            Oscillator & setup( const string _name ) {
+                return setup(_name, 0.5, 0.0, 1.0);
             }
             
-            void setup( const string _name, float _speed ) {
-                setup(_name, _speed, std::max(_speed*.5, 0.00001), _speed * 2);
+            Oscillator & setup( const string _name, float _speed ) {
+                return setup(_name, _speed, std::max(_speed*.5, 0.00001), _speed * 2);
             }
             
-            void setup( const string _name, float _speed, float _speed_min, float _speed_max ) {
+            Oscillator & setup( const string _name, float _speed, float _speed_min, float _speed_max ) {
                 
                 _setup = true;
                 name = _name;
@@ -96,11 +97,14 @@ namespace bbc {
                 
                 setSpeed( _speed );
                 setSpeedRange( _speed_min, _speed_max );
+                
+                return *this;
             }
             
             //------------------------------------------------------------------------
-            void setEnabled( const bool b ) {
+            Oscillator & setEnabled( const bool b ) {
                 enabled = b;
+                return *this;
             }
             
             //------------------------------------------------------------------------
@@ -142,6 +146,9 @@ namespace bbc {
                    
                    // TODO: implement for noise
                    
+               }else if( type == OSC_TYPE_NOISE2) {
+                   
+                   // TODO: implement for noise
                }
                
             }
@@ -187,11 +194,17 @@ namespace bbc {
                     
                     
                 }else if(type == OSC_TYPE_NOISE) {
-                    
+                   
                     float n = ofNoise(step); // 0..1
+                   // float n = ofNoise(step, ofGetFrameNum()); // 0..1  HELLA NOISY
                     //return n;
                     // could use ofSignedNoise(step) isntead as one call.
                     return (n * 2) - 1; // -1..1
+                    
+                }else if(type == OSC_TYPE_NOISE2) {
+                    
+                    float n = ofSignedNoise(step, 0); // -1..1
+                    return n;
                     
                 }
                 
@@ -220,20 +233,23 @@ namespace bbc {
             }
             
             //------------------------------------------------------------------------
-            void setSpeedRange( float _min, float _max ) {
+            Oscillator & setSpeedRange( float _min, float _max ) {
                 speed.setMin(_min);
                 speed.setMax(_max);
+                return *this;
             }
             
             //------------------------------------------------------------------------
-            void setOutputRange( float a, float b) {
+            Oscillator & setOutputRange( float a, float b) {
                 range_start = a;
                 range_end = b;
+                return *this;
             }
             
             //------------------------------------------------------------------------
-            void setType(  OscillatorType t ) {
+            Oscillator & setType(  OscillatorType t ) {
                 type = t;
+                return *this;
             }
             
             //------------------------------------------------------------------------
