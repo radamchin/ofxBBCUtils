@@ -629,6 +629,24 @@ namespace bbc {
            ofDrawLine(newStart, newEnd);
        }
     
+        //---------------------------------------------------------------------------
+        // If an image sprite can be rotated, what is its maximum radius?
+        // https://chatgpt.com/c/67f62871-75a0-8003-a0c2-2c31803d8ad8
+        static float getMaxRadius(float width, float height) {
+          return 0.5 * glm::sqrt(width * width + height * height);
+        }
+    
+        // max Radius of a rotated sprite based on its base width and height
+        static float getRotatedBoundingRadius(float width, float height, float angleRadians) {
+            
+            float cos = glm::abs( glm::cos(angleRadians) );
+            float sin = glm::abs( glm::sin(angleRadians) );
+            float rotatedWidth = width * cos + height * sin;
+            float rotatedHeight = width * sin + height * cos;
+            return 0.5 * glm::sqrt(rotatedWidth * rotatedWidth + rotatedHeight * rotatedHeight);
+        }
+        
+    
     }
     
 }
