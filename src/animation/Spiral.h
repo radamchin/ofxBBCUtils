@@ -34,7 +34,9 @@ namespace bbc {
 
             //--------------------------------------------------------------
             static ofPoint getPosition( float n, float cx, float cy, float radius, float coils, float rotation, bool clockwise = true ) {
-                // Return a point
+                
+                // Return a point on spiral, based on a norm value n
+                // This version is non-linear in that speed / distance increases further out the spiral
                 
                 ofPoint pos(cx, cy);
                 
@@ -60,9 +62,74 @@ namespace bbc {
             }
             
             //--------------------------------------------------------------
+            // Get the point at a constant speed along whole spiral
+            
+            // ChatGPT https://chatgpt.com/c/6812a07d-7c24-8003-ad3f-850bbfa5e766
+            static ofPoint getPosition2( float n, float cx, float cy, float radius, float coils, float rotation, bool clockwise = true ) {
+                ofPoint pos(cx, cy);
+                
+                // Return a point on spiral, based on a norm value n
+                // This has a constant speed, so animating along it has same result.
+
+                float thetaMax = coils * TWO_PI;
+                float awayStep = radius / thetaMax;
+
+                // Compute arc length function
+               /* auto spiralArcLength = [=](float theta) {
+                    return 0.5f * awayStep * (
+                        theta * sqrt(1 + theta * theta) +
+                        log(theta + sqrt(1 + theta * theta))
+                    );
+                };*/
+
+                // Compute total arc length
+                float totalLength = spiralArcLength(thetaMax, awayStep);
+
+                // Find theta such that arc length is n * totalLength using binary search
+                float targetLength = n * totalLength;
+                float lo = 0.0f;
+                float hi = thetaMax;
+                float theta = 0.0f;
+
+                for (int i = 0; i < 20; ++i) { // 20 iterations is usually sufficient
+                    float mid = 0.5f * (lo + hi);
+                    float len = spiralArcLength(mid, awayStep);
+                    if (len < targetLength) {
+                        lo = mid;
+                    } else {
+                        hi = mid;
+                    }
+                }
+                theta = 0.5f * (lo + hi);
+
+                // Compute final position
+                float away = awayStep * theta;
+                float around = theta + rotation;
+
+                if(clockwise) {
+                    pos.x = cx + cos(around) * away;
+                } else {
+                    pos.x = cx - cos(around) * away;
+                }
+                pos.y = cy + sin(around) * away;
+
+                return pos;
+            }
+            
+            //--------------------------------------------------------------
+            // https://chatgpt.com/c/6812a07d-7c24-8003-ad3f-850bbfa5e766
+            // Compute arc length function
+            static float spiralArcLength(float theta, float awayStep) {
+                return 0.5f * awayStep * (
+                    theta * sqrt(1 + theta * theta) +
+                    log(theta + sqrt(1 + theta * theta))
+                );
+            }
+            
+            //--------------------------------------------------------------
             static void drawSpiral2(float cx, float cy, float radius, float coils, float rot, float point_every = 0.001, bool clockwise = true, bool lines_between = true) {
                 
-                // Variation draw, putting points at intervals (instead of using a distance
+                // Variation draw, putting points at intervals (instead of using a distance)
                 
                 float p = 0;
                 
