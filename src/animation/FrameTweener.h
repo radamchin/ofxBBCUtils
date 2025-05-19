@@ -110,13 +110,13 @@ namespace bbc {
                 }
             
                 string toShortString() {
-                    ostringstream out;
+					std::ostringstream out;
                     out << "f=" << frame_counter << "/" << frame_total << ", step=" << ofToString(step,4) << ", running=" << _running << ", complete=" << _complete;
                     return out.str();
                 }
                 
                 string toString() {
-                    ostringstream out;
+                    std::ostringstream out;
                     out << "{FrameTweener " << toShortString() << "}";
                     return out.str();
                 }

@@ -252,7 +252,7 @@ namespace bbc {
         
         static const string getUnixTimeStamp(bool show_ms = false) {
             // get now in format  YYYYMMDDHHMMSSmmm
-            ostringstream format;
+            std::ostringstream format;
             format << "%Y%m%d%H%M%S" << (show_ms ? "%i" : "");
             
             return ofGetTimestampString(format.str());
@@ -298,7 +298,7 @@ namespace bbc {
         // i.e, void setToUpperCase void setToLowerCase
         
         static string toUpperCase( const string & str ) {
-            ostringstream out;
+			std::ostringstream out;
             
             for( int i=0; i<str.length(); i++ ) {
                 out << toupper( str[ i ] );
@@ -308,7 +308,7 @@ namespace bbc {
         }
         
         static string toLowerCase( const string & str ) {
-            ostringstream out;
+			std::ostringstream out;
             
             for( int i=0; i<str.length(); i++ ){
                 out << tolower( str[ i ] );
@@ -319,7 +319,7 @@ namespace bbc {
         
         //---------------------------------------------------------------------------
         static string vecToStr(const ofVec3f & v, int places = -1) {
-            ostringstream out;
+			std::ostringstream out;
             if(places > -1) {
                 out << ofToString(v.x, places) << "," << ofToString(v.y, places) << "," << ofToString(v.z, places);
             }else{
@@ -376,7 +376,7 @@ namespace bbc {
 
 		//---------------------------------------------------------------------------
         static string getGLInfoStringMin() {
-			ostringstream out;
+			std::ostringstream out;
 
 			commonOpenGlInfo info;
 			getGLInfo(info);
@@ -480,7 +480,7 @@ namespace bbc {
         }
         
         //---------------------------------------------------------------------------
-        static void drawCalibration(int alpha = 255, const ofColor mainColor = ofColor::white, float thickness =  2.0f) {
+    static void drawCalibration(int alpha = 255, const ofColor mainColor = ofColor::white, float thickness =  2.0f, float w = 0, float h = 0) {
             /*
              Draw a screen calibration graphic, useful for projection calibration,
              */
@@ -489,8 +489,8 @@ namespace bbc {
             
             ofSetLineWidth(thickness);
             
-            float w = ofGetWidth();
-            float h = ofGetHeight();
+            w = w > 0 ? w : ofGetWidth();
+            h = h > 0 ? h : ofGetHeight();
             
             float cx = w / 2.0;
             float cy = h / 2.0;
@@ -521,7 +521,7 @@ namespace bbc {
             // Draw centre rect & circle
             ofRectMode(OF_RECTMODE_CENTER);
             
-            float dim = min(w, h) * .66f;
+            float dim = glm::min(w, h) * .66f;
             
             ofDrawEllipse(cx, cy, dim, dim);
             

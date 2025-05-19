@@ -14,6 +14,7 @@
 
 #include "ofxXmlSettings.h"
 #include "ofXml.h"
+#include "ofMain.h"
 
 namespace bbc {
 	namespace utils {

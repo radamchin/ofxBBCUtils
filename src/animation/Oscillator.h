@@ -38,15 +38,20 @@ namespace bbc {
             OSC_TYPE_SINE = 0,
             OSC_TYPE_SAW,       // linear tween
             OSC_TYPE_SQUARE,    // on off
-            OSC_TYPE_NOISE,      // noise based
-            OSC_TYPE_NOISE2      //
+            OSC_TYPE_NOISE,     // noise based
+            OSC_TYPE_NOISE2     // alt noise based
         };
    
         //------------------------------------------------------------------------
     
         class Oscillator {
             
+        private:
+            
+        protected:
+            
         public:
+            
             ofParameterGroup params;
             
             ofParameter<bool> enabled{"Enabled", false};
@@ -109,7 +114,7 @@ namespace bbc {
             
             //------------------------------------------------------------------------
             bool getEnabled() {
-                return enabled ;
+                return enabled;
             }
             
             //------------------------------------------------------------------------
@@ -254,7 +259,7 @@ namespace bbc {
             
             //------------------------------------------------------------------------
             string toString() {
-                ostringstream out;
+				std::ostringstream out;
                 out << "[Oscillator '" << name << "' val=" << getValue() << ", raw=" << getRawValue() << ", type:" << type << ", speed=" << speed << " {" << speed.getMin() << "," << speed.getMax() << "}" << ", range={" << range_start << "," << range_end << "}" << ", step:" << step << " ]";
                 return out.str();
             }

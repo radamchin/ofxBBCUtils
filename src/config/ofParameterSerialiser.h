@@ -19,7 +19,6 @@
 
 
 #include "ofParameter.h"
-#include "ofParameterGroup.h"
 
 class ofParameterSerialiser {
     

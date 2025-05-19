@@ -252,7 +252,7 @@ namespace bbc {
             
             //--------------------------------------------------------------
             string toString(){
-                ostringstream out;
+                std::ostringstream out;
                 out << "{BezierAnimator " << FrameTweener::toShortString() << "}";
                 return out.str();
             }
