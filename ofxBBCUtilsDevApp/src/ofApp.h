@@ -3,6 +3,8 @@
 #include "ofMain.h"
 #include "ofEvents.h"
 
+#include "BBCUtils.h"
+
 #include "CheckTimer.h"
 #include "FrameTimer.h"
 
@@ -15,8 +17,6 @@
 #include "RandomBezierAnimator.h"
 #include "Oscillator.h"
 
-#include "BBCUtils.h"
-
 #include "iApp.h"
 
 #include "FPSTrackingWidget.h"
@@ -24,7 +24,7 @@
 
 #include "ofParameterSerialiser.h"
 
-#define BBC_UTILS_DEV_VERSION "1.0.3"
+#define BBC_UTILS_DEV_VERSION "1.0.5"
 
 using namespace bbc::utils;
 

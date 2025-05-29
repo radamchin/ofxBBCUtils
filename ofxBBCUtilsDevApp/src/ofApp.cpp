@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-using namespace bbc::utils;
+//using namespace bbc::utils;
 
 #include "ErpEase.h"
 
@@ -206,7 +206,6 @@ void ofApp::update(){
     bezier_animator_a.update();
     rand_bezier_animator.update();
     
-    
     if(ofGetFrameNum() % 60 == 0) fps_tracker.mark(); // add a line to mark second of time.
         
 }
@@ -218,7 +217,7 @@ void ofApp::draw(){
     drawBackgroundGrid(20.0f, ofColor(32), ofColor(64));
     //ofBackgroundHex(0xAAAAAA);
     
-   // drawCalibration(192, ofColor::white, 4);
+//    drawCalibration(192, ofColor::white, 4);
     
     ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate(), 2) + ", " + getUpTimeStr() + ", " + getUnixTimeStamp(true), 5, 15);
     
@@ -226,13 +225,13 @@ void ofApp::draw(){
     
     fps_tracker.draw(5, 100);
     
-  //  testEasing();
+	testEasing();
     
-  //  testTimers();
+ //   testTimers();
     
-  //  testAnimators();
+    testAnimators();
     
- //   testOscillators();
+   testOscillators();
     
   //  testClipboard();
   
@@ -254,7 +253,7 @@ void ofApp::draw(){
     ofDrawLine( a, b );
     
     ofSetColor(ofColor::limeGreen, 192);
-    bbc::utils::drawOffsetLine(ta, tb, .33, .33, 8);
+	bbc::utils::drawOffsetLine(ta, tb, .33, .33, 8);
     
 }
 
