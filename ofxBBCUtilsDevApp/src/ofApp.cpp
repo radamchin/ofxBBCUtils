@@ -214,7 +214,9 @@ void ofApp::update(){
 void ofApp::draw(){
     
     //ofBackgroundGradient(ofColor::lightGray, ofColor::darkGray);
-    drawBackgroundGrid(20.0f, ofColor(32), ofColor(64));
+	
+	drawBackgroundGrid(24.0f, ofColor(32), ofColor(64));
+	
     //ofBackgroundHex(0xAAAAAA);
     
 //    drawCalibration(192, ofColor::white, 4);

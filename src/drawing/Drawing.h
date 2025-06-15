@@ -20,12 +20,12 @@ namespace bbc {
     namespace utils {
         
         //---------------------------------------------------------------------------
-        static void drawBackgroundGrid(float size, const ofColor& onColor, const ofColor& offColor) {
+		
+        static void drawGrid(float size, int w, int h, const ofColor onColor = ofColor::gainsboro, const ofColor offColor = ofColor::gray) {
             // taken from https://github.com/openframeworks/openFrameworks/issues/5217
 
             static ofMesh gridMesh;
-            
-            float w = ofGetViewportWidth(), h = ofGetViewportHeight();
+			
             gridMesh.clear();
             gridMesh.setMode(OF_PRIMITIVE_TRIANGLES);
         #ifndef TARGET_EMSCRIPTEN
@@ -90,8 +90,16 @@ namespace bbc {
             if(depthMaskEnabled){
                 glDepthMask(GL_TRUE);
             }
+			
         }
-        
+		
+		//---------------------------------------------------------------------------
+		static void drawBackgroundGrid(float size,  const ofColor onColor = ofColor::gainsboro, const ofColor offColor = ofColor::gray) {
+				
+			drawGrid(size, ofGetViewportWidth(), ofGetViewportHeight(), onColor, offColor);
+			
+		}
+			
         //---------------------------------------------------------------------------
 		static void drawCalibration(int alpha = 255, const ofColor mainColor = ofColor::white, float thickness =  2.0f, float w = 0, float h = 0) {
             /*
@@ -292,8 +300,64 @@ namespace bbc {
 	
 		//---------------------------------------------------------------------------
 	
-	
-	
+		// https://chatgpt.com/c/682485bc-c0d0-8003-af18-83d48fd98c70
+		static ofMesh getDashedEllipseMesh(glm::vec3 center,
+									 float radiusX, float radiusY,
+									 glm::vec3 normal = {0, 0, 1},
+									 float startAngle = 0.0f,
+									 float dashLength = 10.0f, float gapLength = 5.0f,
+									 float resolution = 0.01f) {
+			ofMesh dashedMesh;
+			dashedMesh.setMode(OF_PRIMITIVE_LINES);
+
+			float angle = 0.0f;
+			float arcLength = 0.0f;
+			bool drawing = true;
+
+			glm::vec3 lastPoint;
+
+			// Build rotation matrix to orient the ellipse into 3D
+			glm::vec3 defaultNormal = glm::vec3(0, 0, 1);
+			glm::quat orientation = glm::rotation(defaultNormal, glm::normalize(normal));
+
+			bool hasLast = false;
+
+			while (angle <= TWO_PI) {
+				float a = startAngle + angle;
+
+				glm::vec3 local = {
+					cos(a) * radiusX,
+					sin(a) * radiusY,
+					0
+				};
+
+				glm::vec3 point = center + orientation * local;
+
+				if (hasLast) {
+					float segmentLength = glm::distance(lastPoint, point);
+					arcLength += segmentLength;
+
+					if (drawing) {
+						dashedMesh.addVertex(lastPoint);
+						dashedMesh.addVertex(point);
+					}
+
+					if ((drawing && arcLength >= dashLength) ||
+						(!drawing && arcLength >= gapLength)) {
+						drawing = !drawing;
+						arcLength = 0;
+					}
+				}
+
+				lastPoint = point;
+				hasLast = true;
+				angle += resolution;
+			}
+
+			return dashedMesh;
+		}
+
+
 		//---------------------------------------------------------------------------
     }
     
