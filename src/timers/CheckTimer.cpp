@@ -4,8 +4,8 @@
  *  Created by Adam Hinshaw on 24/08/12.
  *  Copyright 2012 BigBrownCupboard. All rights reserved.
   
-	TODO: could make a static Timer class that holds TimerChild(ren) like in my processing lib
-	TODO: update and make static the getCurrentTimeStep to save lots of calls to it every update (minor thing)
+	TODO: Could make a static Timer class that holds TimerChild(ren) like in my processing lib
+	TODO: Update and make static the getCurrentTimeStep to save lots of calls to it every update (minor thing)
  *
  */
 
@@ -86,6 +86,10 @@ namespace bbc {
             // hack ish way to expire a timer.
             expiryTime = getCurrentTimeStamp();
         }
+		
+		void CheckTimer::abort() {
+			expire();
+		}
 
         int CheckTimer::getResetCount() {
             return resetCount;

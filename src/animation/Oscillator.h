@@ -11,6 +11,10 @@
 
  TODO:
  
+* Add a setup that can set type
+ 
+ * Could add an ofParameter<index> to alllow changing??
+ 
  * Match step affect on time to the SINE.
         + So 2 plotters with same step will be at similar position?
         + use PI??
@@ -35,6 +39,7 @@ namespace bbc {
         
         //------------------------------------------------------------------------
         enum OscillatorType {
+			OSC_TYPE_DEFAULT = -1,
             OSC_TYPE_SINE = 0,
             OSC_TYPE_SAW,       // linear tween
             OSC_TYPE_SQUARE,    // on off
@@ -80,15 +85,18 @@ namespace bbc {
             Oscillator & setup() {
                 return setup("");
             }
-            
+			
+			//------------------------------------------------------------------------
             Oscillator & setup( const string _name ) {
                 return setup(_name, 0.5, 0.0, 1.0);
             }
-            
+			
+			//------------------------------------------------------------------------
             Oscillator & setup( const string _name, float _speed ) {
                 return setup(_name, _speed, std::max(_speed*.5, 0.00001), _speed * 2);
             }
-            
+			
+			//------------------------------------------------------------------------
             Oscillator & setup( const string _name, float _speed, float _speed_min, float _speed_max ) {
                 
                 _setup = true;
@@ -125,7 +133,7 @@ namespace bbc {
             //------------------------------------------------------------------------
             void mapStepTo( float val ) {
             
-                // update step value to an external value. Pre-set it.
+                // Update step value to an external value. Preset it.
             
                if(type == OSC_TYPE_SINE) {
                    
@@ -252,7 +260,7 @@ namespace bbc {
             }
             
             //------------------------------------------------------------------------
-            Oscillator & setType(  OscillatorType t ) {
+            Oscillator & setType( OscillatorType t ) {
                 type = t;
                 return *this;
             }

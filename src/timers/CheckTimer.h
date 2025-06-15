@@ -36,6 +36,7 @@ namespace bbc {
                 int getDuration();
                 
                 void expire();
+				void abort();
                 
                 void reset(bool log = false);
                 void reset(int new_duration, bool log = false);

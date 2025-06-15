@@ -148,20 +148,20 @@ namespace bbc {
                 ofPushStyle();
                 ofNoFill();
                 ofEnableAlphaBlending();
-                
-                ofSetColor(0,255,255,alpha);
-                
+				
                 if(use_3d) {
-                
+					
+					ofSetColor(128,255,255,alpha);
+					
                     ofDrawBezier(start_pos.x, start_pos.y, start_pos.z,
                                  control_a.x, control_a.y, control_a.z,
                                  control_b.x, control_b.y, control_b.z,
                                  end_pos.x,     end_pos.y, end_pos.z);
                     
-                    ofSetColor(255,255,0,alpha);
+                    ofSetColor(255,255,128,alpha);
                     ofDrawEllipse(start_pos.x, start_pos.y, start_pos.z, r, r);
                     
-                    ofSetColor(255,0,255,alpha);
+                    ofSetColor(255,128,255,alpha);
                     ofDrawEllipse(end_pos.x, end_pos.y, end_pos.z, r, r);
                     
                     // Draw control points / handles
@@ -175,11 +175,13 @@ namespace bbc {
                     
                     // Draw the position of object along bezier path
                     ofFill();
-                    ofSetColor(255,0,0,alpha);
+                    ofSetColor(255,128,128,alpha);
                     ofDrawEllipse(current_pos.x, current_pos.y, current_pos.z, r*.8, r*.8);
                     
                 }else{
                 
+					ofSetColor(0,255,255,alpha);
+					
                     ofDrawBezier(start_pos.x, start_pos.y, control_a.x, control_a.y, control_b.x, control_b.y, end_pos.x, end_pos.y);
                     //(x1, y1, cx1, cy1, cx2, cy2, x2, y2);
                     

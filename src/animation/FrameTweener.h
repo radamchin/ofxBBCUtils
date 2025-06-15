@@ -7,7 +7,7 @@
  *
  *  Adam Hinshaw 2014
  *
- *      TODO: add option to automatically update via ofEvents listener
+ *  TODO: add option to automatically update via ofEvents listener
  *
  *
  * */
@@ -22,7 +22,8 @@ namespace bbc {
         class FrameTweener {
         
             public:
-            
+			
+				//--------------------------------------------------------------
                 FrameTweener() {
                     frame_counter = 0;
 					frame_total = 1; 
@@ -32,7 +33,8 @@ namespace bbc {
             
 					step = 0.0;
                 }
-                
+			
+				//--------------------------------------------------------------
                 void start(int _frame_total = 100) {
                     //ofLogNotice("FrameTweener.start:") << " _running=" << _running << ", _complete=" << _complete;
                     
@@ -52,15 +54,18 @@ namespace bbc {
                     _complete = false;
                     _running = true;
                 }
-            
+			
+				//--------------------------------------------------------------
                 void stop() {
                     _running = false;
                 }
-                
+			
+				//--------------------------------------------------------------
                 void resume() {
                     _running = true;
                 }
-            
+			
+				//--------------------------------------------------------------
                 void update() {
                     
                     if(_complete) return;
@@ -75,7 +80,8 @@ namespace bbc {
                     
                     step = frame_counter / (float)frame_total; // fractional step 0-1
                 }
-                
+			
+				//--------------------------------------------------------------
                 void interupt() {
                     
                     if(_complete) return;
@@ -84,42 +90,52 @@ namespace bbc {
                     
                     completed(true); // let listener know this is completed but interupted
                 }
-                
+			
+				//--------------------------------------------------------------
                 void setProgress( float p ) {
                     frame_counter = frame_total * p;
                 }
-            
+			
+				//--------------------------------------------------------------
                 float getPosition() {
                     return step;
                 }
-                
+			
+				//--------------------------------------------------------------
                 bool isRunning() {
                     return _running;
                 }
-                
+		
+				//--------------------------------------------------------------
                 bool isActive(){
                     return !_complete;
                 }
-                
+			
+				//--------------------------------------------------------------
                 bool isComplete(){
                     return _complete;
                 }
-            
+			
+				//--------------------------------------------------------------
                 int getDuration() {
                     return frame_total;
                 }
-            
+			
+				//--------------------------------------------------------------
                 string toShortString() {
 					std::ostringstream out;
                     out << "f=" << frame_counter << "/" << frame_total << ", step=" << ofToString(step,4) << ", running=" << _running << ", complete=" << _complete;
                     return out.str();
                 }
-                
+			
+				//--------------------------------------------------------------
                 string toString() {
                     std::ostringstream out;
                     out << "{FrameTweener " << toShortString() << "}";
                     return out.str();
                 }
+			
+				//--------------------------------------------------------------
             
             protected:
                 
@@ -130,12 +146,14 @@ namespace bbc {
                 bool _complete;
             
                 float step;
-                
+		
+				//--------------------------------------------------------------
                 void completed(bool interrupted) {
                     _complete = true;
                     _running = false;
                 }
-            
+		
+				//--------------------------------------------------------------
         };
     
     }
