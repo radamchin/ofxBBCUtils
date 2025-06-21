@@ -65,13 +65,22 @@ namespace bbc {
         }
 	
 		//--------------------------------------------------------------------------------------
-        static string secondsToHMS(int totalSeconds) {
+        static string secondsToHMS(int totalSeconds) { // HH::MM:SS
             int hours   = floor(totalSeconds / 3600);
             int minutes = floor((totalSeconds - (hours * 3600)) / 60);
             int seconds = round(totalSeconds - (hours * 3600) - (minutes * 60));
             
             return ofToString(hours, 2, '0') + ":" + ofToString(minutes, 2, '0') + ":" + ofToString(seconds, 2, '0');
         }
+	
+		//--------------------------------------------------------------------------------------
+		static string secondsToMS(int totalSeconds) { // MM:SS
+			
+			int minutes = floor(totalSeconds / 60);
+			int seconds = round(totalSeconds - (minutes * 60));
+			
+			return ofToString(minutes, 2, '0') + ":" + ofToString(seconds, 2, '0');
+		}
 	
 		//--------------------------------------------------------------------------------------
         static string getNowSQLDateStamp() {
