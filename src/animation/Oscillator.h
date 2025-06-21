@@ -13,7 +13,7 @@
  
 * Add a setup that can set type
  
- * Could add an ofParameter<index> to alllow changing??
+ * Could add an ofParameter<int> type_index  to alllow changing type
  
  * Match step affect on time to the SINE.
         + So 2 plotters with same step will be at similar position?
@@ -60,7 +60,7 @@ namespace bbc {
             ofParameterGroup params;
             
             ofParameter<bool> enabled{"Enabled", false};
-            ofParameter<float> speed;
+			ofParameter<float> speed{"Speed", 0.1};
             
             float step;
             
@@ -105,7 +105,6 @@ namespace bbc {
                 //params.add( enabled.set("Enabled [Osc. " + _name + "]", false) );
                 //speed.setName("Speed [Osc. " + _name + "]");
                 params.add( enabled );
-                speed.setName("Speed");
                 params.add( speed );
                 
                 setSpeed( _speed );
@@ -252,11 +251,22 @@ namespace bbc {
                 return *this;
             }
             
+			//------------------------------------------------------------------------
+			Oscillator & setMinOutputRange( float mn ) {
+				range_start = mn;
+				return *this;
+			}
+			
+			//------------------------------------------------------------------------
+			Oscillator & setMaxOutputRange( float mx ) {
+				range_end = mx;
+				return *this;
+			}
+			
             //------------------------------------------------------------------------
             Oscillator & setOutputRange( float a, float b) {
-                range_start = a;
-                range_end = b;
-                return *this;
+				setMinOutputRange(a);
+                return setMaxOutputRange(b);
             }
             
             //------------------------------------------------------------------------
