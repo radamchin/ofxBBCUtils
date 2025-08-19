@@ -356,7 +356,24 @@ namespace bbc {
 
 			return dashedMesh;
 		}
+		
+		//---------------------------------------------------------------------------
+		static void drawRotatedBitmapStringHighlight(string txt, int x = 0, int y = 0, int angle_deg = -90, ofColor background = ofColor::black, ofColor foreground  = ofColor::white ) {
+			ofPushMatrix();
+			 // Move to the position where you want text anchored
+			 ofTranslate(x, y);
 
+			 // Rotate 90 degrees around Z axis (since we're in 2D)
+			 ofRotateDeg(angle_deg);  // or -90 for opposite direction
+			
+			 ofSetDrawBitmapMode(OF_BITMAPMODE_MODEL);
+			 // Draw string at the new origin
+			 ofDrawBitmapStringHighlight( txt, 0, 0, background, foreground );
+
+			 ofSetDrawBitmapMode(OF_BITMAPMODE_SIMPLE); // reset to default
+			
+			 ofPopMatrix();
+		}
 
 		//---------------------------------------------------------------------------
     }

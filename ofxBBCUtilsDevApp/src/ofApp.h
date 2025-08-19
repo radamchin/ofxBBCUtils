@@ -28,6 +28,48 @@
 
 using namespace bbc::utils;
 
+
+//--------------------------------------------------------------------
+struct EaseVals {
+	
+	// Struct to hold and increment test easing norms 0..1
+	
+	float a = 0;
+	float b = 0;
+	float c = 0;
+	
+	int a_dir = 1; // -1 || 1
+	int b_dir = 1;
+	int c_dir = 1;
+	
+	//--------------------------------------------------------
+	void process( const float stp, float & v, int & dir ) {
+		// Move value along the step
+		v += stp * dir;
+		if(dir == -1) {
+			if(v < 0.0) {
+				v = 0.0;
+				dir = 1.0;
+			}
+		}else{
+			if(v > 1.0) {
+				v = 1.0;
+				dir = -1.0;
+			}
+		}
+	}
+	
+	//--------------------------------------------------------
+	void increment( float stp = 0.001 ) {
+		
+		process( stp, a, a_dir );
+		process( stp, b, b_dir );
+		process( stp, c, c_dir );
+		
+	}
+};
+
+//--------------------------------------------------------------------
 class ofApp : public iApp{
 	public:
     
@@ -62,10 +104,8 @@ class ofApp : public iApp{
         FrameTimer *fa_timer;
         FrameTimer *fb_timer;
         
-        float fa;
-        float fb;
-        float fc;
-    
+		EaseVals ease_vals;
+	
         bbc::utils::Oscillator sineOscillator;
         bbc::utils::MiniPlotter sinePlotter;
     
@@ -87,7 +127,6 @@ class ofApp : public iApp{
     
         ErpEase::easeFunc testEaseFunc;
         
-    
         FPSTrackingWidget fps_tracker;
     
 };

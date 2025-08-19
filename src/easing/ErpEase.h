@@ -49,6 +49,8 @@ typedef enum  {
     BounceInOut,
     BounceIn,
     BounceOut,
+	SloMo,
+	Stepped
 } EaseKind;
 
 namespace ErpEase {
@@ -176,6 +178,17 @@ namespace ErpEase {
     static float bounceOut(float start, float stop, float amt) {
         return start + (stop-start) * bbc::utils::easing::Bounce::easeOut(amt, 0.0f, 1.0f, 1.0f);
     }
+
+	// SLOWMO
+	static float slowMo(float start, float stop, float amt, float linear_ratio = 0.05, float power = 0.5) {
+		return start + (stop-start) * bbc::utils::easing::SloMo::ease(amt, 0.0f, 1.0f, 1.0f, linear_ratio, power);
+	}
+
+	// STEPPED
+	static float stepped(float start, float stop, float amt, int steps = 10 ) {
+		return start + (stop-start) * bbc::utils::easing::Stepped::ease(amt, 0.0f, 1.0f, 1.0f, steps);
+	}
+
     
     //------------------------------------------------------------------
     typedef float (*easeFunc)(float, float, float); // function pointer signiture
@@ -217,8 +230,12 @@ namespace ErpEase {
             case BounceInOut: return &bounceInOut;
             case BounceIn: return &bounceIn;
             case BounceOut: return &bounceOut;
-            
+			
+				// Note SloMo & Stepped wont work here as they have different function signatures. TODO: work out how to do this (templates?)
+			//case SlowMo: return &sloMo;
+			//case Stepped: return &stepped;
         }
+		
         return &linearInOut;
     }
 

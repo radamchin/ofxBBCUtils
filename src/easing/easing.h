@@ -1,4 +1,4 @@
-// Robert Penner Easing Equations
+// Robert Penner Easing Equations + others from GSAP
 #include "Back.h"
 #include "Bounce.h"
 #include "Circ.h"
@@ -10,3 +10,6 @@
 #include "Quart.h"
 #include "Quint.h"
 #include "Sine.h"
+#include "SloMo.h"
+#include "Stepped.h"
+

@@ -19,8 +19,7 @@ void ofApp::setup()  {
     testConfig();
     
     // init timers.
-    fa = fb = fc = 0;
-
+   
 	a_timer = new CheckTimer("A_TEST", 1 * 1000);
 	b_timer = new CheckTimer("B_TEST", 3 * 1000);
     fa_timer = new FrameTimer(500, true);
@@ -219,7 +218,7 @@ void ofApp::draw(){
 	
     //ofBackgroundHex(0xAAAAAA);
     
-//    drawCalibration(192, ofColor::white, 4);
+	//    drawCalibration(192, ofColor::white, 4);
     
     ofDrawBitmapStringHighlight(ofToString(ofGetFrameRate(), 2) + ", " + getUpTimeStr() + ", " + getUnixTimeStamp(true), 5, 15);
     
@@ -231,16 +230,16 @@ void ofApp::draw(){
     
  //   testTimers();
     
-    testAnimators();
+//    testAnimators();
     
-   testOscillators();
+	//   testOscillators();
     
   //  testClipboard();
   
     
     // Test smaller utils
     
-    ofVec2f ta(100,100);
+  /*  ofVec2f ta(100,100);
     ofVec2f tb(600,600);
     
     ofVec2f a = bbc::utils::getPointOnLine(ta, tb, 0.2 );
@@ -255,7 +254,7 @@ void ofApp::draw(){
     ofDrawLine( a, b );
     
     ofSetColor(ofColor::limeGreen, 192);
-	bbc::utils::drawOffsetLine(ta, tb, .33, .33, 8);
+	bbc::utils::drawOffsetLine(ta, tb, .33, .33, 8);*/
     
 }
 
@@ -337,56 +336,165 @@ void ofApp::testTimers(){
 void ofApp::testEasing() {
     
     // Test Easing.
-    fa += 0.0025;
-    fa = fa > 1.0 ? 0.0 : fa;
-    
-    fb += 0.0025;
-    fb = fb > 1.0 ? 0.0 : fb;
-    
-    fc += 0.0025;
-    fc = fc > 1.0 ? 0.0 : fc;
+	ease_vals.increment(0.002);
+	
+	// TODO: could draw a line for every path, but with a dot (small circ) at every 5% along?? to show what the plot looks like in a 2 dims
     
     // Back Bounce Circ Cubic Elastic Expo Linear Quad Quart Quint Sine
+	int yanchor = ofGetHeight() - 26;
+	int x = 20;
+	int x_step = 24;
+	int crad = 8;
+	int xpad = 4;
+	int start_y = crad;
+	int end_y = ofGetHeight()-crad;
+	int angle = -90;
+	
+	ofColor bg_col(0,0,0);
+	ofColor col(255,255,0);
+	
+	// Log current value
+	ofDrawBitmapStringHighlight( "EaseVal.a = " + ofToString(ease_vals.a), 14, ofGetHeight() - 6);
+	
+	drawRotatedBitmapStringHighlight( "sineIn", x+xpad, yanchor, angle, bg_col, col );
+    ofSetColor(col);
+	ofDrawCircle( x, ErpEase::sineIn(start_y, end_y, ease_vals.a), crad);
     
-    ofSetColor(255,255,0);
-    ofDrawCircle( 20, ErpEase::sineIn(0, ofGetHeight(), fa), 10);
+	x+=x_step;
+	col.set(0,255,255);
+	drawRotatedBitmapStringHighlight( "sineOut", x+xpad, yanchor, angle, bg_col, col );
+    ofSetColor(col);
+    ofDrawCircle( x, ErpEase::sineOut(start_y, end_y, ease_vals.b), crad);
+	
+	x+=x_step;
+	col.set(255,0,255);
+	drawRotatedBitmapStringHighlight( "sineInOut", x+xpad, yanchor, angle, bg_col, col );
+    ofSetColor(col);
+    ofDrawCircle( x, ErpEase::sineInOut(start_y, end_y, ease_vals.c), crad);
     
-    ofSetColor(0,255,255);
-    ofDrawCircle( 40, ErpEase::sineOut(0, ofGetHeight(), fb), 10);
+	
+	x+=x_step;
+	col.set(255,255,0);
+	drawRotatedBitmapStringHighlight( "elasticIn", x+xpad, yanchor, angle, bg_col, col );
+    ofSetColor(col);
+    ofDrawCircle( x, ErpEase::elasticIn(start_y, end_y, ease_vals.a), crad);
+	
+	x+=x_step;
+	col.set(0,255,255);
+	drawRotatedBitmapStringHighlight( "elasticOut", x+xpad, yanchor, angle, bg_col, col );
+    ofSetColor(col);
+    ofDrawCircle( x, ErpEase::elasticOut(start_y, end_y, ease_vals.b), crad);
     
-    ofSetColor(255,0,255);
-    ofDrawCircle( 60, ErpEase::sineInOut(0, ofGetHeight(), fc), 10);
+	x+=x_step;
+	col.set(255,0,255);
+	drawRotatedBitmapStringHighlight( "elasticInOut", x+xpad, yanchor, angle, bg_col, col );
+    ofSetColor(col);
+    ofDrawCircle( x, ErpEase::elasticInOut(start_y, end_y, ease_vals.c), crad);
     
-    ofSetColor(255,255,0);
-    ofDrawCircle( 80, ErpEase::elasticIn(0, ofGetHeight(), fa), 10);
-    
-    ofSetColor(0,255,255);
-    ofDrawCircle( 100, ErpEase::elasticOut(0, ofGetHeight(), fb), 10);
-    
-    ofSetColor(255,0,255);
-    ofDrawCircle( 120, ErpEase::elasticInOut(0, ofGetHeight(), fc), 10);
-    
-    ofSetColor(255,255,0);
-    ofDrawCircle( 140, ErpEase::bounceIn(0, ofGetHeight(), fa), 10);
-    
-    ofSetColor(0,255,255);
-    ofDrawCircle( 160, ErpEase::bounceOut(0, ofGetHeight(), fb), 10);
-    
-    ofSetColor(255,0,255);
-    ofDrawCircle( 180, ErpEase::bounceInOut(0, ofGetHeight(), fc), 10);
-    
-    // Special ease lookup by type
-    ofSetColor(ofColor::pink);
-    ofDrawCircle( 200, ErpEase::easeByKind(EaseKind::QuadInOut, 0, ofGetHeight(), fc), 10);
-    
-    ofSetColor(ofColor::orange);
-    ofDrawCircle( 220, ErpEase::easeByKind(EaseKind::QuintInOut, 0, ofGetHeight(), fc), 10);
-    
-    // Test easeFunc pointer
-    ofSetColor(ofColor::wheat);
-    ofDrawCircle( 240, testEaseFunc(0, ofGetHeight(), fc), 10);
-}
 
+	x+=x_step;
+	col.set(255,255,0);
+	drawRotatedBitmapStringHighlight( "bounceIn", x+xpad, yanchor, angle, bg_col, col );
+    ofSetColor(col);
+    ofDrawCircle( x, ErpEase::bounceIn(start_y, end_y, ease_vals.a), crad);
+	
+	x+=x_step;
+	col.set(0,255,255);
+	drawRotatedBitmapStringHighlight( "bounceOut", x+xpad, yanchor, angle, bg_col, col );
+    ofSetColor(col);
+    ofDrawCircle( x, ErpEase::bounceOut(start_y, end_y, ease_vals.b), crad);
+    
+	x+=x_step;
+	col.set(255,0,255);
+	drawRotatedBitmapStringHighlight( "bounceInOut", x+xpad, yanchor, angle, bg_col, col );
+    ofSetColor(col);
+    ofDrawCircle( x, ErpEase::bounceInOut(start_y, end_y, ease_vals.c), crad);
+    
+	
+	x+=x_step;
+	col.set(128,0,255);
+	drawRotatedBitmapStringHighlight( "expoInOut", x+xpad, yanchor, angle, bg_col, col );
+	ofSetColor(col);
+	ofDrawCircle( x, ErpEase::expoInOut(start_y, end_y, ease_vals.c), crad);
+	
+	
+	x+=x_step;
+	col.set(ofColor::limeGreen);
+	drawRotatedBitmapStringHighlight( "linearInOut", x+xpad, yanchor, angle, bg_col, col );
+	ofSetColor(col);
+	ofDrawCircle( x, ErpEase::linearInOut(start_y, end_y, ease_vals.c), crad);
+	
+	
+    // Special ease lookup by type
+	x+=x_step;
+	col.set(ofColor::pink);
+	drawRotatedBitmapStringHighlight( "QuadInOut", x+xpad, yanchor, angle, bg_col, col );
+    ofSetColor(col);
+    ofDrawCircle( x, ErpEase::easeByKind(EaseKind::QuadInOut, start_y, end_y, ease_vals.c), crad);
+	
+	
+	x+=x_step;
+	col.set(ofColor::darkOrange);
+	drawRotatedBitmapStringHighlight( "QuartInOut", x+xpad, yanchor, angle, bg_col, col );
+	ofSetColor(col);
+	ofDrawCircle( x, ErpEase::easeByKind(EaseKind::QuartInOut, start_y, end_y, ease_vals.c), crad);
+	
+	x+=x_step;
+	col.set(ofColor::orange);
+	drawRotatedBitmapStringHighlight( "QuintInOut", x+xpad, yanchor, angle, bg_col, col );
+    ofSetColor(col);
+    ofDrawCircle( x, ErpEase::easeByKind(EaseKind::QuintInOut, start_y, end_y, ease_vals.c), crad);
+	
+	x+=x_step;
+	col.set(ofColor::lemonChiffon);
+	drawRotatedBitmapStringHighlight( "BackInOut", x+xpad, yanchor, angle, bg_col, col );
+	ofSetColor(col);
+	ofDrawCircle( x, ErpEase::easeByKind(EaseKind::BackInOut, start_y, end_y, ease_vals.c), crad);
+	
+	x+=x_step;
+	col.set(ofColor::wheat);
+    // Test easeFunc pointer
+	drawRotatedBitmapStringHighlight( "CircInOut", x+xpad, yanchor, angle, bg_col, col );
+    ofSetColor(col);
+    ofDrawCircle( x, testEaseFunc(start_y, end_y, ease_vals.c), crad);
+	
+	// SloMos
+	x+=x_step;
+	col.set(ofColor::chocolate);
+	drawRotatedBitmapStringHighlight( "SloMo Ex.1", x+xpad, yanchor, angle, bg_col, col );
+	ofSetColor(col);
+	ofDrawCircle( x, ErpEase::slowMo(start_y, end_y, ease_vals.c, 0.005, 0.7), crad);
+	
+	x+=x_step;
+	col.set(ofColor::cadetBlue);
+	drawRotatedBitmapStringHighlight( "SloMo Ex.2", x+xpad, yanchor, angle, bg_col, col );
+	ofSetColor(col);
+	ofDrawCircle( x, ErpEase::slowMo(start_y, end_y, ease_vals.c, 0.1, 0.4), crad);
+		
+	// slowMo(float start, float stop, float amt, float linear_ratio = 0.05, float power = 0.5)
+	// linear_ratio: smaller this the smoother / slower the ins and outs  0.05; // 0.7;
+	// power: higher this the flatter the slomo middle0.5; // 0.7;
+	   
+	// Stepped ease
+	x+=x_step;
+	col.set(ofColor::rosyBrown);
+	drawRotatedBitmapStringHighlight( "Stepped Ex.1", x+xpad, yanchor, angle, bg_col, col );
+	ofSetColor(col);
+	ofDrawCircle( x, ErpEase::stepped(start_y, end_y, ease_vals.c, 4), crad); // 32
+	
+	x+=x_step;
+	col.set(ofColor::coral);
+	drawRotatedBitmapStringHighlight( "Stepped Ex.2", x+xpad, yanchor, angle, bg_col, col );
+	ofSetColor(col);
+	ofDrawCircle( x, ErpEase::stepped(start_y, end_y, ease_vals.c, 12), crad); // 12
+	
+	x+=x_step;
+	col.set(ofColor::mediumPurple);
+	drawRotatedBitmapStringHighlight( "Stepped Ex.3", x+xpad, yanchor, angle, bg_col, col );
+	ofSetColor(col);
+	ofDrawCircle( x, ErpEase::stepped(start_y, end_y, ease_vals.c, 24), crad);
+	
+}
 
 //--------------------------------------------------------------
 void ofApp::testOscillators() {
