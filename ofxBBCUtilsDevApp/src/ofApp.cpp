@@ -2,7 +2,17 @@
 
 //using namespace bbc::utils;
 
-#include "ErpEase.h"
+/*
+ TODO:
+	* Put visual tests on a keyshortcut to advance through options / showcase.
+			* Use a enum to test / show / advance
+ 
+			* Somethings liek frame profiler and stats could be a single key toggle.
+		
+	* Seperate Tests into seperate classes to have update and draws base on enum. looping a list
+
+*/
+
 
 //--------------------------------------------------------------
 ofApp::ofApp():iApp("BBC_UTILS_DEV_TEST", BBC_UTILS_DEV_VERSION, false) {
@@ -51,28 +61,10 @@ void ofApp::setup()  {
     fps_tracker.bgCol = ofColor(192,192,192,212);
     fps_tracker.setup();
     
-    // Ease function pointers
-    testEaseFunc = ErpEase::getEaseFunctionPointer(EaseKind::CircInOut);
     
-    
-    sineOscillator.setup("Sine", 0.005).setEnabled( true );
-    sinePlotter.setup(24,48);
-    
-    sawOscillator.setup("Saw", 0.005).setType( bbc::utils::OSC_TYPE_SAW ).setEnabled( true );
-    sawPlotter.setup(24,48);
-    
-    // Square, is a binary / blinking vibe
-    squareOscillator.setup("Square", 0.005).setType( bbc::utils::OSC_TYPE_SQUARE ).setEnabled( true );
-    squarePlotter.setup(24,48);
-    
-    // Randomesque but uses perlin noise.
-    noiseOscillator.setup("Noise", 0.005).setType( bbc::utils::OSC_TYPE_NOISE ).setEnabled( true );
-    noisePlotter.setup(24,48);
-    
-    noise2Oscillator.setup("Noise2", 0.005).setType( bbc::utils::OSC_TYPE_NOISE2 ).setEnabled( true );
-    noise2Plotter.setup(24,48);
-    
-    
+	easing.setup();
+	oscillators.setup();
+	
 }
 
 //--------------------------------------------------------------
@@ -224,16 +216,16 @@ void ofApp::draw(){
     
     ofSetColor(255);
     
-    fps_tracker.draw(5, 100);
+//    fps_tracker.draw(5, 100);
     
-	testEasing();
+	easing.draw();
     
  //   testTimers();
     
 //    testAnimators();
     
-	//   testOscillators();
-    
+	// oscillators.draw(0,0);
+	
   //  testClipboard();
   
     
@@ -330,255 +322,6 @@ void ofApp::testTimers(){
     ofSetColor(0,255,255);
     ofDrawBitmapString(fb_timer->toString(), 10, 50);
 
-}
-
-//--------------------------------------------------------------
-void ofApp::testEasing() {
-    
-    // Test Easing.
-	ease_vals.increment(0.002);
-	
-	// TODO: could draw a line for every path, but with a dot (small circ) at every 5% along?? to show what the plot looks like in a 2 dims
-    
-    // Back Bounce Circ Cubic Elastic Expo Linear Quad Quart Quint Sine
-	int yanchor = ofGetHeight() - 26;
-	int x = 20;
-	int x_step = 24;
-	int crad = 8;
-	int xpad = 4;
-	int start_y = crad;
-	int end_y = ofGetHeight()-crad;
-	int angle = -90;
-	
-	ofColor bg_col(0,0,0);
-	ofColor col(255,255,0);
-	
-	// Log current value
-	ofDrawBitmapStringHighlight( "EaseVal.a = " + ofToString(ease_vals.a), 14, ofGetHeight() - 6);
-	
-	drawRotatedBitmapStringHighlight( "sineIn", x+xpad, yanchor, angle, bg_col, col );
-    ofSetColor(col);
-	ofDrawCircle( x, ErpEase::sineIn(start_y, end_y, ease_vals.a), crad);
-    
-	x+=x_step;
-	col.set(0,255,255);
-	drawRotatedBitmapStringHighlight( "sineOut", x+xpad, yanchor, angle, bg_col, col );
-    ofSetColor(col);
-    ofDrawCircle( x, ErpEase::sineOut(start_y, end_y, ease_vals.b), crad);
-	
-	x+=x_step;
-	col.set(255,0,255);
-	drawRotatedBitmapStringHighlight( "sineInOut", x+xpad, yanchor, angle, bg_col, col );
-    ofSetColor(col);
-    ofDrawCircle( x, ErpEase::sineInOut(start_y, end_y, ease_vals.c), crad);
-    
-	
-	x+=x_step;
-	col.set(255,255,0);
-	drawRotatedBitmapStringHighlight( "elasticIn", x+xpad, yanchor, angle, bg_col, col );
-    ofSetColor(col);
-    ofDrawCircle( x, ErpEase::elasticIn(start_y, end_y, ease_vals.a), crad);
-	
-	x+=x_step;
-	col.set(0,255,255);
-	drawRotatedBitmapStringHighlight( "elasticOut", x+xpad, yanchor, angle, bg_col, col );
-    ofSetColor(col);
-    ofDrawCircle( x, ErpEase::elasticOut(start_y, end_y, ease_vals.b), crad);
-    
-	x+=x_step;
-	col.set(255,0,255);
-	drawRotatedBitmapStringHighlight( "elasticInOut", x+xpad, yanchor, angle, bg_col, col );
-    ofSetColor(col);
-    ofDrawCircle( x, ErpEase::elasticInOut(start_y, end_y, ease_vals.c), crad);
-    
-
-	x+=x_step;
-	col.set(255,255,0);
-	drawRotatedBitmapStringHighlight( "bounceIn", x+xpad, yanchor, angle, bg_col, col );
-    ofSetColor(col);
-    ofDrawCircle( x, ErpEase::bounceIn(start_y, end_y, ease_vals.a), crad);
-	
-	x+=x_step;
-	col.set(0,255,255);
-	drawRotatedBitmapStringHighlight( "bounceOut", x+xpad, yanchor, angle, bg_col, col );
-    ofSetColor(col);
-    ofDrawCircle( x, ErpEase::bounceOut(start_y, end_y, ease_vals.b), crad);
-    
-	x+=x_step;
-	col.set(255,0,255);
-	drawRotatedBitmapStringHighlight( "bounceInOut", x+xpad, yanchor, angle, bg_col, col );
-    ofSetColor(col);
-    ofDrawCircle( x, ErpEase::bounceInOut(start_y, end_y, ease_vals.c), crad);
-    
-	
-	x+=x_step;
-	col.set(128,0,255);
-	drawRotatedBitmapStringHighlight( "expoInOut", x+xpad, yanchor, angle, bg_col, col );
-	ofSetColor(col);
-	ofDrawCircle( x, ErpEase::expoInOut(start_y, end_y, ease_vals.c), crad);
-	
-	
-	x+=x_step;
-	col.set(ofColor::limeGreen);
-	drawRotatedBitmapStringHighlight( "linearInOut", x+xpad, yanchor, angle, bg_col, col );
-	ofSetColor(col);
-	ofDrawCircle( x, ErpEase::linearInOut(start_y, end_y, ease_vals.c), crad);
-	
-	
-    // Special ease lookup by type
-	x+=x_step;
-	col.set(ofColor::pink);
-	drawRotatedBitmapStringHighlight( "QuadInOut", x+xpad, yanchor, angle, bg_col, col );
-    ofSetColor(col);
-    ofDrawCircle( x, ErpEase::easeByKind(EaseKind::QuadInOut, start_y, end_y, ease_vals.c), crad);
-	
-	
-	x+=x_step;
-	col.set(ofColor::darkOrange);
-	drawRotatedBitmapStringHighlight( "QuartInOut", x+xpad, yanchor, angle, bg_col, col );
-	ofSetColor(col);
-	ofDrawCircle( x, ErpEase::easeByKind(EaseKind::QuartInOut, start_y, end_y, ease_vals.c), crad);
-	
-	x+=x_step;
-	col.set(ofColor::orange);
-	drawRotatedBitmapStringHighlight( "QuintInOut", x+xpad, yanchor, angle, bg_col, col );
-    ofSetColor(col);
-    ofDrawCircle( x, ErpEase::easeByKind(EaseKind::QuintInOut, start_y, end_y, ease_vals.c), crad);
-	
-	x+=x_step;
-	col.set(ofColor::lemonChiffon);
-	drawRotatedBitmapStringHighlight( "BackInOut", x+xpad, yanchor, angle, bg_col, col );
-	ofSetColor(col);
-	ofDrawCircle( x, ErpEase::easeByKind(EaseKind::BackInOut, start_y, end_y, ease_vals.c), crad);
-	
-	x+=x_step;
-	col.set(ofColor::wheat);
-    // Test easeFunc pointer
-	drawRotatedBitmapStringHighlight( "CircInOut", x+xpad, yanchor, angle, bg_col, col );
-    ofSetColor(col);
-    ofDrawCircle( x, testEaseFunc(start_y, end_y, ease_vals.c), crad);
-	
-	// SloMos
-	x+=x_step;
-	col.set(ofColor::chocolate);
-	drawRotatedBitmapStringHighlight( "SloMo Ex.1", x+xpad, yanchor, angle, bg_col, col );
-	ofSetColor(col);
-	ofDrawCircle( x, ErpEase::slowMo(start_y, end_y, ease_vals.c, 0.005, 0.7), crad);
-	
-	x+=x_step;
-	col.set(ofColor::cadetBlue);
-	drawRotatedBitmapStringHighlight( "SloMo Ex.2", x+xpad, yanchor, angle, bg_col, col );
-	ofSetColor(col);
-	ofDrawCircle( x, ErpEase::slowMo(start_y, end_y, ease_vals.c, 0.1, 0.4), crad);
-		
-	// slowMo(float start, float stop, float amt, float linear_ratio = 0.05, float power = 0.5)
-	// linear_ratio: smaller this the smoother / slower the ins and outs  0.05; // 0.7;
-	// power: higher this the flatter the slomo middle0.5; // 0.7;
-	   
-	// Stepped ease
-	x+=x_step;
-	col.set(ofColor::rosyBrown);
-	drawRotatedBitmapStringHighlight( "Stepped Ex.1", x+xpad, yanchor, angle, bg_col, col );
-	ofSetColor(col);
-	ofDrawCircle( x, ErpEase::stepped(start_y, end_y, ease_vals.c, 4), crad); // 32
-	
-	x+=x_step;
-	col.set(ofColor::coral);
-	drawRotatedBitmapStringHighlight( "Stepped Ex.2", x+xpad, yanchor, angle, bg_col, col );
-	ofSetColor(col);
-	ofDrawCircle( x, ErpEase::stepped(start_y, end_y, ease_vals.c, 12), crad); // 12
-	
-	x+=x_step;
-	col.set(ofColor::mediumPurple);
-	drawRotatedBitmapStringHighlight( "Stepped Ex.3", x+xpad, yanchor, angle, bg_col, col );
-	ofSetColor(col);
-	ofDrawCircle( x, ErpEase::stepped(start_y, end_y, ease_vals.c, 24), crad);
-	
-}
-
-//--------------------------------------------------------------
-void ofApp::testOscillators() {
-        
-    ofPushStyle();
-    ofPushMatrix();
-    
-    float MAX_R = 60; // how big our circle is that shows this value.
-    
-    int DW = 320+(MAX_R*4.5);
-    int DH = 180;
-    int PADX = 50;
-    int PADY = 50;
-        
-    ofTranslate( PADX, ofGetHeight()-DH-PADY ); //  ofGetWidth()-DW-
-    
-    // draw bg box
-    ofSetColor(ofColor::white, 64);
-    ofFill();
-    ofDrawRectangle(0, 0, DW, DH);
-    
-    ofDrawBitmapStringHighlight( "Oscillators:", 5, -10);
-    
-    
-    float dx = 1 * MAX_R;
-    float dy = DH * .5;
-    
-    float v = sineOscillator.update();
-    sinePlotter.add(v);
-    
-    float r = MAX_R * v;
-    ofSetColor(ofColor::pink, 192);
-    ofDrawCircle( dx, dy, r ); // d*.5, DH*.5
-    ofDrawBitmapStringHighlight( "Sine", dx, DH * .75);
-    //ofDrawBitmapStringHighlight(sineOscillator.toString(), 5, DH * .25);
-    sinePlotter.draw(dx-sinePlotter.getWidth()/2); // 0, 0); // DH-sinePlotter.getHeight());
-    
-    
-    v = sawOscillator.update();
-    sawPlotter.add(v);
-    
-    r = MAX_R * v;
-    ofSetColor(ofColor::lemonChiffon, 192);
-    dx += MAX_R * 2;
-    ofDrawCircle( dx, dy, r );
-    ofDrawBitmapStringHighlight( "Saw", dx, DH * .75);
-    //ofDrawBitmapStringHighlight(sawOscillator.toString(), 5, DH * .66);
-    sawPlotter.draw(dx-sawPlotter.getWidth()/2); // 0, 0); // DH-sinePlotter.getHeight());
-    
-    
-    v = squareOscillator.update();
-    squarePlotter.add(v);
-    r = MAX_R * v;
-    ofSetColor(ofColor::cadetBlue, 192);
-    dx += MAX_R * 2;
-    ofDrawCircle( dx, dy, r );
-    ofDrawBitmapStringHighlight( "Square", dx, DH * .75);
-    //ofDrawBitmapStringHighlight(squareOscillator.toString(), 5, DH * .85);
-    squarePlotter.draw(dx-squarePlotter.getWidth()/2);
-    
-    
-    v = noiseOscillator.update();
-    noisePlotter.add(v);
-    r = MAX_R * v;
-    ofSetColor(ofColor::seaGreen, 192);
-    dx += MAX_R * 2;
-    ofDrawCircle( dx, dy, r );
-    ofDrawBitmapStringHighlight( "Noise", dx, DH * .75);
-    //ofDrawBitmapStringHighlight(noiseOscillator.toString(), 5, DH * 1);
-    noisePlotter.draw(dx-noisePlotter.getWidth()/2);
-    
-    
-    v = noise2Oscillator.update();
-    noise2Plotter.add(v);
-    r = MAX_R * v;
-    ofSetColor(ofColor::gold, 192);
-    dx += MAX_R * 2;
-    ofDrawCircle( dx, dy, r );
-    ofDrawBitmapStringHighlight( "Noise2", dx, DH * .75);
-    //ofDrawBitmapStringHighlight(noise2Oscillator.toString(), 5, DH * 1);
-    noise2Plotter.draw(dx-noise2Plotter.getWidth()/2);
-    
-    ofPopMatrix();
-    ofPopStyle();
 }
 
 //--------------------------------------------------------------
