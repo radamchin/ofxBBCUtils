@@ -14,6 +14,7 @@
 #define bbcDrawing_h
 
 #include "ofMain.h"
+#include <regex>
 
 namespace bbc {
 
@@ -376,8 +377,274 @@ namespace bbc {
 		}
 
 		//---------------------------------------------------------------------------
-    }
-    
+		static void drawCross(float cx, float cy, float size, float thickness, ofColor color, bool as_x = true ) {
+			// https://chatgpt.com/c/6825cbdf-c220-8003-b132-4e536e7530bc
+			ofPushMatrix();
+			ofTranslate(cx, cy);
+			if(as_x) ofRotateDeg(45); // Rotate to align cross arms like "X"
+			ofSetColor(color);
+			ofFill();
+
+			float halfSize = size * 0.5;
+			float halfThickness = thickness * 0.5;
+
+			// First bar (horizontal after rotation)
+			ofBeginShape();
+			ofVertex(-halfSize, -halfThickness);
+			ofVertex(halfSize, -halfThickness);
+			ofVertex(halfSize, halfThickness);
+			ofVertex(-halfSize, halfThickness);
+			ofEndShape(true);
+
+			// Second bar (vertical after rotation)
+			ofBeginShape();
+			ofVertex(-halfThickness, -halfSize);
+			ofVertex(halfThickness, -halfSize);
+			ofVertex(halfThickness, halfSize);
+			ofVertex(-halfThickness, halfSize);
+			ofEndShape(true);
+
+			ofPopMatrix();
+		}
+	
+	
+		//---------------------------------------------------------------------------
+		static void offsetPolyline(ofPolyline &poly, float dx, float dy) {
+			 for (auto &v : poly.getVertices()) {
+				 v.x += dx;
+				 v.y += dy;
+			 }
+		 }
+
+		//---------------------------------------------------------------------------
+		static ofPolyline offsetCopyPolyline(const ofPolyline &poly, float dx, float dy) {
+			 ofPolyline shifted;
+			 for (auto v : poly.getVertices()) {
+				 v.x += dx;
+				 v.y += dy;
+				 shifted.addVertex(v);
+			 }
+			 shifted.close();
+			 return shifted;
+		 }
+	
+		//---------------------------------------------------------------------------
+		static glm::vec2 getRandomPointInsidePolyline(const ofPolyline &poly) {
+			ofRectangle box = poly.getBoundingBox();
+			glm::vec2 p;
+			do {
+				p = glm::vec2(ofRandom(box.x, box.x + box.width),
+							  ofRandom(box.y, box.y + box.height));
+			} while (!poly.inside(glm::vec3(p, 0)));
+			return p;
+		}
+	
+		//---------------------------------------------------------------------------
+		static glm::vec2 getRandomPointInsidePolyline( const ofPolyline &poly, const vector<ofPolyline>& obstacles ) {
+			ofRectangle box = poly.getBoundingBox();
+			glm::vec2 p;
+			bool valid = false;
+
+			do {
+				p = glm::vec2(ofRandom(box.x, box.x + box.width),
+								 ofRandom(box.y, box.y + box.height));
+
+				// Check inside main poly
+				if (!poly.inside(glm::vec3(p, 0))) continue;
+
+				// Check outside all obstacles
+				valid = true;
+				for (const auto& o : obstacles) {
+					if (o.inside(glm::vec3(p, 0))) {
+						valid = false;
+						break;
+					}
+				}
+
+			} while (!valid);
+
+			return p;
+		}
+	
+		//---------------------------------------------------------------------------
+		// Cubic Bezier interpolation
+		static glm::vec2 cubicBezier(const glm::vec2 &p0,
+							  const glm::vec2 &p1,
+							  const glm::vec2 &p2,
+							  const glm::vec2 &p3,
+							  float t) {
+			float u = 1 - t;
+			return u*u*u * p0 +
+				   3*u*u*t * p1 +
+				   3*u*t*t * p2 +
+				   t*t*t * p3;
+		}
+	
+		//---------------------------------------------------------------------------
+		// Helper: parse numbers from SVG path segment (handles comma or no space)
+		static std::vector<float> parseNumbers(const std::string &s) {
+			std::vector<float> nums;
+			std::regex re("[-+]?[0-9]*\\.?[0-9]+"); // matches floats
+			auto begin = std::sregex_iterator(s.begin(), s.end(), re);
+			auto end = std::sregex_iterator();
+			for (auto it = begin; it != end; ++it) {
+				nums.push_back(std::stof(it->str()));
+			}
+			return nums;
+		}
+	
+		//---------------------------------------------------------------------------
+		// Parse a very simple subset of SVG path data into an ofPolyline
+		static ofPolyline svgPathToPolyline(const std::string &d, int bezierResolution = 20) {
+			ofPolyline poly;
+		   glm::vec2 cursor(0,0);
+		   glm::vec2 lastMove(0,0);
+
+		   size_t i = 0;
+		   while (i < d.size()) {
+			   char cmd = d[i];
+			   if (isspace(cmd)) { i++; continue; }
+			   if (!isalpha(cmd)) { i++; continue; }
+
+			   i++; // move past command
+			   size_t nextCmdPos = d.find_first_of("MmLlCcZz", i);
+			   std::string data = (nextCmdPos == std::string::npos) ? d.substr(i) : d.substr(i, nextCmdPos - i);
+			   std::vector<float> nums = parseNumbers(data);
+
+			   if (cmd == 'M') { cursor = glm::vec2(nums[0], nums[1]); lastMove = cursor; poly.addVertex(cursor.x, cursor.y); }
+			   else if (cmd == 'm') { cursor += glm::vec2(nums[0], nums[1]); lastMove = cursor; poly.addVertex(cursor.x, cursor.y); }
+			   else if (cmd == 'L') { cursor = glm::vec2(nums[0], nums[1]); poly.addVertex(cursor.x, cursor.y); }
+			   else if (cmd == 'l') { cursor += glm::vec2(nums[0], nums[1]); poly.addVertex(cursor.x, cursor.y); }
+			   else if (cmd == 'C') {
+				   for (size_t j = 0; j + 5 < nums.size(); j+=6) {
+					   glm::vec2 p0 = cursor;
+					   glm::vec2 p1(nums[j], nums[j+1]);
+					   glm::vec2 p2(nums[j+2], nums[j+3]);
+					   glm::vec2 p3(nums[j+4], nums[j+5]);
+					   for (int k=1; k<=bezierResolution; k++) {
+						   float t = (float)k / (float)bezierResolution;
+						   glm::vec2 pt = cubicBezier(p0,p1,p2,p3,t);
+						   poly.addVertex(pt.x, pt.y);
+					   }
+					   cursor = p3;
+				   }
+			   }
+			   else if (cmd == 'c') {
+				   for (size_t j = 0; j + 5 < nums.size(); j+=6) {
+					   glm::vec2 p0 = cursor;
+					   glm::vec2 p1 = cursor + glm::vec2(nums[j], nums[j+1]);
+					   glm::vec2 p2 = cursor + glm::vec2(nums[j+2], nums[j+3]);
+					   glm::vec2 p3 = cursor + glm::vec2(nums[j+4], nums[j+5]);
+					   for (int k=1; k<=bezierResolution; k++) {
+						   float t = (float)k / (float)bezierResolution;
+						   glm::vec2 pt = cubicBezier(p0,p1,p2,p3,t);
+						   poly.addVertex(pt.x, pt.y);
+					   }
+					   cursor = p3;
+				   }
+			   }
+			   else if (cmd == 'Z' || cmd == 'z') { poly.addVertex(lastMove.x, lastMove.y); poly.close(); }
+
+			   i = nextCmdPos;
+		   }
+
+		   return poly;
+		}
+	
+		//---------------------------------------------------------------------------
+		// Build a circle polyline centered at (cx, cy) with given radius
+		static ofPolyline makePolylineCircle(float cx, float cy, float r, int resolution = 40) {
+			ofPolyline poly;
+			
+			// Magic constant for control point offset
+			float k = 0.5522847498f;
+			float c = r * k;
+
+			glm::vec2 p0(cx + r, cy);      // rightmost point
+			glm::vec2 p1(cx + r, cy + c);
+			glm::vec2 p2(cx + c, cy + r);
+			glm::vec2 p3(cx,     cy + r);  // bottom
+
+			glm::vec2 p4(cx - c, cy + r);
+			glm::vec2 p5(cx - r, cy + c);
+			glm::vec2 p6(cx - r, cy);      // left
+
+			glm::vec2 p7(cx - r, cy - c);
+			glm::vec2 p8(cx - c, cy - r);
+			glm::vec2 p9(cx,     cy - r);  // top
+
+			glm::vec2 p10(cx + c, cy - r);
+			glm::vec2 p11(cx + r, cy - c);
+			glm::vec2 p12(cx + r, cy);     // back to rightmost
+
+			auto addCubic = [&](glm::vec2 a, glm::vec2 b, glm::vec2 c, glm::vec2 d) {
+				glm::vec2 prev = a;
+				for (int i=1; i<=resolution; i++) {
+					float t = (float)i / (float)resolution;
+					glm::vec2 pt = cubicBezier(a,b,c,d,t);
+					poly.addVertex(pt.x, pt.y);
+					prev = pt;
+				}
+			};
+
+			poly.addVertex(p0.x, p0.y);
+			addCubic(p0,p1,p2,p3);
+			addCubic(p3,p4,p5,p6);
+			addCubic(p6,p7,p8,p9);
+			addCubic(p9,p10,p11,p12);
+
+			poly.close();
+			return poly;
+		}
+
+		//---------------------------------------------------------------------------
+		// Sample n points evenly spaced around a polyline, starting from centroid
+		static std::vector<glm::vec2> getRadialBoundaryPoints(const ofPolyline& poly, int n, float step = 2.0f, int refineSteps = 5) {
+			std::vector<glm::vec2> pts;
+
+		   if (poly.size() < 3 || n <= 0) return pts;
+
+		   // centroid first
+		   glm::vec2 centroid = poly.getCentroid2D();
+		   pts.push_back(centroid);
+
+		   float angleStep = TWO_PI / n;
+
+		   for (int i = 0; i < n; i++) {
+			   float angle = i * angleStep;
+			   glm::vec2 dir(cos(angle), sin(angle));
+
+			   glm::vec2 pos = centroid;
+			   glm::vec2 lastInside = pos;
+			   glm::vec2 firstOutside = pos;
+
+			   // march outward until outside
+			   while (poly.inside(glm::vec3(pos,0))) {
+				   lastInside = pos;
+				   pos += dir * step;
+			   }
+			   firstOutside = pos;
+
+			   // refine between lastInside and firstOutside
+			   for (int j = 0; j < refineSteps; j++) {
+				   glm::vec2 mid = (lastInside + firstOutside) * 0.5f;
+				   if (poly.inside(glm::vec3(mid, 0))) {
+					   lastInside = mid;
+				   } else {
+					   firstOutside = mid;
+				   }
+			   }
+
+			   pts.push_back(lastInside);
+		   }
+
+		   return pts;
+		}
+
+		//---------------------------------------------------------------------------
+	
+	}
+
 }
 
 #endif // bbcDrawing_h
