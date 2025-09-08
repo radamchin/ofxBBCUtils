@@ -6,6 +6,9 @@
 //
 //	Dev playground for easing functions
 
+// TODO: how to get stepped and slowmo as ease funtion pointers?
+
+
 #pragma once
 #include "TestRunner.h"
 
@@ -82,14 +85,14 @@ public:
 		
 		// TODO: could draw a line for every path, but with a dot (small circ) at every 5% along?? to show what the plot looks like in a 2 dims
 		
-		// Back Bounce Circ Cubic Elastic Expo Linear Quad Quart Quint Sine
-		int yanchor = ofGetHeight() - 26;
+		int vpad = 35;
 		int x = 20;
-		int x_step = 24;
+		int x_step = 24; // distance between columns
+		int yanchor = ofGetHeight() - 10; // 26 - vpad;
 		int crad = 8;
 		int xpad = 4;
-		int start_y = crad;
-		int end_y = ofGetHeight()-crad;
+		int start_y = vpad;
+		int end_y = ofGetHeight() - crad - vpad - 75;
 		int angle = -90;
 		
 		ofColor bg_col(0,0,0);
@@ -119,66 +122,28 @@ public:
 			
 		};
 		
-		// Log current value
-		ofDrawBitmapStringHighlight( "EaseVal.a = " + ofToString(ease_vals.a), 14, ofGetHeight() - 6);
+		// Back Bounce Circ Cubic Elastic Expo Linear Quad Quart Quint Sine
 		
+		
+		easeLabel( "LinearInOut", ofColor::limeGreen );
+		ofDrawCircle( x, ErpEase::linearInOut(start_y, end_y, ease_vals.c), crad);
+		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::LinearInOut));
+		
+		/*x+=x_step;
 		easeLabel( "SineIn", col);
 		ofDrawCircle( x, ErpEase::sineIn(start_y, end_y, ease_vals.a), crad);
 		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::SineIn));
 		
 		x+=x_step;
-		easeLabel( "SneOut", ofColor::lightCoral );
+		easeLabel( "SineOut", ofColor::lightCoral );
 		ofDrawCircle( x, ErpEase::sineOut(start_y, end_y, ease_vals.b), crad);
-		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::SineOut));
+		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::SineOut));*/
 		
 		x+=x_step;
 		easeLabel( "SineInOut", ofColor::yellowGreen );
 		ofDrawCircle( x, ErpEase::sineInOut(start_y, end_y, ease_vals.c), crad);
 		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::SineInOut));
 		
-		
-		x+=x_step;
-		easeLabel( "ElasticIn", ofColor::cyan );
-		ofDrawCircle( x, ErpEase::elasticIn(start_y, end_y, ease_vals.a), crad);
-		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::ElasticIn));
-		
-		x+=x_step;
-		easeLabel( "ElasticOut", ofColor::magenta );
-		ofDrawCircle( x, ErpEase::elasticOut(start_y, end_y, ease_vals.b), crad);
-		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::ElasticOut));
-		
-		x+=x_step;
-		easeLabel( "ElasticInOut", ofColor::indianRed );
-		ofDrawCircle( x, ErpEase::elasticInOut(start_y, end_y, ease_vals.c), crad);
-		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::ElasticInOut));
-		
-
-		x+=x_step;
-		easeLabel( "BounceIn", ofColor::pink );
-		ofDrawCircle( x, ErpEase::bounceIn(start_y, end_y, ease_vals.a), crad);
-		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::BounceIn));
-		
-		x+=x_step;
-		easeLabel( "BounceOut", ofColor::teal );
-		ofDrawCircle( x, ErpEase::bounceOut(start_y, end_y, ease_vals.b), crad);
-		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::BounceOut));
-		
-		x+=x_step;
-		easeLabel( "BounceInOut", ofColor::lavender );
-		ofDrawCircle( x, ErpEase::bounceInOut(start_y, end_y, ease_vals.c), crad);
-		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::BounceInOut));
-		
-		
-		x+=x_step;
-		easeLabel( "ExpoInOut", ofColor::orchid );
-		ofDrawCircle( x, ErpEase::expoInOut(start_y, end_y, ease_vals.c), crad);
-		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::ExpoInOut));
-		
-		
-		x+=x_step;
-		easeLabel( "LinearInOut", ofColor::limeGreen );
-		ofDrawCircle( x, ErpEase::linearInOut(start_y, end_y, ease_vals.c), crad);
-		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::LinearInOut));
 		
 		
 		// Special ease lookup by type
@@ -199,15 +164,56 @@ public:
 		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::QuintInOut));
 		
 		x+=x_step;
-		easeLabel( "BackInOut", ofColor::lemonChiffon );
-		ofDrawCircle( x, ErpEase::easeByKind(EaseKind::BackInOut, start_y, end_y, ease_vals.c), crad);
-		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::BackInOut));
-		
-		x+=x_step;
 		// Test easeFunc pointer
 		easeLabel( "CircInOut", ofColor::wheat );
 		ofDrawCircle( x, testEaseFunc(start_y, end_y, ease_vals.c), crad);
 		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::CircInOut));
+		
+		
+		// Wierder / Extreme ones
+		
+		x+=x_step;
+		easeLabel( "BackInOut", ofColor::lemonChiffon );
+		ofDrawCircle( x, ErpEase::easeByKind(EaseKind::BackInOut, start_y, end_y, ease_vals.c), crad);
+		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::BackInOut));
+		
+		/*x+=x_step;
+		easeLabel( "ElasticIn", ofColor::cyan );
+		ofDrawCircle( x, ErpEase::elasticIn(start_y, end_y, ease_vals.a), crad);
+		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::ElasticIn));
+		
+		x+=x_step;
+		easeLabel( "ElasticOut", ofColor::magenta );
+		ofDrawCircle( x, ErpEase::elasticOut(start_y, end_y, ease_vals.b), crad);
+		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::ElasticOut));*/
+		
+		x+=x_step;
+		easeLabel( "ElasticInOut", ofColor::indianRed );
+		ofDrawCircle( x, ErpEase::elasticInOut(start_y, end_y, ease_vals.c), crad);
+		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::ElasticInOut));
+		
+
+	/*	x+=x_step;
+		easeLabel( "BounceIn", ofColor::pink );
+		ofDrawCircle( x, ErpEase::bounceIn(start_y, end_y, ease_vals.a), crad);
+		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::BounceIn));
+		
+		x+=x_step;
+		easeLabel( "BounceOut", ofColor::teal );
+		ofDrawCircle( x, ErpEase::bounceOut(start_y, end_y, ease_vals.b), crad);
+		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::BounceOut));*/
+		
+		x+=x_step;
+		easeLabel( "BounceInOut", ofColor::lavender );
+		ofDrawCircle( x, ErpEase::bounceInOut(start_y, end_y, ease_vals.c), crad);
+		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::BounceInOut));
+		
+		
+		x+=x_step;
+		easeLabel( "ExpoInOut", ofColor::orchid );
+		ofDrawCircle( x, ErpEase::expoInOut(start_y, end_y, ease_vals.c), crad);
+		plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::ExpoInOut));
+		
 		
 		// SloMos
 		x+=x_step;
@@ -239,6 +245,11 @@ public:
 		easeLabel( "Stepped Ex.3", ofColor::mediumPurple );
 		ofDrawCircle( x, ErpEase::stepped(start_y, end_y, ease_vals.c, 24), crad);
 		//plotEasLine( x, ErpEase::getEaseFunctionPointer(EaseKind::ElasticInOut));
+		
+		
+		// Log current value
+		ofDrawBitmapStringHighlight( "v=" + ofToString(ease_vals.a), 12, 16); // start_y + (end_y - start_y) / 2); // EaseVal.a = " +
+		
 		
 	}
 	
