@@ -14,6 +14,31 @@
 
 #include "easing.h"
 
+// Macros to generate easing functions for a given easing type
+
+// Small building-block macros
+#define DEFINE_EASING_IN(NAME, TYPE) \
+	static float NAME##In(float start, float stop, float amt) { \
+		return start + (stop-start) * bbc::utils::easing::TYPE::easeIn(amt, 0.0f, 1.0f, 1.0f); \
+	}
+
+#define DEFINE_EASING_OUT(NAME, TYPE) \
+	static float NAME##Out(float start, float stop, float amt) { \
+		return start + (stop-start) * bbc::utils::easing::TYPE::easeOut(amt, 0.0f, 1.0f, 1.0f); \
+	}
+
+#define DEFINE_EASING_INOUT(NAME, TYPE) \
+	static float NAME##InOut(float start, float stop, float amt) { \
+		return start + (stop-start) * bbc::utils::easing::TYPE::easeInOut(amt, 0.0f, 1.0f, 1.0f); \
+	}
+
+// Bigger macro that combines all three
+#define DEFINE_EASING_FUNCS(NAME, TYPE) \
+	DEFINE_EASING_IN(NAME, TYPE) \
+	DEFINE_EASING_OUT(NAME, TYPE) \
+	DEFINE_EASING_INOUT(NAME, TYPE)
+
+
 typedef enum  {
     None = -1,
     LinearInOut = 0,
@@ -55,129 +80,17 @@ typedef enum  {
 
 namespace ErpEase {
     
-    // LINEAR
-    static float linearInOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Linear::easeInOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float linearIn(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Linear::easeIn(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float linearOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Linear::easeOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-	
-	// QUAD
-    static float quadInOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Quad::easeInOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float quadIn(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Quad::easeIn(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float quadOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Quad::easeOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-  	
-
-	// CUBIC
-    static float cubicInOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Cubic::easeInOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float cubicIn(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Cubic::easeIn(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float cubicOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Cubic::easeOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-	
-	// QUART
-    static float quartInOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Quart::easeInOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float quartIn(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Quart::easeIn(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float quartOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Quart::easeOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-	
-	
-	// QUINT
-    static float quintInOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Quint::easeInOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float quintIn(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Quint::easeIn(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float quintOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Quint::easeOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-	
-	
-	// CIRC
-    static float circInOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Circ::easeInOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float circIn(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Circ::easeIn(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float circOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Circ::easeOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-    
-    // EXPO
-    static float expoInOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Expo::easeInOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float expoIn(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Expo::easeIn(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float expoOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Expo::easeOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-	
-	// BACK
-    static float backInOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Back::easeInOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float backIn(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Back::easeIn(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float backOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Back::easeOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-	
-	// SINE
-    static float sineInOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Sine::easeInOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float sineIn(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Sine::easeIn(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float sineOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Sine::easeOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-	
-	// ELASTIC
-    static float elasticInOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Elastic::easeInOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float elasticIn(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Elastic::easeIn(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float elasticOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Elastic::easeOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-	
-	// BOUNCE
-    static float bounceInOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Bounce::easeInOut(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float bounceIn(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Bounce::easeIn(amt, 0.0f, 1.0f, 1.0f);
-    }
-    static float bounceOut(float start, float stop, float amt) {
-        return start + (stop-start) * bbc::utils::easing::Bounce::easeOut(amt, 0.0f, 1.0f, 1.0f);
-    }
+	DEFINE_EASING_FUNCS(linear, Linear)
+	DEFINE_EASING_FUNCS(quad, Quad)
+	DEFINE_EASING_FUNCS(cubic, Cubic)
+	DEFINE_EASING_FUNCS(quart, Quart)
+	DEFINE_EASING_FUNCS(quint, Quint)
+	DEFINE_EASING_FUNCS(circ, Circ)
+	DEFINE_EASING_FUNCS(expo, Expo)
+	DEFINE_EASING_FUNCS(back, Back)
+	DEFINE_EASING_FUNCS(sine, Sine)
+	DEFINE_EASING_FUNCS(elastic, Elastic)
+	DEFINE_EASING_FUNCS(bounce, Bounce)
 
 	// SLOWMO
 	static float slowMo(float start, float stop, float amt, float linear_ratio = 0.05, float power = 0.5) {
@@ -191,7 +104,7 @@ namespace ErpEase {
 
     
     //------------------------------------------------------------------
-    typedef float (*easeFunc)(float, float, float); // function pointer signiture
+    typedef float (*easeFunc)(float, float, float); // Function pointer signiture
 
     //------------------------------------------------------------------
 
@@ -231,7 +144,7 @@ namespace ErpEase {
             case BounceIn: return &bounceIn;
             case BounceOut: return &bounceOut;
 			
-				// Note SloMo & Stepped wont work here as they have different function signatures. TODO: work out how to do this (templates?)
+			// Note SloMo & Stepped wont work here as they have different function signatures. TODO: work out how to do this (templates?)
 			//case SlowMo: return &sloMo;
 			//case Stepped: return &stepped;
         }
