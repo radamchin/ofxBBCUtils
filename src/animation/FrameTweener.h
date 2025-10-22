@@ -80,7 +80,13 @@ namespace bbc {
                     
                     step = frame_counter / (float)frame_total; // fractional step 0-1
                 }
+					
 			
+				//--------------------------------------------------------------
+				bool isAtSecondLastFrame() {
+					return frame_counter == frame_total-1;
+				}
+				
 				//--------------------------------------------------------------
                 void interupt() {
                     
